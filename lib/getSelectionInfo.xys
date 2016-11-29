@@ -30,8 +30,14 @@
 			return 0;
 		}
 	}
-	
-	function getSeasonsFolders($path){
-		//listfolder([path=<curpath>], [pattern=*], [flags], [separator="|"])
-		return listfolder($path, , 2 + 4);
+
+	function getItemName(void){
+		$path = getFullPath();
+		if(!$fullPath){
+			echo "getFullPath() returned 0!";
+		}
+		else{
+			//gettoken(string, [index=1], [separator=" "], [format], [flags])
+			return gettoken($path, -1, "\");
+		}
 	}
