@@ -1,10 +1,13 @@
  include "..\lib\getDataTV.xys";
  include "..\lib\getSelectionInfo.xys";
  include "..\lib\getFileInfo.xys";
+ include "..\lib\db.xys";
+ include "..\lib\regex.xys";
+ include "..\lib\list.xys";
 
 	$fullPath = getFullPath();
 	if(!$fullPath){
 		end 1, "Something went wrong!";
 	}
-	
-	text getSeasonsFolders($fullPath) . <crlf> . getTVFiles($fullPath);
+
+	echo getLastLocalEpisode($fullPath);

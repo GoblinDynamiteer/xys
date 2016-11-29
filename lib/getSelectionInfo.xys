@@ -9,6 +9,7 @@
 				return $selection;
 			}
 		}
+		//Returns zero if checks trigger
 		else{
 			msg "More than one item selected!";
 			return 0;
@@ -31,10 +32,14 @@
 		}
 	}
 
-	function getItemName(void){
+	//Returns name of selected item folder
+	function getSelectedFolderName(void){
 		$path = getFullPath();
+		//Displays error message and returns zero if getFullPath
+		//returns zero
 		if(!$fullPath){
 			echo "getFullPath() returned 0!";
+			return 0;
 		}
 		else{
 			//gettoken(string, [index=1], [separator=" "], [format], [flags])
