@@ -1,0 +1,20 @@
+	//Checks if TV folder is in correct directory
+	function isTV($path){
+		if(regexmatches($path, $regexTVpath) != ""){
+			return 1;
+		}
+		else{
+			//msg "Not in TV";
+			return 0;
+		}
+	}
+	//Checks if Movie folder is in correct directory
+	function isMovie($path){
+		if(regexmatches($path, $regexMoviePath) != ""){
+			return 1;
+		}
+		else{
+			//msg "Not in Movies";
+			return 0;
+		}
+	}
