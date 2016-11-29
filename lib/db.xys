@@ -1,0 +1,23 @@
+	perm $dbTV = "D:\Google Drive\Scriptstuff\MediaDb\tv.db";
+	perm $pytFolder = "D:\Google Drive\Scriptstuff\xyplorer\python\";
+	
+	//Gets IMDB-id from string, returns ID in format tt######
+	function trimIMDB($string){
+		//http://www.imdb.com/title/tt0103064/
+		return regexmatches($string, "tt\d{1,}");
+	}
+	
+	//python json_tvmaze_omdb.py tt3107288 1 Year
+	function pythonOMDB($imdb, $info){
+		return runret('python tvmaze_omdb.py "' . $imdb . '" 1 "'. $info .'"', $pytFolder);
+	}
+	
+	//Gets Title of Movie / TV-show from OMDB with python-script
+	function getTitle($imdb){
+		return pythonOMDB($imdb, "Title");
+	}
+	
+	//Gets Year of Movie / TV-show from OMDB with python-script
+	function getYear($imdb){
+		return pythonOMDB($imdb, "Year");
+	}
