@@ -3,4 +3,8 @@
  include "..\lib\getFileInfo.xys";
 
 	$fullPath = getFullPath();
-	echo getTVFiles($fullPath);
+	if(!$fullPath){
+		end 1, "Something went wrong!";
+	}
+	
+	text getSeasonsFolders($fullPath) . <crlf> . getTVFiles($fullPath);

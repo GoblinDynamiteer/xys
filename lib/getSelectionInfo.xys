@@ -1,6 +1,5 @@
 	//Functions for getting selected folder/file data
 
-
 	//Returns full path to selected path, checks that selection is
 	//folder, and that items selected is == 1
 	function getFullPath(void){
@@ -30,4 +29,9 @@
 		else{
 			return 0;
 		}
+	}
+	
+	function getSeasonsFolders($path){
+		//listfolder([path=<curpath>], [pattern=*], [flags], [separator="|"])
+		return listfolder($path, , 2 + 4);
 	}
