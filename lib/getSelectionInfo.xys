@@ -33,7 +33,7 @@
 	}
 
 	//Returns name of selected item folder
-	function getSelectedFolderName(void){
+	function getFolderName(void){
 		$path = getFullPath();
 		//Displays error message and returns zero if getFullPath
 		//returns zero

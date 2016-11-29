@@ -31,7 +31,7 @@
 		$episodes = getSE($files);
 		//Sorts the list and returns the last item
 		$episodes = sortList($episodes);
-		return getLastListItem($episodes);
+		return recase(getLastListItem($episodes), "upper");
 	}
 	
 	//Returns S##E## from string
