@@ -1,4 +1,6 @@
  include "..\lib\getDataTV.xys";
  include "..\lib\getSelectionInfo.xys";
- 
- echo getFullPath();
+ include "..\lib\getFileInfo.xys";
+
+	$fullPath = getFullPath();
+	echo getTVFiles($fullPath);

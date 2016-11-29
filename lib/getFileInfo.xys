@@ -1,0 +1,7 @@
+	//Various file functions
+	
+	//Returns files with certain extension in folder
+	function listFiles($folder, $extension){
+		//quicksearch([query="*"], [path], [separator="<crlf>"], [flags])
+		return quicksearch("*" . $extension, $folder, |);
+	}

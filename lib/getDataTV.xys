@@ -1,1 +1,14 @@
-//Functions for getting TV-data
+	//Functions for getting TV-data
+	perm $vidExtensions = "mkv|avi|mp4|m4v";
+	
+	//Returns list of video files in path, in subfolders
+	function getTVFiles($path){
+		$fileList =  "";
+		//function istFiles in getFileInfo.xys
+		foreach($ext, $vidExtensions, |){
+			$fileList = $fileList . listFiles($path, $ext);
+		}
+		//replace(string, search, [replacement=""], [matchcase=0], [start=1], [count=-1])
+		//removes path from list
+		return replace($fileList, $path . "\");
+	}

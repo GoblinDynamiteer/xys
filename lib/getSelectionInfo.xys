@@ -1,6 +1,8 @@
 	//Functions for getting selected folder/file data
 
-	//Returns full path to selected path
+
+	//Returns full path to selected path, checks that selection is
+	//folder, and that items selected is == 1
 	function getFullPath(void){
 		$selection = get("SelectedItemsPathNames");
 		if(getSelectedItemsCount($selection) == 1){
