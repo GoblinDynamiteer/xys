@@ -12,3 +12,29 @@
 		//removes path from list
 		return replace($fileList, $path . "\");
 	}
+	
+	function getSeasonsFolders($path){
+		//listfolder([path=<curpath>], [pattern=*], [flags], [separator="|"])
+		return listfolder($path, , 2 + 4);
+	}
+	
+	//Finds and returns the last episode
+	function getLastLocalEpisode($path){
+		$seasonFolders = getSeasonsFolders($path);
+		//Sorts list
+		$seasonFolders = sortList($seasonFolders);
+		//gets last folder name
+		$lastSeason = getLastListItem($seasonFolders);
+		//Lists video-files in last season folder
+		$files = getTVFiles($path . "\" . $lastSeason);
+		//Extracts S##E## from file-list, as |-separated list
+		$episodes = getSE($files);
+		//Sorts the list and returns the last item
+		$episodes = sortList($episodes);
+		return getLastListItem($episodes);
+	}
+	
+	//Returns S##E## from string
+	function getSE($string){
+		return regexmatches($string, $regexSE);
+	}
