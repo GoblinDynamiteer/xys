@@ -1,15 +1,32 @@
 	perm $dbTV = "D:\Google Drive\Scriptstuff\MediaDb\tv.db";
 	perm $pytFolder = "D:\Google Drive\Scriptstuff\xyplorer\python\";
+
+	perm $pythErrorText =  "Python script returned error!";
 	
 	//Gets IMDB-id from string, returns ID in format tt######
 	function trimIMDB($string){
-		//http://www.imdb.com/title/tt0103064/
-		return regexmatches($string, "tt\d{1,}");
+		//example input string: http://www.imdb.com/title/tt0103064/
+		//returns tt0103064
+		$id = regexmatches($string, $regexIMDB);
+		if($id == ""){
+			msg "Could not extract IMDb-id from string!"
+			return 0;
+		}
+		else{
+			return $id;
+		}
 	}
 	
 	//python json_tvmaze_omdb.py tt3107288 1 Year
 	function pythonOMDB($imdb, $info){
-		return runret('python tvmaze_omdb.py "' . $imdb . '" 1 "'. $info .'"', $pytFolder);
+		$data = runret('python tvmaze_omdb.py "' . $imdb . '" 1 "'. $info .'"', $pytFolder);
+		if(!checkPythonScriptError($data)){
+			msg $pythErrorText;
+			return 0;
+		}
+		else{
+			return $data;
+		}
 	}
 	
 	//Gets Title of Movie / TV-show from OMDB with python-script
@@ -20,4 +37,24 @@
 	//Gets Year of Movie / TV-show from OMDB with python-script
 	function getYear($imdb){
 		return pythonOMDB($imdb, "Year");
+	}
+	
+	//Gets Genre of Movie / TV-show from OMDB with python-script
+	function getGenre($imdb){
+		return pythonOMDB($imdb, "Genre");
+	}
+	
+	//Gets Rating of Movie / TV-show from OMDB with python-script
+	function getRating($imdb){
+		return pythonOMDB($imdb, "imdbRating");
+	}
+	
+	//Returns 0 if python script returned error
+	function checkPythonScriptError($string){
+		if(regexmatches($string, "Traceback") != ""){
+			return 0;
+		}
+		else{
+			return 1;
+		}
 	}
