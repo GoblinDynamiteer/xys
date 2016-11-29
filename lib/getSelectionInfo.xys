@@ -1,0 +1,31 @@
+	//Functions for getting selected folder/file data
+
+	//Returns full path to selected path
+	function getFullPath(void){
+		$selection = get("SelectedItemsPathNames");
+		if(getSelectedItemsCount($selection) == 1){
+			if(isFolder($selection)){
+				return $selection;
+			}
+		}
+		else{
+			msg "More than one item selected!";
+			return 0;
+		}
+	}
+
+	//Returns count of items in string, seperated by <crlf>
+	function getSelectedItemsCount($items){
+		return gettoken($items, "count", <crlf>);
+	}
+	
+	//Checks if path is a folder or file
+	function isFolder($path){
+		//exists() returns 2 if folder
+		if(exists($path) == 2){
+			return 1;
+		}
+		else{
+			return 0;
+		}
+	}

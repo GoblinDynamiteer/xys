@@ -1,0 +1,4 @@
+ include "..\lib\getDataTV.xys";
+ include "..\lib\getSelectionInfo.xys";
+ 
+ echo getFullPath();
