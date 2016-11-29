@@ -1,0 +1,2 @@
+perm $regexSE = "s\d{2}e\d{2}";
+perm $regexIMDB = "tt\d{1,}";
