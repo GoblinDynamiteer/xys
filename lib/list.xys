@@ -1,0 +1,11 @@
+
+	//Sorts list ascending A-Z
+	function sortList($list){
+	//formatlist(list, [format], [separator="|"], [param], [flags])
+		return formatlist($list, "eds", |);
+	}
+	
+	function getLastListItem($list){
+		return gettoken($list, -1, "|");
+	}
+
