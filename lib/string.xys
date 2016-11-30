@@ -1,3 +1,26 @@
 	function removeCRLF($string){
 		return replace($string, <crlf>);
 	}
+	
+	function episodeNextNumber($episode){
+		//gets ##|## from S##E##
+		$seasonepisode = regexmatches($episode, $regexD2);
+		//gets first token from ##|##
+		$season = gettoken($seasonepisode, 1, "|");
+		//gets last token from ##|##
+		$number = gettoken($seasonepisode, -1, "|");
+		$number++;
+		$number = format($number, "00");
+		$season = format($season, "00");
+		return "S" . $season . "E" . $number;
+	}
+	
+	function episodeNextSeason($episode){
+		//gets ##|## from S##E##
+		$seasonepisode = regexmatches($episode, $regexD2);
+		//gets first token from ##|##
+		$season = gettoken($seasonepisode, 1, "|");
+		$season++;
+		$season = format($season, "00");
+		return "S" . $season . "E01";
+	}
