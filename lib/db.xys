@@ -26,7 +26,18 @@
 			return 0;
 		}
 		else{
-			return $data;
+			return removeCRLF($data);
+		}
+	}
+	
+	function pythonTVMaze($imdb, $info){
+		$data = runret('python tvmaze_omdb.py "' . $imdb . '" 2 "lastAired" "'. $info .'" ', $pytFolder);
+		if(!checkPythonScriptError($data)){
+			msg $pythErrorText;
+			return 0;
+		}
+		else{
+			return removeCRLF($data);
 		}
 	}
 	
@@ -80,6 +91,22 @@
 	//Gets Rating of Movie / TV-show from OMDB with python-script
 	function getRating($imdb){
 		return pythonOMDB($imdb, "imdbRating");
+	}
+	
+	//Gets airdate for last aired episode
+	function getLastAiredDate($imdb){
+		return pythonTVMaze($imdb, "airdate");
+	}
+	
+	//Gets last aired episode
+	function getLastAiredEpisode($imdb){
+		//API JSON : "season":6,"number":10
+		$season = pythonTVMaze($imdb, "season");
+		$episode = pythonTVMaze($imdb, "number");
+		// format(1, "000"); //001
+		$season = format($season, "00");
+		$episode = format($episode, "00");
+		return "S" . $season . "E" . $episode;
 	}
 	
 	//Returns 0 if python script returned error
