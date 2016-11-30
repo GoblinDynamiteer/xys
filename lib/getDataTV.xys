@@ -2,7 +2,7 @@
 	perm $vidExtensions = "mkv|avi|mp4|m4v";
 	
 	//Returns list of video files in path, in subfolders
-	function getTVFiles($path){
+	function getLocalTVFiles($path){
 		$fileList =  "";
 		//function istFiles in getFileInfo.xys
 		foreach($ext, $vidExtensions, |){
@@ -26,7 +26,7 @@
 		//gets last folder name
 		$lastSeason = getLastListItem($seasonFolders);
 		//Lists video-files in last season folder
-		$files = getTVFiles($path . "\" . $lastSeason);
+		$files = getLocalTVFiles($path . "\" . $lastSeason);
 		//Extracts S##E## from file-list, as |-separated list
 		$episodes = getSE($files);
 		//Sorts the list and returns the last item
@@ -35,6 +35,7 @@
 	}
 	
 	//Returns S##E## from string
+	//eg S03E02
 	function getSE($string){
 		return regexmatches($string, $regexSE);
 	}
