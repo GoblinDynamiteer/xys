@@ -34,8 +34,12 @@
 	function pythonTVMazeLastEp($imdb, $info){
 		$data = runret('python tvmaze_omdb.py "' . $imdb . '" 2 "lastAired" "'. $info .'" ', $pytFolder);
 		if(!checkPythonScriptError($data)){
-			msg $pythErrorText;
-			return 0;
+			if(regexmatches($data, "404"){
+				return 404;
+			}
+			else{
+				return 0;
+			}
 		}
 		else{
 			return removeCRLF($data);
@@ -61,7 +65,6 @@
 			return 0;
 		}
 		else{
-			step;
 			//gets ##|## from S##E##
 			$seasonepisode = regexmatches($episode, $regexD2);
 			//gets first token from ##|##
@@ -87,8 +90,12 @@
 	function pythonTVMaze($imdb, $info){
 		$data = runret('python tvmaze_omdb.py "' . $imdb . '" 2 "'. $info .'" ', $pytFolder);
 		if(!checkPythonScriptError($data)){
-			msg $pythErrorText;
-			return 0;
+			if(regexmatches($data, "404"){
+				return 404;
+			}
+			else{
+				return 0;
+			}
 		}
 		else{
 			return removeCRLF($data);
@@ -118,22 +125,39 @@
 	}
 	
 	//Section is folder name for tv-show
+	//Gets IMDB from TV database
 	function getDbTVIMDb($section){
 		return getDbTVinfo($section, "imdb");
 	}
 	
 	//Section is folder name for tv-show
+	//Gets TVMaze ID from TV database
+	function getDbTVMaze($section){
+		return getDbTVinfo($section, "tvmaze");
+	}	
+	
+	//Section is folder name for tv-show
+	//Sets IMDB-id to TV database
 	function setDbTVIMDb($section, $data){
 		setDbTVinfo($section, $data, "imdb");
 	}
-	
+
 	//Section is folder name for tv-show
+	//Sets TVMaze ID to TV database
 	function setDbTVMaze($section, $data){
-		setDbTVinfo($section, $data, "tvmaze");
+		$data = setDbTVinfo($section, $data, "tvmaze");
 	}
 	
+	//Gets TVMaze ID from TVMaze Database
 	function getTVMaze($imdb){
-		return pythonTVMaze($imdb, "id")
+		$data = pythonTVMaze($imdb, "id");
+		//Checks response from python function
+		if((strlen($data) > 10) || ($data == 0) || ($data == 404)){
+			return 0;
+		}
+		else {
+			return $data;
+		}
 	}
 	
 	//Gets Title of Movie / TV-show from OMDB with python-script
@@ -191,6 +215,11 @@
 		else {
 			return 1;
 		}
+	}
+	
+	//Checks if episode exists in TVMaze database
+	function TVEpisodeAirdate($tvmazeid, $episode){
+		return pythonTVMazeEpisode($tvmazeid, "airdate", $episode);
 	}
 	
 	//Gets last aired episode

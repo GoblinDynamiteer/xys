@@ -17,6 +17,7 @@
 	}
 	//Gets IMDB-id from TV database
 	$imdbID = getDbTVIMDb($folderName);
+	
 	//Triggers if ID wasn't found in database
 	if(!$imdbID){
 		//Asks for user input of IMDB-id or URL
@@ -26,6 +27,14 @@
 		//Extracts Id from string/URL
 		$imdbID = trimIMDB($imdbID);
 		setDbTVIMDb($folderName, $imdbID);
+	}
+	
+	$mazeid = getDbTVMaze($imdbID);
+	if(!$mazeid){
+		$mazeid = getTVMaze($imdbID);
+	}
+	if($mazeid){
+		setDbTVMaze($folderName, $mazeid);
 	}
 	
 	$lastep = getLastLocalEpisode($fullPath);
