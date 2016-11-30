@@ -24,7 +24,11 @@ response = urllib.request.urlopen(url).read().decode('utf-8') #reads url, decode
 parsed_json = json.loads(response) #reads and parses json string to variable parsed_json
 
 if sys.argv[3] == "lastAired":
-	print(parsed_json["_links"]["previousepisode"]["href"])
+	#print(parsed_json["_links"]["previousepisode"]["href"])
+	lastepUrl = parsed_json["_links"]["previousepisode"]["href"];
+	response = urllib.request.urlopen(lastepUrl).read().decode('utf-8');
+	parsed_json = json.loads(response);
+	print(parsed_json[sys.argv[4]]);
 
 else:
 	print(parsed_json[sys.argv[3]]) #Prints the parsed json, at value of passed argument 2 (can be title, year, etc for this case)
