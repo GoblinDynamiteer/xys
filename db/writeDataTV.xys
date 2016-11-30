@@ -5,6 +5,7 @@
  include "..\lib\regex.xys";
  include "..\lib\list.xys";
  include "..\lib\securityChecks.xys";
+ include "..\lib\string.xys";
 
 	$fullPath = getFullPath();
 	//Folder name is used as section in TV Database
@@ -25,5 +26,29 @@
 		//Extracts Id from string/URL
 		$imdbID = trimIMDB($imdbID);
 		setDbTVIMDb($folderName, $imdbID);
+	}
+	
+	$lastep = getLastLocalEpisode($fullPath);
+	$nextEp = episodeNextNumber($lastep);
+	$nextEp2 = episodeNextSeason($lastep);
+	
+	$mid = getTVMaze($imdbID);
+	if(TVEpisodeStatus($mid, $nextEp)){
+		$collect = $nextEp;
+	}
+	
+	elseif(TVEpisodeStatus($mid, $nextEp2)){
+		$collect = $nextEp2;
+	}
+	
+	else {
+		$collect = 0;
+	}
+	
+	if($collect){
+		text "Next episode is: " . $collect . " which airs " . TVEpisodeAirdate($mid, $collect);
+	}
+	else {
+		text "Could not find next episode!!! Show status: " . TVshowStatus($imdbID);
 	}
 	
