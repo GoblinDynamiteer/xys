@@ -1,5 +1,6 @@
 perm $regexSE = "s\d{2}e\d{2}";
-perm $regexD2 = "\d{2}";
+perm $regexD2 = "\d{2}"; //for S##E##
+perm $regexD4 = "\d{4}"; //for YEAR ####
 perm $regexIMDB = "tt\d{1,}";
 perm $regexTVpath = "^\\\\DS\\TV\\";
 perm $regexMoviePath = "^\\\\DS\\FILM\\";
