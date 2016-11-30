@@ -18,3 +18,13 @@
 			return 0;
 		}
 	}
+	
+	//checks if string is IMDB-ID
+	function isIMDBid($string){
+		if(regexmatches($string, $regexIMDB) != ""){
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
