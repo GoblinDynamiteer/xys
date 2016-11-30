@@ -6,7 +6,7 @@ import json, urllib.request, sys #libraries for json and url
 #sys.argv[0] contains script-name -- similar to C
 #sys.argv[1] contains passed argument 1 -- similar to C
 #sys.argv[2] contains passed argument 2
-#sys.argv[3] contains passed argument 3  1 = OMDb 2= TVmaze
+#sys.argv[3] contains passed argument 3  1 = OMDb 2= TVmaze 3=TVmaze episode
 
 imdb = sys.argv[1]
 
@@ -16,7 +16,12 @@ if int(sys.argv[2]) == 1: #Arguments are passed as strings? Use int() to convert
 
 elif int(sys.argv[2]) == 2:
 	url = "http://api.tvmaze.com/lookup/shows?imdb=" + imdb
-	
+
+#use tvmaze id instead of imdb-id - for checking episodes
+#http://api.tvmaze.com/shows/5529/episodebynumber?season=1&number=1
+elif int(sys.argv[2]) == 3:
+	url = "http://api.tvmaze.com/shows/" + imdb + "/episodebynumber?season=" + sys.argv[4] + "&number=" +  sys.argv[5]
+
 else:
 	print("Wrong arg2")
 
@@ -29,6 +34,16 @@ if sys.argv[3] == "lastAired":
 	response = urllib.request.urlopen(lastepUrl).read().decode('utf-8');
 	parsed_json = json.loads(response);
 	print(parsed_json[sys.argv[4]]);
+	
+elif sys.argv[3] == "nextAired":
+	#print(parsed_json["_links"]["previousepisode"]["href"])
+	nextepUrl = parsed_json["_links"]["nextepisode"]["href"];
+	response = urllib.request.urlopen(nextepUrl).read().decode('utf-8');
+	parsed_json = json.loads(response);
+	print(parsed_json[sys.argv[4]]);
+
+elif sys.argv[3] == "epCheck":
+	print(parsed_json[sys.argv[6]]);
 
 else:
 	print(parsed_json[sys.argv[3]]) #Prints the parsed json, at value of passed argument 2 (can be title, year, etc for this case)
