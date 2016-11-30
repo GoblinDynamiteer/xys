@@ -1,4 +1,5 @@
 	perm $dbTV = "D:\Google Drive\Scriptstuff\MediaDb\tv.db";
+	perm $dbTVep = "D:\Google Drive\Scriptstuff\MediaDb\tvep.db";
 	perm $dbFilm = "D:\Google Drive\Scriptstuff\MediaDb\film.db";
 	perm $pytFolder = "D:\Google Drive\Scriptstuff\xyplorer\python\";
 
@@ -145,7 +146,28 @@
 	//Section is folder name for tv-show
 	//Sets TVMaze ID to TV database
 	function setDbTVMaze($section, $data){
-		$data = setDbTVinfo($section, $data, "tvmaze");
+		setDbTVinfo($section, $data, "tvmaze");
+	}
+	
+	//Section is folder name for tv-show
+	//Sets list of current files in show-folder
+	//Keeps record of last list
+	function setDBTVFiles($section){
+		$path = "\\DS\TV\" . $section;
+		$data= getLocalTVFiles($path);
+		$oldList = getkey("files", $section, $dbTVep);
+		setkey $data, "files", $section, $dbTVep;
+		setkey $oldList, "files_pre", $section, $dbTVep;
+	}
+
+	//Gets list of files in database
+	function getDBTVFiles($section){
+		if(isIMDBid($section)){
+			msg "Error: getDBTVFiles() has gotten IMDB-id as passed argument!";
+		}
+		else{
+			return getkey("files", $section, $dbTVep);
+		}
 	}
 	
 	//Gets TVMaze ID from TVMaze Database
@@ -167,13 +189,43 @@
 	
 	//Gets Year of Movie / TV-show from OMDB with python-script
 	function getYear($imdb){
-		return pythonOMDB($imdb, "Year");
+		$data = pythonOMDB($imdb, "Year");
+		if(strlen($data) > 4){
+			$data = regexmatches($data, $regexD4);
+			if(gettoken($data, "count", |) > 1){
+				$startyear = gettoken($data, 1, |);
+				$endyear = gettoken($data, -1, |);
+				return $startyear . "-" . $endyear;
+			}
+			else{
+				return $data . "-";
+			}
+		}
+		else{
+			return $data;
+		}
 	}
 	
 	//Gets Genre of Movie / TV-show from OMDB with python-script
 	function getGenre($imdb){
 		return pythonOMDB($imdb, "Genre");
 	}
+	
+
+	//Sets Genre of TV-show to TV Database
+	function setDbTVGenre($section, $data){
+		setDbTVinfo($section, $data, "genre");
+	}
+	
+	//Sets last local episode of TV-show to TV Database
+	function setDbTVLocalEp($section, $data){
+		setDbTVinfo($section, $data, "localep");
+	}	
+	
+	//Sets Year of TV-show to TV Database
+	function setDbTVYear($section, $data){
+		setDbTVinfo($section, $data, "year");
+	}	
 	
 	//Gets Rating of Movie / TV-show from OMDB with python-script
 	function getRating($imdb){
