@@ -11,6 +11,7 @@
 	//Folder name is used as section in TV Database
 	$folderName = getFolderName();
 	$section = $folderName;
+	$tvShow = $folderName;
 	//Checks if selected folder is in TV location of NAS
 	//getFullPath returns zero at various errors
 	if(!$fullPath || !isTV($fullPath)){
@@ -30,17 +31,36 @@
 		setDbTVIMDb($folderName, $imdbID);
 	}
 	
-	$mazeid = getDbTVMaze($imdbID);
+	$mazeid = getDbTVMaze($section);
 	if(!$mazeid){
-		$mazeid = getTVMaze($imdbID);
+		step;
+		$mazeid = getTVMaze($section);
+		if(!$mazeid){
+			$mazeid = input(
+			"TVMaze Id could not be set!", 
+			"Enter manually!");
+		}
 	}
 	if($mazeid){
 		setDbTVMaze($folderName, $mazeid);
 	}
+
 	setDbTVLocalEp($folderName, getLastLocalEpisode($fullPath));
-	setDbTVGenre($folderName, getGenre($imdbID));
-	setDbTVYear($folderName, getYear($imdbID));
+	setDbTVGenre($folderName, getGenre($tvShow));
+	setDbTVYear($folderName, getYear($tvShow));
 	setDBTVFiles($section);
+	setDbTVStatus($section, TVshowStatus($tvShow));
+	
+	$lastAiredEpisode = getLastAiredEpisode($tvShow);
+	$lastAiredEpisodeDate = getLastAiredDate($tvShow);
+	$nextAiredEpisodeDate = getNextAiredEpisode($tvShow);
+	$nextAiredEpisodeDate = getNextAiredDate($tvShow);
+	
+	setDbTVLastAired($section, $lastAiredEpisode);
+	setDbTVLastAiredDate($section, $lastAiredEpisodeDate);
+	setDbTVNextAired($section, getNextAiredEpisode($tvShow));
+	setDbTVNextAiredDate($section, $nextAiredEpisodeDate);
+	
 /* 	$list = getDBTVFiles($folderName);
 	foreach($file, getLocalTVFiles($fullPath), |){
 		if(strpos($list , $file) == -1){
