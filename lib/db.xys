@@ -5,6 +5,9 @@
 
 	perm $pythErrorText =  "Python script returned error!";
 	
+	perm $hexOrange = "FF4500";
+	perm $hexGreen = "2E8B57";
+	
 	//Gets IMDB-id from string, returns ID in format tt######
 	function trimIMDB($string){
 		//example input string: http://www.imdb.com/title/tt0103064/
@@ -21,9 +24,9 @@
 	
 	//python json_tvmaze_omdb.py tt3107288 1 Year
 	function pythonOMDB($imdb, $info){
-		$data = runret('python tvmaze_omdb.py "' . $imdb . '" 1 "'. $info .'"', $pytFolder);
+		$data = runret('python omdb.py "' . $imdb . '" "'. $info .'"', $pytFolder);
 		if(!checkPythonScriptError($data)){
-			msg $pythErrorText;
+			status $pythErrorText, "FF0000", "alert";
 			return 0;
 		}
 		else{
@@ -32,8 +35,8 @@
 	}
 	
 	//Gets TVMaze data (last aired ep) with API, using python-script
-	function pythonTVMazeLastEp($imdb, $info){
-		$data = runret('python tvmaze_omdb.py "' . $imdb . '" 2 "lastAired" "'. $info .'" ', $pytFolder);
+	function pythonTVMazeLastEp($mazeid, $info){
+		$data = runret('python tvmaze_tvmid_prevep.py "' . $mazeid . '" "'. $info .'" ', $pytFolder);
 		if(!checkPythonScriptError($data)){
 			if(regexmatches($data, "404"){
 				return 404;
@@ -48,13 +51,18 @@
 	}
 	
 	//Gets TVMaze data (next aired ep) with API, using python-script
-	function pythonTVMazeNextEp($imdb, $info){
-		$data = runret('python tvmaze_omdb.py "' . $imdb . '" 2 "nextAired" "'. $info .'" ', $pytFolder);
-		if(!checkPythonScriptError($data)){
-			msg $pythErrorText;
+	function pythonTVMazeNextEp($mazeid, $info){
+		$data = runret('python tvmaze_tvmid_nextep.py "' . $mazeid . '" "'. $info .'" ', $pytFolder);
+		if(strpos($data, "KeyError") != -1) {
+			status "TVMaze: No data for next episode!", $hexOrange, "alert";
+			return -1;
+		}
+		elseif(!checkPythonScriptError($data)){
+			status $pythErrorText, "FF0000", "alert";
 			return 0;
 		}
 		else{
+			status "TVMaze: Found data for next episode!", $hexGreen, "ready";
 			return removeCRLF($data);
 		}
 	}
@@ -62,7 +70,8 @@
 	//Gets TVMaze data (next aired ep) with API, using python-script
 	function pythonTVMazeEpisode($mazeid, $info, $episode){
 		if(regexmatches($mazeid, "tt") != ""){
-			msg "Error: pythonTVMazeNextEp() needs TVMaze-id, not IMDB-id!";
+			msg "Error: pythonTVMazeEpisode() needs TVMaze-id, not IMDB-id!";
+			status $pythErrorText, "FF0000", "alert"
 			return 0;
 		}
 		else{
@@ -72,7 +81,7 @@
 			$season = gettoken($seasonepisode, 1, "|");
 			//gets last token from ##|##
 			$number = gettoken($seasonepisode, -1, "|");
-			$data = runret('python tvmaze_omdb.py "' . $mazeid . '" 3 "epCheck" "' . $season . '" "' . $number . '" "'. $info .'" ', $pytFolder);
+			$data = runret('python tvmaze_tvmid_episode.py "' . $mazeid . '" "' . $season . '" "' . $number . '" "'. $info .'" ', $pytFolder);
 			if(!checkPythonScriptError($data)){
 				if(regexmatches($data, "404"){
 					return 404;
@@ -88,8 +97,13 @@
 	}
 	
 	//Gets TVMaze data (show-info) with API, suing python-script
-	function pythonTVMaze($imdb, $info){
-		$data = runret('python tvmaze_omdb.py "' . $imdb . '" 2 "'. $info .'" ', $pytFolder);
+	function pythonTVMaze($mazeid, $info){
+		if(isIMDBid($mazeid)){
+			$data = runret('python tvmaze_imdb.py "' . $mazeid . '" "'. $info .'" ', $pytFolder);
+		}
+		else{
+			$data = runret('python tvmaze_tvmid.py "' . $mazeid . '" "'. $info .'" ', $pytFolder);
+		}
 		if(!checkPythonScriptError($data)){
 			if(regexmatches($data, "404"){
 				return 404;
@@ -171,7 +185,8 @@
 	}
 	
 	//Gets TVMaze ID from TVMaze Database
-	function getTVMaze($imdb){
+	function getTVMaze($section){
+		$imdb = getDbTVIMDb($section);
 		$data = pythonTVMaze($imdb, "id");
 		//Checks response from python function
 		if((strlen($data) > 10) || ($data == 0) || ($data == 404)){
@@ -183,12 +198,14 @@
 	}
 	
 	//Gets Title of Movie / TV-show from OMDB with python-script
-	function getTitle($imdb){
+	function getTitle($section){
+		$imdb = getDbTVIMDb($section);
 		return pythonOMDB($imdb, "Title");
 	}
 	
 	//Gets Year of Movie / TV-show from OMDB with python-script
-	function getYear($imdb){
+	function getYear($section){
+		$imdb = getDbTVIMDb($section);
 		$data = pythonOMDB($imdb, "Year");
 		if(strlen($data) > 4){
 			$data = regexmatches($data, $regexD4);
@@ -207,7 +224,8 @@
 	}
 	
 	//Gets Genre of Movie / TV-show from OMDB with python-script
-	function getGenre($imdb){
+	function getGenre($section){
+		$imdb = getDbTVIMDb($section);
 		return pythonOMDB($imdb, "Genre");
 	}
 	
@@ -228,35 +246,58 @@
 	}	
 	
 	//Gets Rating of Movie / TV-show from OMDB with python-script
-	function getRating($imdb){
+	function getRating($section){
+		$imdb = getDbTVIMDb($section);
 		return pythonOMDB($imdb, "imdbRating");
 	}
 	
 	//Gets airdate for last aired episode
-	function getLastAiredDate($imdb){
-		return pythonTVMazeLastEp($imdb, "airdate");
+	function getLastAiredDate($section){
+		$mazeid = getDbTVMaze($section);
+		return pythonTVMazeLastEp($mazeid, "airdate");
 	}
+
+
 	
 	//Gets airdate for next unaired episode
-	function getNextAiredDate($imdb){
-		return pythonTVMazeNextEp($imdb, "airdate");
+	function getNextAiredDate($section){
+		$mazeid = getDbTVMaze($section);
+		$data = pythonTVMazeNextEp($mazeid, "airdate");
+		if($data == -1){
+			return "No data for next episode!";
+		}
+		else {
+			return $data;
+		}
 	}
-	
+
 	//Gets next unaired episode
-	function getNextAiredEpisode($imdb){
+	function getNextAiredEpisode($section){
+		$mazeid = getDbTVMaze($section);
 		//API JSON : "season":6,"number":10
-		$season = pythonTVMazeNextEp($imdb, "season");
-		$episode = pythonTVMazeNextEp($imdb, "number");
-		// format(1, "000"); //001
-		$season = format($season, "00");
-		$episode = format($episode, "00");
-		return "S" . $season . "E" . $episode;
+		$season = pythonTVMazeNextEp($mazeid, "season");
+		if($season == -1){
+			return "No data for next episode!";
+		}
+		else{
+			$episode = pythonTVMazeNextEp($mazeid, "number");
+			// format(1, "000"); //001
+			$season = format($season, "00");
+			$episode = format($episode, "00");
+			return "S" . $season . "E" . $episode;
+		}
 	}
 	
 	//Gets status of tv show: ended/running etc
-	function TVshowStatus($imdb){
-		return pythonTVMaze($imdb, "status");
+	function TVshowStatus($section){
+		$mazeid = getDbTVMaze($section);
+		return pythonTVMaze($mazeid, "status");
 	}
+
+	//Sets status of TV-show to TV Database
+	function setDbTVStatus($section, $data){
+		setDbTVinfo($section, $data, "status");
+	}		
 	
 	//Checks if episode exists in TVMaze database
 	function TVEpisodeStatus($tvmazeid, $episode){
@@ -275,15 +316,35 @@
 	}
 	
 	//Gets last aired episode
-	function getLastAiredEpisode($imdb){
+	function getLastAiredEpisode($section){
+		$mazeid = getDbTVMaze($section);
 		//API JSON : "season":6,"number":10
-		$season = pythonTVMazeLastEp($imdb, "season");
-		$episode = pythonTVMazeLastEp($imdb, "number");
+		$season = pythonTVMazeLastEp($mazeid, "season");
+		$episode = pythonTVMazeLastEp($mazeid, "number");
 		// format(1, "000"); //001
 		$season = format($season, "00");
 		$episode = format($episode, "00");
 		return "S" . $season . "E" . $episode;
 	}
+	
+	//Sets last aired episode of TV-show to TV Database
+	function setDbTVLastAired($section, $data){
+		setDbTVinfo($section, $data, "lastaired");
+	}
+	
+	function setDbTVLastAiredDate($section, $data){
+		setDbTVinfo($section, $data, "lastaireddate");
+	}
+
+	//Sets next aired episode of TV-show to TV Database
+	function setDbTVNextAired($section, $data){
+		setDbTVinfo($section, $data, "nextaired");
+	}		
+	
+	//Sets next aired episode of TV-show to TV Database
+	function setDbTVNextAiredDate($section, $data){
+		setDbTVinfo($section, $data, "nextaireddate");
+	}		
 	
 	//Returns 0 if python script returned error
 	function checkPythonScriptError($string){
