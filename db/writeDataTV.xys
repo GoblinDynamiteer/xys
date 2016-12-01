@@ -10,6 +10,7 @@
 	$fullPath = getFullPath();
 	//Folder name is used as section in TV Database
 	$folderName = getFolderName();
+	$section = $folderName;
 	//Checks if selected folder is in TV location of NAS
 	//getFullPath returns zero at various errors
 	if(!$fullPath || !isTV($fullPath)){
@@ -36,28 +37,17 @@
 	if($mazeid){
 		setDbTVMaze($folderName, $mazeid);
 	}
-	
-	$lastep = getLastLocalEpisode($fullPath);
-	$nextEp = episodeNextNumber($lastep);
-	$nextEp2 = episodeNextSeason($lastep);
-	
-	$mid = getTVMaze($imdbID);
-	if(TVEpisodeStatus($mid, $nextEp)){
-		$collect = $nextEp;
-	}
-	
-	elseif(TVEpisodeStatus($mid, $nextEp2)){
-		$collect = $nextEp2;
-	}
-	
-	else {
-		$collect = 0;
-	}
-	
-	if($collect){
-		text "Next episode is: " . $collect . " which airs " . TVEpisodeAirdate($mid, $collect);
-	}
-	else {
-		text "Could not find next episode!!! Show status: " . TVshowStatus($imdbID);
-	}
-	
+	setDbTVLocalEp($folderName, getLastLocalEpisode($fullPath));
+	setDbTVGenre($folderName, getGenre($imdbID));
+	setDbTVYear($folderName, getYear($imdbID));
+	setDBTVFiles($section);
+/* 	$list = getDBTVFiles($folderName);
+	foreach($file, getLocalTVFiles($fullPath), |){
+		if(strpos($list , $file) == -1){
+			//msg "newfile!";
+			;
+		}
+	} */
+
+
+
