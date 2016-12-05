@@ -1,3 +1,5 @@
+ include "..\lib\regex.xys";
+
 	function removeCRLF($string){
 		return replace($string, <crlf>);
 	}
@@ -23,4 +25,23 @@
 		$season++;
 		$season = format($season, "00");
 		return "S" . $season . "E01";
+	}
+
+	function getMovieLetter($string){
+		if(regexmatches($string, $regexThe) != ""){
+			$firstLetter = substr($string, 4, 1);
+		}
+		else{
+			$firstLetter = substr($string, 0, 1);
+		}
+		if(regexmatches($firstLetter, $regexD1) != ""){
+			$firstLetter = "#";
+		}
+		elseif(($firstLetter == "V") || ($firstLetter == "W")) {
+			$firstLetter = "VW";
+		}
+		else {
+			$firstLetter = $firstLetter;
+		}
+		return $firstLetter;
 	}
