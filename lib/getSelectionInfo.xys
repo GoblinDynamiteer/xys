@@ -46,3 +46,4 @@
 			return gettoken($path, -1, "\");
 		}
 	}
+	

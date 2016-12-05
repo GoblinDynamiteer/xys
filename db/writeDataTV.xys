@@ -33,7 +33,7 @@
 	
 	$mazeid = getDbTVMaze($section);
 	if(!$mazeid){
-		step;
+
 		$mazeid = getTVMaze($section);
 		if(!$mazeid){
 			$mazeid = input(

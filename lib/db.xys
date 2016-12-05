@@ -226,7 +226,9 @@
 	//Gets Genre of Movie / TV-show from OMDB with python-script
 	function getGenre($section){
 		$imdb = getDbTVIMDb($section);
-		return pythonOMDB($imdb, "Genre");
+		$data = pythonOMDB($imdb, "Genre");
+		status "Got genre from OMDB: " . $data, "0000FF", "progress";
+		return $data;
 	}
 	
 

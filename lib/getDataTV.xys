@@ -20,6 +20,7 @@
 	
 	//Finds and returns the last episode
 	function getLastLocalEpisode($path){
+		status "Getting episode file list", "0000FF", "progress";
 		$seasonFolders = getSeasonsFolders($path);
 		//Sorts list
 		$seasonFolders = sortList($seasonFolders);
