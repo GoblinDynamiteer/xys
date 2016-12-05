@@ -1,0 +1,6 @@
+	$unrarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\unrar.exe";
+
+	function unrar($source, $location) {
+		status "Packar upp: ". $source, 000000, progress;
+		run '"' . $unrarExe . '" x "' . $source . '" "' . $location . '"', , 2;
+	}
