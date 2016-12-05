@@ -1,0 +1,9 @@
+ include "..\lib\rar.xys";
+ include "..\lib\getSelectionInfo.xys";
+ include "..\lib\string.xys";
+ //include "..\lib\regex.xys";
+
+	$selectedItemPath = getFullPath();
+	$selectedItemName = getFolderName();
+	$firstLetter = getMovieLetter($selectedItemName);
+	text $selectedItemPath . <crlf> . $selectedItemName . <crlf> . $firstLetter;
