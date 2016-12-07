@@ -28,15 +28,18 @@
 	}
 
 	function getMovieLetter($string){
+		//The. shall be ignored, first letter after The. is movie folder
 		if(regexmatches($string, $regexThe) != ""){
 			$firstLetter = substr($string, 4, 1);
 		}
 		else{
 			$firstLetter = substr($string, 0, 1);
 		}
+		//If first letter is a digit
 		if(regexmatches($firstLetter, $regexD1) != ""){
 			$firstLetter = "#";
 		}
+		// V and W should be in folder VW
 		elseif(($firstLetter == "V") || ($firstLetter == "W")) {
 			$firstLetter = "VW";
 		}
