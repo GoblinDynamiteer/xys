@@ -1,6 +1,11 @@
-	$unrarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\unrar.exe";
+	perm $unrarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\unrar.exe";
 
-	function unrar($source, $location) {
-		status "Packar upp: ". $source, 000000, progress;
-		run '"' . $unrarExe . '" x "' . $source . '" "' . $location . '"', , 2;
+	function unrar($source, $destination) {
+		//Creates desitination directory if doesnt exist
+		if(!exists($destination)){
+			new($destination, "dir");
+			wait 100;
+		}
+		status "Unraring: ". $source, 000000, progress;
+		run '"' . $unrarExe . '" x "' . $source . '" "' . $destination . '"', , 2;
 	}
