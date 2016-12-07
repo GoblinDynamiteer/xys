@@ -28,9 +28,15 @@
 	}
 
 	function getMovieLetter($string){
-		//The. shall be ignored, first letter after The. is movie folder
+		//Skips The/An/A
 		if(regexmatches($string, $regexThe) != ""){
 			$firstLetter = substr($string, 4, 1);
+		}
+		elseif(regexmatches($string, $regexAn) != ""){
+			$firstLetter = substr($string, 3, 1);
+		}
+		elseif(regexmatches($string, $regexA) != ""){
+			$firstLetter = substr($string, 2, 1);
 		}
 		else{
 			$firstLetter = substr($string, 0, 1);
