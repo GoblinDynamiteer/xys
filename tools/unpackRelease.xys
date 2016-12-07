@@ -1,9 +1,30 @@
  include "..\lib\rar.xys";
  include "..\lib\getSelectionInfo.xys";
  include "..\lib\string.xys";
- //include "..\lib\regex.xys";
+ include "..\lib\db.xys";
 
 	$selectedItemPath = getFullPath();
 	$selectedItemName = getFolderName();
 	$firstLetter = getMovieLetter($selectedItemName);
-	text $selectedItemPath . <crlf> . $selectedItemName . <crlf> . $firstLetter;
+	//Full DS destination
+	$destination = $dsFilm . $firstLetter . "\" .  $selectedItemName;
+	//To show in confirm dialog
+	$ConfirmText = "Extract "  . <crlf> . $selectedItemName . " to "  . <crlf> . $destination;
+	
+	//confirm(text, [linebreaker="<br>"], [DefaultButton=1], [Buttons=1])
+	//Buttons = 4 = Yes/No, returns 1/0
+	$confirm = confirm($ConfirmText, , 2, 4);
+	if($confirm){
+		//Move Subs-folder to DS/Misc
+		if(exists($selectedItemPath . "\Subs")){
+			moveas $selectedItemName, $dsSUB, $selectedItemPath . "\Subs";
+		}
+		tag "Extracted: Delete Me!", $selectedItemPath, 2, 1;
+		tag "Red", $selectedItemPath, 0, 0;
+		unrar($selectedItemPath, $destination);
+	}
+	else{
+		status "Cancelled", $hexOrange, stop;
+	}
+	releaseglobals 3;
+	end 1;
