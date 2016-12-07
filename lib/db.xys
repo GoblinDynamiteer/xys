@@ -1,6 +1,8 @@
 	perm $dbTV = "D:\Google Drive\Scriptstuff\MediaDb\tv.db";
 	perm $dbTVep = "D:\Google Drive\Scriptstuff\MediaDb\tvep.db";
 	perm $dbFilm = "D:\Google Drive\Scriptstuff\MediaDb\film.db";
+	perm $newTxt = "D:\Google Drive\Scriptstuff\MediaDb\new.txt";
+	perm $dbFolder = "D:\Google Drive\Scriptstuff\MediaDb\";
 	perm $pytFolder = "D:\Google Drive\Scriptstuff\xyplorer\python\";
 
 	perm $pythErrorText =  "Python script returned error!";
@@ -121,6 +123,18 @@
 		}
 	}
 
+	function addNewTVEpisode($episode, $show){
+		$today = now("yyyy-mm-dd");
+		$mazeID = getTVMaze($show);
+		$title = pythonTVMazeEpisode($mazeID, "name", $episode);
+		$airdate = pythonTVMazeEpisode($mazeID, "airdate", $episode);
+		//writefile(filename, data, [on_exist], [mode]) 
+		$textstring = "[ " . $today . " ] [ TV ] [ " . $show . " ] [ " . $episode . " : " . $title . " ] [ Airdate: " . $airdate . " ]";
+		//copyto $dbFolder . "bak", $newTxt, , , , 2;
+		//copyas "*_bak", $dbFolder, $newTxt;
+		writefile($newTxt, $textstring . <crlf>, "a");
+	}
+	
 	//Writes data to TV Database
 	function setDbTVinfo($section, $data, $key){
 		setkey $data, $key, $section, $dbTV;
