@@ -8,6 +8,10 @@
 	perm $hexOrange = "FF4500";
 	perm $hexGreen = "2E8B57";
 	
+	perm $dsFilm = "\\DS\FILM\";
+	perm $dsTV = "\\DS\TV\";
+	perm $dsSUB = "\\DS\MISC\SUB Subtitles\";
+	
 	//Gets IMDB-id from string, returns ID in format tt######
 	function trimIMDB($string){
 		//example input string: http://www.imdb.com/title/tt0103064/
