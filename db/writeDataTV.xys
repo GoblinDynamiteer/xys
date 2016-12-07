@@ -6,6 +6,7 @@
  include "..\lib\list.xys";
  include "..\lib\securityChecks.xys";
  include "..\lib\string.xys";
+ include "..\lib\xyplorerCommands";
 
 	$fullPath = getFullPath();
 	//Folder name is used as section in TV Database
@@ -61,6 +62,8 @@
 	setDbTVNextAired($section, getNextAiredEpisode($tvShow));
 	setDbTVNextAiredDate($section, $nextAiredEpisodeDate);
 	
+	wait 200;
+	
 /* 	$list = getDBTVFiles($folderName);
 	foreach($file, getLocalTVFiles($fullPath), |){
 		if(strpos($list , $file) == -1){
@@ -68,6 +71,7 @@
 			;
 		}
 	} */
+	refreshWindow();
 
 
 

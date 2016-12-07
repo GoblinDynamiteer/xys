@@ -1,0 +1,5 @@
+
+	function refreshWindow(void){
+		#1001;	//refresh 
+		#372;	//autoresize columns 
+	}
