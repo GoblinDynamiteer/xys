@@ -47,9 +47,7 @@
 	if($mazeid){
 		setDbTVMaze($folderName, $mazeid);
 	}
-
 	if($fullUpdate){
-		setDbTVLocalEp($folderName, getLastLocalEpisode($fullPath));
 		if(!getDbTVGenre($tvShow)){
 				setDbTVGenre($folderName, getGenre($tvShow));
 		}
@@ -57,7 +55,8 @@
 				setDbTVYear($folderName, getYear($tvShow));
 		}
 	}
-
+	
+	setDbTVLocalEp($folderName, getLastLocalEpisode($fullPath));
 	setDbTVStatus($section, TVshowStatus($tvShow));
 	$lastAiredEpisode = getLastAiredEpisode($tvShow);
 	$lastAiredEpisodeDate = getLastAiredDate($tvShow);
@@ -68,26 +67,25 @@
 	setDbTVLastAiredDate($section, $lastAiredEpisodeDate);
 	setDbTVNextAired($section, getNextAiredEpisode($tvShow));
 	setDbTVNextAiredDate($section, $nextAiredEpisodeDate);
-	
 	wait 200;
-	setDBTVFiles($section);
-	
-	//Checks for new episodes, compares to database
-	$list = getDBTVFiles($folderName);
-	$localfiles = getLocalTVFiles($fullPath);
-	$localfiles  = episodeSorter($localfiles);
-
-	$newFiles = "";
-	foreach($file, $localfiles, |){
-		if(strpos($list , $file) == -1){
-			$newFiles = $newFiles . "|" . $file;
+	//step;
+	msg "Not checking new files!";
+	$checkNew = 0;
+	if($checkNew){
+		//Checks for new episodes, compares to database
+		$list = getDBTVFiles($folderName);
+		$localfiles = getLocalTVFiles($fullPath);
+		$localfiles  = episodeSorter($localfiles);
+		foreach($file, $localfiles, |){
+			if(strpos($list , $file) == -1){
+				status "Found new episode: " . $file, $hexGreen, "alert";
+				addNewTVEpisode($file, $tvShow);
+			}
 		}
 	}
-	
-	text $newFiles;
-	
 	wait 200;
-	
+	setDBTVFiles($section);
+	wait 200;
 	refreshWindow();
 
 
