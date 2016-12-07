@@ -241,6 +241,12 @@
 		setDbTVinfo($section, $data, "genre");
 	}
 	
+	//Section is folder name for tv-show
+	//Gets year from TV database
+	function getDbTVGenre($section){
+		return getDbTVinfo($section, "genre");
+	}
+	
 	//Sets last local episode of TV-show to TV Database
 	function setDbTVLocalEp($section, $data){
 		setDbTVinfo($section, $data, "localep");
@@ -251,6 +257,12 @@
 		setDbTVinfo($section, $data, "year");
 	}	
 	
+	//Section is folder name for tv-show
+	//Gets year from TV database
+	function getDbTVYear($section){
+		return getDbTVinfo($section, "year");
+	}
+
 	//Gets Rating of Movie / TV-show from OMDB with python-script
 	function getRating($section){
 		$imdb = getDbTVIMDb($section);
