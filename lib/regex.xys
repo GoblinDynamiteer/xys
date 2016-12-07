@@ -1,8 +1,17 @@
+//For SeasonEpisode S##E##
 perm $regexSE = "s\d{2}e\d{2}";
-perm $regexThe = "^the.";
-perm $regexD2 = "\d{2}"; //for S##E##
-perm $regexD1 = "\d{1}"; //for checking if number
-perm $regexD4 = "\d{4}"; //for YEAR ####
+
+//For first string in movie folder releases
+perm $regexThe = "^the\.";
+perm $regexA = "^a\.";
+perm $regexAn = "^an\.";
+
+//Gets 1/2/4 digits
+perm $regexD1 = "\d{1}";
+perm $regexD2 = "\d{2}";
+perm $regexD4 = "\d{4}"; //eg. for year 1922
+
+//Regex for getting IMDB-id
 perm $regexIMDB = "tt\d{1,}";
 perm $regexTVpath = "^\\\\DS\\TV\\";
 perm $regexMoviePath = "^\\\\DS\\FILM\\";
