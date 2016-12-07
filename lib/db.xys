@@ -171,8 +171,9 @@
 	//Sets list of current files in show-folder
 	//Keeps record of last list
 	function setDBTVFiles($section){
-		$path = "\\DS\TV\" . $section;
-		$data= getLocalTVFiles($path);
+		$path = $dsTV . $section;
+		$data = getLocalTVFiles($path);
+		$data = episodeSorter($data);
 		$oldList = getkey("files", $section, $dbTVep);
 		setkey $data, "files", $section, $dbTVep;
 		setkey $oldList, "files_pre", $section, $dbTVep;

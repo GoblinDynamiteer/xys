@@ -57,7 +57,7 @@
 				setDbTVYear($folderName, getYear($tvShow));
 		}
 	}
-	setDBTVFiles($section);
+
 	setDbTVStatus($section, TVshowStatus($tvShow));
 	$lastAiredEpisode = getLastAiredEpisode($tvShow);
 	$lastAiredEpisodeDate = getLastAiredDate($tvShow);
@@ -70,14 +70,24 @@
 	setDbTVNextAiredDate($section, $nextAiredEpisodeDate);
 	
 	wait 200;
+	setDBTVFiles($section);
 	
-/* 	$list = getDBTVFiles($folderName);
-	foreach($file, getLocalTVFiles($fullPath), |){
+	//Checks for new episodes, compares to database
+	$list = getDBTVFiles($folderName);
+	$localfiles = getLocalTVFiles($fullPath);
+	$localfiles  = episodeSorter($localfiles);
+
+	$newFiles = "";
+	foreach($file, $localfiles, |){
 		if(strpos($list , $file) == -1){
-			//msg "newfile!";
-			;
+			$newFiles = $newFiles . "|" . $file;
 		}
-	} */
+	}
+	
+	text $newFiles;
+	
+	wait 200;
+	
 	refreshWindow();
 
 

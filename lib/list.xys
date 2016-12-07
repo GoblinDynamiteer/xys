@@ -9,3 +9,9 @@
 		return gettoken($list, -1, "|");
 	}
 
+	function episodeSorter($list){
+		$data = getSE($list);
+		$data = sortList($data);
+		$data = recase($data, "upper");
+		return $data;
+	}
