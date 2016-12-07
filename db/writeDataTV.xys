@@ -13,6 +13,7 @@
 	$folderName = getFolderName();
 	$section = $folderName;
 	$tvShow = $folderName;
+	$fullUpdate = 0;
 	//Checks if selected folder is in TV location of NAS
 	//getFullPath returns zero at various errors
 	if(!$fullPath || !isTV($fullPath)){
@@ -30,6 +31,7 @@
 		//Extracts Id from string/URL
 		$imdbID = trimIMDB($imdbID);
 		setDbTVIMDb($folderName, $imdbID);
+		$fullUpdate = 1;
 	}
 	
 	$mazeid = getDbTVMaze($section);
@@ -46,12 +48,17 @@
 		setDbTVMaze($folderName, $mazeid);
 	}
 
-	setDbTVLocalEp($folderName, getLastLocalEpisode($fullPath));
-	setDbTVGenre($folderName, getGenre($tvShow));
-	setDbTVYear($folderName, getYear($tvShow));
+	if($fullUpdate){
+		setDbTVLocalEp($folderName, getLastLocalEpisode($fullPath));
+		if(!getDbTVGenre($tvShow)){
+				setDbTVGenre($folderName, getGenre($tvShow));
+		}
+		if(!getDbTVYear($tvShow)){
+				setDbTVYear($folderName, getYear($tvShow));
+		}
+	}
 	setDBTVFiles($section);
 	setDbTVStatus($section, TVshowStatus($tvShow));
-	
 	$lastAiredEpisode = getLastAiredEpisode($tvShow);
 	$lastAiredEpisodeDate = getLastAiredDate($tvShow);
 	$nextAiredEpisodeDate = getNextAiredEpisode($tvShow);
