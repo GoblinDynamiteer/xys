@@ -68,9 +68,8 @@
 	setDbTVNextAired($section, getNextAiredEpisode($tvShow));
 	setDbTVNextAiredDate($section, $nextAiredEpisodeDate);
 	wait 200;
-	//step;
-	msg "Not checking new files!";
-	$checkNew = 0;
+	$checkNew = confirm("Check for new episodes?", , 2, 4);
+	$foundNewFiles = 0;
 	if($checkNew){
 		//Checks for new episodes, compares to database
 		$list = getDBTVFiles($folderName);
@@ -78,14 +77,18 @@
 		$localfiles  = episodeSorter($localfiles);
 		foreach($file, $localfiles, |){
 			if(strpos($list , $file) == -1){
-				status "Found new episode: " . $file, $hexGreen, "alert";
+				status "Found new episode: " . $file, $hexGreen, "ready";
 				addNewTVEpisode($file, $tvShow);
+				$foundNewFiles = 1;
 			}
 		}
 	}
 	wait 200;
-	setDBTVFiles($section);
-	wait 200;
+	if($foundNewFiles || !$checkNew){
+		status "Updating episode database with current local files.", $hexGreen, "ready";
+		setDBTVFiles($section);
+		wait 200;
+	}
 	refreshWindow();
 
 
