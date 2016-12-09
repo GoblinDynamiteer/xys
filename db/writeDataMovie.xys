@@ -6,55 +6,44 @@
  include "..\lib\securityChecks.xys";
  include "..\lib\string.xys";
  include "..\lib\xyplorerCommands";
- 
-	$fullPath = getFullPath();
-	$folderName = getFolderName();
-	$section = $folderName;
-	$Movie = $folderName;
-	$movieLetter = getMovieLetter($section);
-	$path = $dsFilm . $movieLetter;
-	$localFolders = listfolder($path, , 6);
-	$count = gettoken($localFolders , "count", "|");
-	$start = 1;
-	setDBMovieFiles($Movie);
-	//end 1;
-	if(!$fullPath || !isMovie($fullPath)){
-		end 1, "Something went wrong!";
-	}
-	//Temporary- for setting all movies in folders
-	foreach($folder, $localFolders, "|"){
-		$Movie = $folder;
-		$folderName = $folder;
-		$section = $folder;
-		//Gets IMDB-id from Movie database
-		$imdbID = getDbMovieIMDb($Movie);
-		if(!$imdbID){
-			//Gets Id from old database, if available
-			$imdbID = getkey("IMDbID", $Movie, "D:\Google Drive\Scriptstuff\MediaDb\movie_database.txt");
-			if(!$imdbID){
-			//Asks for user input of IMDB-id or URL
-			$imdbID = input(
-				"ID not found in database!", 
-				"Enter IMDB-id / URL for " . $folderName);
-			//Extracts Id from string/URL
-			$imdbID = trimIMDB($imdbID);
+	//Lists and returns folders with full path in NAS movie directory, 
+	//separated with | (default)
+	$movieLetters = listfolder($dsFilm,, 6);
+	foreach($letter, $movieLetters){
+		//Lists and returns movie folders in letter-folder
+		$localFolders = listfolder($dsFilm . $letter, , 6);
+		$dbFolders = getDBMovieFilesByLetter($letter);
+		status "Checking for new movies in: " . $letter;
+		if($localFolders != $dbFolders){
+			wait 1;
+			foreach($localMovie, $localFolders){
+				//New movie found, will ask for IMDB input:
+				if(strpos($dbFolders , $localMovie) == -1){
+					status "Found new movie: " . $localMovie;
+					$imdbID = input("Found new movie!", 
+					"Enter IMDB-id / URL for " . $localMovie);
+					$imdbID = trimIMDB($imdbID);
+					//ends script if IMDB-id incorrect, to prevent writing new
+					//movies to databas
+					if(!$imdbID){
+						end 1; 
+					}
+					//Sets DB data for new movie
+					setDbMovieIMDb($localMovie, $imdbID);
+					$title = getTitle($localMovie);
+					$year = getYear($localMovie);
+					$genre = getGenre($localMovie);
+					setDbMovieGenre($localMovie, $genre);
+					setDbMovieYear($localMovie, $year);
+					setDbMovieTitle($localMovie, $title);
+					status "Data set for: " . $localMovie;
+					//Lists movie as newly added
+					addNewMovie($localMovie);
+				}
 			}
+			//Updates list of movies in database
+			setDBMovieFilesByLetter($letter);
 		}
-		setDbMovieIMDb($section, $imdbID);
-		$title = getTitle($Movie);
-		$year = getYear($Movie);
-		$genre = getGenre($Movie);
-		setDbMovieGenre($Movie, $genre);
-		setDbMovieYear($Movie, $year);
-		setDbMovieTitle($Movie, $title);
-		status "Data set for: " . $Movie . " | Done: " . $start . "/" . $count;
-		$start++;
-		wait 100;
-		
+		wait 1;
 	}
-
-	if($localFolders == getDBMovieFiles($Movie)){
-		msg "no new movies!";
-	}
-	//getDBMovieFiles($Movie);
-	
+	end 1;
