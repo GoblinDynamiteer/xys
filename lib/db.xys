@@ -5,7 +5,8 @@
 	perm $newTxt = "D:\Google Drive\Scriptstuff\MediaDb\new.txt";
 	perm $dbFolder = "D:\Google Drive\Scriptstuff\MediaDb\";
 	perm $pytFolder = "D:\Google Drive\Scriptstuff\xyplorer\python\";
-
+	perm $scriptFolder = "D:\Google Drive\Scriptstuff\xyplorer\";
+	
 	perm $pythErrorText =  "Python script returned error!";
 	
 	perm $hexOrange = "FF4500";
@@ -152,11 +153,12 @@
 		//[ 2016-12-09 ] [ MOVIE ] [ Sherpa ] [ 2015 ] [ BluRay 720p ]
 		$textstring = "[ " . $today . " ] [ MOVIE ] [ " . $title . " ] [ " . $year  . " ] [ " . $source . " " . $res . " ] ";
 		if($spec){
-			$textstring = $textstring . " [ " . $spec " ] ";
+			$textstring = $textstring . " [ " . $spec . " ] ";
 		}
 		if($sc){
-			$textstring = $textstring . " [ " . $sc " ] ";
+			$textstring = $textstring . " [ " . $sc . " ] ";
 		}
+		$textstring = replace($textstring, "  ", " ");
 		writefile($newTxt, $textstring . <crlf>, "a");
 		wait 100;
 		backupto $dsInfo, $newTxt;
@@ -315,7 +317,7 @@
 	//Gets Year of Movie / TV-show from OMDB with python-script
 	function getYear($section){
 		$imdb = getDbMovieIMDb($section);
-		if(!isset($imdb)){
+		if(!$imdb){
 			$imdb = getDbTVIMDb($section);
 		}
 		$data = pythonOMDB($imdb, "Year");
@@ -339,10 +341,18 @@
 	//Gets Genre of Movie / TV-show from OMDB with python-script
 	function getGenre($section){
 		$imdb = getDbMovieIMDb($section);
-		if(!isset($imdb)){
+		if(!$imdb){
 			$imdb = getDbTVIMDb($section);
 		}
 		$data = pythonOMDB($imdb, "Genre");
+		//If OMDB returns N/A as genre, gets from TVMaze API
+		if($data == "N/A"){
+			$mazeid = getDbTVMaze($section);
+			$data = pythonTVMaze($mazeid, "genres");
+			$data = replace($data, "'");
+			$data = replace($data, "[");
+			$data = replace($data, "]");
+		}
 		status "Got genre from OMDB: " . $data, "0000FF", "progress";
 		return $data;
 	}
@@ -437,6 +447,7 @@
 	
 	//Gets status of tv show: ended/running etc
 	function TVshowStatus($section){
+		step;
 		$mazeid = getDbTVMaze($section);
 		return pythonTVMaze($mazeid, "status");
 	}
