@@ -14,7 +14,10 @@
 	$movieLetter = getMovieLetter($section);
 	$path = $dsFilm . $movieLetter;
 	$localFolders = listfolder($path, , 6);
+	$count = gettoken($localFolders , "count", "|");
+	$start = 1;
 	setDBMovieFiles($Movie);
+	//end 1;
 	if(!$fullPath || !isMovie($fullPath)){
 		end 1, "Something went wrong!";
 	}
@@ -44,6 +47,10 @@
 		setDbMovieGenre($Movie, $genre);
 		setDbMovieYear($Movie, $year);
 		setDbMovieTitle($Movie, $title);
+		status "Data set for: " . $Movie . "Done: " . $start . "/" . $count;
+		$start++;
+		wait 100;
+		
 	}
 
 	if($localFolders == getDBMovieFiles($Movie)){
