@@ -47,7 +47,7 @@
 		setDbMovieGenre($Movie, $genre);
 		setDbMovieYear($Movie, $year);
 		setDbMovieTitle($Movie, $title);
-		status "Data set for: " . $Movie . "Done: " . $start . "/" . $count;
+		status "Data set for: " . $Movie . " | Done: " . $start . "/" . $count;
 		$start++;
 		wait 100;
 		
