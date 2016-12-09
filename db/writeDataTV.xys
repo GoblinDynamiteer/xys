@@ -47,15 +47,10 @@
 	if($mazeid){
 		setDbTVMaze($folderName, $mazeid);
 	}
-	if($fullUpdate){
-		if(!getDbTVGenre($tvShow)){
-				setDbTVGenre($folderName, getGenre($tvShow));
-		}
-		if(!getDbTVYear($tvShow)){
-				setDbTVYear($folderName, getYear($tvShow));
-		}
-	}
 	
+	setDbTVGenre($folderName, getGenre($tvShow));
+	setDbTVYear($folderName, getYear($tvShow));
+
 	setDbTVLocalEp($folderName, getLastLocalEpisode($fullPath));
 	setDbTVStatus($section, TVshowStatus($tvShow));
 	$lastAiredEpisode = getLastAiredEpisode($tvShow);
