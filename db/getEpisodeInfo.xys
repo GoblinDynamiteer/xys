@@ -13,11 +13,9 @@
 	$folderName = getFolderName();
 	$section = $folderName;
 	$tvShow = $folderName;
-	
-	$mazeID = getTVMaze($tvShow);
+	$mazeID = getDbTVMaze($tvShow);
 	$episodeList = getLocalTVFiles($fullPath);
-	$episodeList = getSE($episodeList);
-	$episodeList = recase(sortList($episodeList), "upper");
+	$episodeList = episodeSorter($episodeList);
 	$episode = inputselect("Choose Episode", $episodeList);
 	//name airdate summary
 	$title = pythonTVMazeEpisode($mazeID, "name", $episode);

@@ -126,7 +126,7 @@
 
 	function addNewTVEpisode($episode, $show){
 		$today = now("yyyy-mm-dd");
-		$mazeID = getTVMaze($show);
+		$mazeID = getDbTVMaze($show);
 		$title = pythonTVMazeEpisode($mazeID, "name", $episode);
 		$airdate = pythonTVMazeEpisode($mazeID, "airdate", $episode);
 		//writefile(filename, data, [on_exist], [mode]) 
