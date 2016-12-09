@@ -18,3 +18,6 @@ perm $regexMoviePath = "^\\\\DS\\FILM\\";
 
 //For various Movie release info
 perm $regexRes = "(720p|1080p)";
+perm $regexSpecialRelease = "(remastered|directors.cut|extended|unrated|dircut|\.dc\.|uncut)";
+perm $regexSpecialScene = "(proper|repack|rerip|remux)";
+perm $regexSource = "(bluray|hddvd|web.dl|web.rip|blu.ray|hdtv|webrip)";
