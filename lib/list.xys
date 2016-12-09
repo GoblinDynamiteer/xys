@@ -5,10 +5,12 @@
 		return formatlist($list, "eds", |);
 	}
 	
+	//Returns the last item in a |-separated list
 	function getLastListItem($list){
 		return gettoken($list, -1, "|");
 	}
 
+	//Converts a list of episode files to S##E## and sorts it
 	function episodeSorter($list){
 		$data = getSE($list);
 		$data = sortList($data);
