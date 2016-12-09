@@ -58,9 +58,41 @@
 	function getMovieRes($string){
 		$data = regexmatches($string, $regexRes);
 		if($data){
-			return $data;
+			return recase($data, "lower");
 		}
 		else{
 			return "Unknown Res";
+		}
+	}
+
+	function getMovieSource($string){
+		$data = regexmatches($string, $regexSource);
+		if($data){
+			return $data;
+		}
+		else{
+			return 0;
+		}
+	}	
+	
+	function getMovieSpecial($string){
+		$data = regexmatches($string, $regexSpecialRelease);
+		$data = replace($data, ".dc.", "Director's Cut");
+		$data = replace($data, "|", " | ");
+		if($data){
+			return $data;
+		}
+		else{
+			return 0;
+		}
+	}
+	
+	function getMovieScene($string){
+		$data = regexmatches($string, $regexSpecialScene);
+		if($data){
+			return $data;
+		}
+		else{
+			return 0;
 		}
 	}
