@@ -63,11 +63,11 @@
 	
 "_LINKS : Links"
 	sub "_Db";
-	sub "_PopLists";
 	$path = <cc_path>;
 	$name =  <cc_name>;
 	$checkTv = regexmatches(<cc_path>, "\\\\ds\\tv\\");
 	$checkMovie = regexmatches(<cc_path>, "\\\\ds\\film\\");
+	$tvPopList = "RARBG;rarbg|TVMaze;tvmaze|IMDb;imdb";
 	//Loads file with links to various websites
 	$urls = readfile($urlTxt);
 	if($checkTv){
@@ -89,7 +89,4 @@
 	elseif($checkMovie){
 		msg "MOVIE NOT BUILT!";
 	}
-	
-"_PopLists"
-	//The value before semicolon is shown in popup, value after is returned
-	global $tvPopList = "RARBG;rarbg|TVMaze;tvmaze|IMDb;imdb";
+
