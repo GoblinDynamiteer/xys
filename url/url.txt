@@ -1,0 +1,3 @@
+http://www.imdb.com/title/%STRING%
+http://www.tvmaze.com/shows/%STRING%
+https://rarbg.to/torrents.php?imdb=%STRING%
