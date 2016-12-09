@@ -274,7 +274,9 @@
 		if(!isset($imdb)){
 			$imdb = getDbTVIMDb($section);
 		}
-		return pythonOMDB($imdb, "Title");
+		$data = pythonOMDB($imdb, "Title");
+		status "Got title from OMDB: " . $data, "0000FF", "progress";
+		return $data;
 	}
 	
 	//Gets Year of Movie / TV-show from OMDB with python-script
@@ -284,6 +286,7 @@
 			$imdb = getDbTVIMDb($section);
 		}
 		$data = pythonOMDB($imdb, "Year");
+		status "Got year from OMDB: " . $data, "0000FF", "progress";
 		if(strlen($data) > 4){
 			$data = regexmatches($data, $regexD4);
 			if(gettoken($data, "count", |) > 1){
