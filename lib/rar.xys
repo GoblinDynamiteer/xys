@@ -7,5 +7,6 @@
 			wait 100;
 		}
 		status "Unraring: ". $source, 000000, progress;
-		run '"' . $unrarExe . '" x "' . $source . '" "' . $destination . '"', , 2;
+		//run command, [directory], [wait=0], [show=1]
+		run '"' . $unrarExe . '" x "' . $source . '" "' . $destination . '"', , 0, 2;
 	}
