@@ -1,0 +1,39 @@
+ include "..\lib\getSelectionInfo.xys";
+ include "..\lib\getFileInfo.xys";
+ include "..\lib\db.xys";
+ include "..\lib\regex.xys";
+ include "..\lib\list.xys";
+ include "..\lib\securityChecks.xys";
+ include "..\lib\string.xys";
+ include "..\lib\xyplorerCommands";
+	$fullPath = getFullPath();
+	$folderName = getFolderName();
+	$section = $folderName;
+	$Movie = $folderName;
+	
+	if(!$fullPath || !isMovie($fullPath)){
+		end 1, "Something went wrong!";
+	}
+	//Gets IMDB-id from Movie database
+	$imdbID = getDbMovieIMDb($Movie);
+	if(!$imdbID){
+		//Gets Id from old database, if available
+		$imdbID = getkey("IMDbID", $Movie, "D:\Google Drive\Scriptstuff\MediaDb\movie_database.txt");
+		if(!$imdbID){
+		//Asks for user input of IMDB-id or URL
+		$imdbID = input(
+			"ID not found in database!", 
+			"Enter IMDB-id / URL for " . $folderName);
+		//Extracts Id from string/URL
+		$imdbID = trimIMDB($imdbID);
+		}
+	}
+	setDbMovieIMDb($section, $imdbID);
+	$title = getTitle($Movie);
+	$year = getYear($Movie);
+	$genre = getGenre($Movie);
+	setDbMovieGenre($Movie, $genre);
+	setDbMovieYear($Movie, $year);
+	setDbMovieTitle($Movie, $title);
+	text getDBMovieFiles($Movie);
+	//setDBMovieFiles($Movie);

@@ -54,3 +54,13 @@
 		}
 		return $firstLetter;
 	}
+	
+	function getMovieRes($string){
+		$data = regexmatches($string, $regexRes);
+		if($data){
+			return $data;
+		}
+		else{
+			return "Unknown Res";
+		}
+	}

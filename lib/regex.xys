@@ -15,3 +15,6 @@ perm $regexD4 = "\d{4}"; //eg. for year 1922
 perm $regexIMDB = "tt\d{1,}";
 perm $regexTVpath = "^\\\\DS\\TV\\";
 perm $regexMoviePath = "^\\\\DS\\FILM\\";
+
+//For various Movie release info
+perm $regexRes = "(720p|1080p)";
