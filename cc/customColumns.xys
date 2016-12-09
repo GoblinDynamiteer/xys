@@ -1,5 +1,6 @@
 "_Db"
 	perm $dbTV = "D:\Google Drive\Scriptstuff\MediaDb\tv.db";
+	perm $urlTxt = "D:\Google Drive\Scriptstuff\xyplorer\url\url.txt";
 
 "_TV : EpisodeCheck"
 	sub "_Db";
@@ -41,3 +42,34 @@
 "_TV : Genre"
 	sub "_Db";
 	return getkey("genre", <cc_name>, $dbTV);
+	
+"_LINKS : Links"
+	sub "_Db";
+	sub "_PopLists";
+	$path = <cc_path>;
+	$name =  <cc_name>;
+	$checkTv = regexmatches(<cc_path>, "\\\\ds\\tv\\");
+	$checkMovie = regexmatches(<cc_path>, "\\\\ds\\film\\");
+	//Loads file with links to various websites
+	$urls = readfile($urlTxt);
+	if($checkTv){
+		$imdb = getkey("imdb", <cc_name>, $dbTV);
+		$mazeid = getkey("tvmaze", <cc_name>, $dbTV);
+		$choice = popupnested($tvPopList);
+		//Find the token for url in <crlf>-separated list that contains value from popuplist
+		$token = gettokenindex($choice, $urls, <crlf>);
+		//Gets the url with the found token
+		$site = gettoken($urls, $token, <crlf>);
+		//Sets value to replace %STRING% with (in url-file)
+		$replace = $choice == "tvmaze" ? $mazeid : $imdb;
+		$site = replace($site, "%STRING%", $replace);
+		if(isset($site)){
+			goto $site;
+		}
+	}
+	elseif($checkMovie){
+		msg "MOVIE NOT BUILT!";
+	}
+	
+"_PopLists"
+	global $tvPopList = "RARBG;rarbg|TVMaze;tvmaze|IMDb;imdb";
