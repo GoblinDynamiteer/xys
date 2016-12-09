@@ -1,5 +1,6 @@
 "_Db"
 	perm $dbTV = "D:\Google Drive\Scriptstuff\MediaDb\tv.db";
+	perm $dbMovie = "D:\Google Drive\Scriptstuff\MediaDb\film.db";
 	perm $urlTxt = "D:\Google Drive\Scriptstuff\xyplorer\url\url.txt";
 
 "_TV : EpisodeCheck"
@@ -15,7 +16,11 @@
  
 "_TV : Year"
 	sub "_Db";
-	return getkey("year", <cc_name>, $dbTV);
+	$year = getkey("year", <cc_name>, $dbTV);
+	if(!$year){
+		$year = getkey("year", <cc_name>, $dbMovie);
+	}
+	return $year;
 	
 "_TV : Status"
 	sub "_Db";
@@ -41,7 +46,20 @@
 
 "_TV : Genre"
 	sub "_Db";
-	return getkey("genre", <cc_name>, $dbTV);
+	$genre = getkey("genre", <cc_name>, $dbTV);
+	if(!$genre){
+		$genre = getkey("genre", <cc_name>, $dbMovie);
+	}
+	return $genre;
+	
+	
+"_TV : Title"
+	sub "_Db";
+	$title = getkey("title", <cc_name>, $dbMovie);
+	if(!$title){
+		$title = getkey("title", <cc_name>, $dbTV);
+	}
+	return $title;
 	
 "_LINKS : Links"
 	sub "_Db";
@@ -63,6 +81,7 @@
 		//Sets value to replace %STRING% with (in url-file)
 		$replace = $choice == "tvmaze" ? $mazeid : $imdb;
 		$site = replace($site, "%STRING%", $replace);
+		//Opens the URL if the variable is set
 		if(isset($site)){
 			goto $site;
 		}
@@ -72,4 +91,5 @@
 	}
 	
 "_PopLists"
+	//The value before semicolon is shown in popup, value after is returned
 	global $tvPopList = "RARBG;rarbg|TVMaze;tvmaze|IMDb;imdb";
