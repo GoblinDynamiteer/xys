@@ -22,9 +22,15 @@
 		tag "Extracted: Delete Me!", $selectedItemPath, 2, 1;
 		tag "Red", $selectedItemPath, 0, 0;
 		unrar($selectedItemPath, $destination);
+		wait 100;
+		$confirm = confirm("Run script to check for new movies?", , 2, 4);
+		if($confirm){
+			load $scriptFolder . "\db\writeDataMovie.xys";
+		}
 	}
 	else{
 		status "Cancelled", $hexOrange, stop;
 	}
+	
 	releaseglobals 3;
 	end 1;
