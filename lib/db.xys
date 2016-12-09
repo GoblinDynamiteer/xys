@@ -126,6 +126,7 @@
 	}
 
 	function addNewTVEpisode($episode, $show){
+		backupto $dbFolder . "bak", $newTxt;
 		$today = now("yyyy-mm-dd");
 		$mazeID = getDbTVMaze($show);
 		$title = pythonTVMazeEpisode($mazeID, "name", $episode);
@@ -137,7 +138,28 @@
 		writefile($newTxt, $textstring . <crlf>, "a");
 		wait 100;
 		backupto $dsInfo, $newTxt;
+	}
+	
+	function addNewMovie($section){
 		backupto $dbFolder . "bak", $newTxt;
+		$today = now("yyyy-mm-dd");
+		$title = getTitle($section);
+		$year = getYear($section);
+		$res = getMovieRes($section);
+		$spec = getMovieSpecial($section);
+		$sc = getMovieScene($section);
+		$source = getMovieSource($section);
+		//[ 2016-12-09 ] [ MOVIE ] [ Sherpa ] [ 2015 ] [ BluRay 720p ]
+		$textstring = "[ " . $today . " ] [ MOVIE ] [ " . $title . " ] [ " . $year  . " ] [ " . $source . " " . $res . " ] ";
+		if($spec){
+			$textstring = $textstring . " [ " . $spec " ] ";
+		}
+		if($sc){
+			$textstring = $textstring . " [ " . $sc " ] ";
+		}
+		writefile($newTxt, $textstring . <crlf>, "a");
+		wait 100;
+		backupto $dsInfo, $newTxt;
 	}
 	
 	//Writes data to TV Database
@@ -238,6 +260,12 @@
 			setkey $data, "files", $movieLetter, $dbFilmList;
 		}
 	}
+	
+	function setDBMovieFilesByLetter($movieLetter){
+		$path = $dsFilm . $movieLetter;
+		$data = listfolder($path, , 6);
+		setkey $data, "files", $movieLetter, $dbFilmList;
+	}
 
 	//Gets list of files in database
 	function getDBTVFiles($section){
@@ -249,9 +277,14 @@
 		}
 	}
 	
-	//Gets list of files in database
+	//Gets list of files in database, from movie
 	function getDBMovieFiles($section){
 		$movieLetter = getMovieLetter($section);
+		return getkey("files", $movieLetter, $dbFilmList);
+	}
+	
+	//Gets list of files in database, from letter
+	function getDBMovieFilesByLetter($movieLetter){
 		return getkey("files", $movieLetter, $dbFilmList);
 	}
 	
