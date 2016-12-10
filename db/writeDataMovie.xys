@@ -9,12 +9,14 @@
 	//Lists and returns folders with full path in NAS movie directory, 
 	//separated with | (default)
 	$movieLetters = listfolder($dsFilm,, 6);
+	$runBackup = 0;
 	foreach($letter, $movieLetters){
 		//Lists and returns movie folders in letter-folder
 		$localFolders = listfolder($dsFilm . $letter, , 6);
 		$dbFolders = getDBMovieFilesByLetter($letter);
 		status "Checking for new movies in: " . $letter;
 		if($localFolders != $dbFolders){
+			$runBackup = 1;
 			wait 1;
 			foreach($localMovie, $localFolders){
 				//New movie found, will ask for IMDB input:
@@ -46,4 +48,11 @@
 		}
 		wait 1;
 	}
+	//Moves new.txt to ds/info and backups .db files
+	if($runBackup){
+		backupDBfiles();
+	}
+	status "Done!";
+	releaseglobals 3;
 	end 1;
+
