@@ -127,7 +127,6 @@
 	}
 
 	function addNewTVEpisode($episode, $show){
-
 		$today = now("yyyy-mm-dd");
 		$mazeID = getDbTVMaze($show);
 		$title = pythonTVMazeEpisode($mazeID, "name", $episode);
@@ -135,6 +134,9 @@
 		//writefile(filename, data, [on_exist], [mode]) 
 		$textstring = "[ " . $today . " ] [ TV ] [ " . $show . " ] [ " . $episode . " : " . $title . " ] [ Airdate: " . $airdate . " ]";
 		writefile($newTxt, $textstring . <crlf>, "a");
+		 //Wait to prevent unwritable file - if locked by Google Drive
+		 //Can happen if lots of new episodes are added fast
+		wait 500;
 	}
 	
 	//Moves new.txt to ds/info and backups .db files
@@ -165,6 +167,9 @@
 			$textstring = $textstring . " [ " . $sc . " ] ";
 		}
 		$textstring = replace($textstring, "  ", " ");
+		 //Wait to prevent unwritable file - if locked by Google Drive
+		 //Can happen if lots of new movies are added fast
+		wait 500;
 		writefile($newTxt, $textstring . <crlf>, "a");
 	}
 	
