@@ -127,22 +127,28 @@
 	}
 
 	function addNewTVEpisode($episode, $show){
-		backupto $dbFolder . "bak", $newTxt;
+
 		$today = now("yyyy-mm-dd");
 		$mazeID = getDbTVMaze($show);
 		$title = pythonTVMazeEpisode($mazeID, "name", $episode);
 		$airdate = pythonTVMazeEpisode($mazeID, "airdate", $episode);
 		//writefile(filename, data, [on_exist], [mode]) 
 		$textstring = "[ " . $today . " ] [ TV ] [ " . $show . " ] [ " . $episode . " : " . $title . " ] [ Airdate: " . $airdate . " ]";
-		//copyto $dbFolder . "bak", $newTxt, , , , 2;
-		//copyas "*_bak", $dbFolder, $newTxt;
 		writefile($newTxt, $textstring . <crlf>, "a");
-		wait 100;
+	}
+	
+	//Moves new.txt to ds/info and backups .db files
+	function backupDBfiles(void){
+		$now = now("yyyy-mm-dd-hh-nn");
+		$backupFolder = new($dbFolder . "bak\" . $now, "dir");
 		backupto $dsInfo, $newTxt;
+		copyto $backupFolder , $newTxt;
+		$dbFiles = listfolder($dbFolder, "*.db", 1);
+		//$dbFiles = quicksearch("*.db", $dbFolder, "|");
+		copyto $backupFolder , $dbFiles;
 	}
 	
 	function addNewMovie($section){
-		backupto $dbFolder . "bak", $newTxt;
 		$today = now("yyyy-mm-dd");
 		$title = getTitle($section);
 		$year = getYear($section);
@@ -160,8 +166,6 @@
 		}
 		$textstring = replace($textstring, "  ", " ");
 		writefile($newTxt, $textstring . <crlf>, "a");
-		wait 100;
-		backupto $dsInfo, $newTxt;
 	}
 	
 	//Writes data to TV Database
@@ -447,7 +451,7 @@
 	
 	//Gets status of tv show: ended/running etc
 	function TVshowStatus($section){
-		step;
+
 		$mazeid = getDbTVMaze($section);
 		return pythonTVMaze($mazeid, "status");
 	}
