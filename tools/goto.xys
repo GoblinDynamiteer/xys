@@ -20,19 +20,16 @@
 		end 1;
 	}
 	switch($choice){
+		case $fztv:
 		case $tv:
 			$tvchoice = inputselect("TV-Shows", listTVfolders(), , 72, ,"500", "1000");
 			$season = getLastSeasonFolder($dsTV . $tvchoice);
 			$path = $dsTV . $tvchoice . "\"  . $season;
 			copytext $path;
 			gotoFolderP2($path);
-			break;
-		case $fztv:
-			$tvchoice = inputselect("TV-Shows", listTVfolders(), , 72, ,"500", "1000");
-			$season = getLastSeasonFolder($dsTV . $tvchoice);
-			$path = $dsTV . $tvchoice . "\"  . $season;
-			copytext $path;
-			gotoFolderP2($path);
+			if($choice == $tv){
+				break;
+			}
 			filezilla($path);
 			break;
 		case $fzpos:
