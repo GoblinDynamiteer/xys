@@ -1,3 +1,5 @@
+ include "..\lib\list.xys";
+
 	//Functions for getting TV-data
 	perm $vidExtensions = "mkv|avi|mp4|m4v";
 	
@@ -16,6 +18,13 @@
 	function getSeasonsFolders($path){
 		//listfolder([path=<curpath>], [pattern=*], [flags], [separator="|"])
 		return listfolder($path, , 2 + 4);
+	}
+	
+	function getLastSeasonFolder($path){
+		//listfolder([path=<curpath>], [pattern=*], [flags], [separator="|"])
+		$data = listfolder($path, , 2 + 4);
+		$data = getLastListItem($data);
+		return $data;
 	}
 	
 	//Finds and returns the last episode
