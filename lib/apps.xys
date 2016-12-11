@@ -1,4 +1,5 @@
 	perm $unrarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\unrar.exe";
+	perm $filezillaExe = "C:\Program Files (x86)\FileZilla FTP Client\filezilla.exe";
 
 	function unrar($source, $destination) {
 		//Creates desitination directory if doesnt exist
@@ -9,4 +10,8 @@
 		status "Unraring: ". $source, 000000, progress;
 		//run command, [directory], [wait=0], [show=1]
 		run '"' . $unrarExe . '" x "' . $source . '" "' . $destination . '"', , 0, 2;
+	}
+	
+	function filezilla($folder){
+		run '"' . $filezillaExe. '" --local="' . $folder . '" --site="0/whatbox/odyssey.whatbox.ca"';
 	}
