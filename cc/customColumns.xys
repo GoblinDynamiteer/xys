@@ -1,6 +1,6 @@
 "_Db"
-	perm $dbTV = "D:\Google Drive\Scriptstuff\MediaDb\tv.db";
-	perm $dbMovie = "D:\Google Drive\Scriptstuff\MediaDb\film.db";
+	perm $dbTV = "C:\db\tv.db";
+	perm $dbMovie = "C:\db\film.db";
 	perm $urlTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\url.txt";
 
 "_TV : EpisodeCheck"

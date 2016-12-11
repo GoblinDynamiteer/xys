@@ -1,9 +1,12 @@
-	perm $dbTV = "D:\Google Drive\Scriptstuff\MediaDb\tv.db";
-	perm $dbTVep = "D:\Google Drive\Scriptstuff\MediaDb\tvep.db";
-	perm $dbFilm = "D:\Google Drive\Scriptstuff\MediaDb\film.db";
-	perm $dbFilmList = "D:\Google Drive\Scriptstuff\MediaDb\filmlist.db";
-	perm $newTxt = "D:\Google Drive\Scriptstuff\MediaDb\new.txt";
-	perm $dbFolder = "D:\Google Drive\Scriptstuff\MediaDb\";
+
+	//Store in C: to prevent Google Drive from locking files
+	perm $dbTV = "C:\db\tv.db";
+	perm $dbTVep = "C:\db\tvep.db";
+	perm $dbFilm = "C:\db\film.db";
+	perm $dbFilmList = "C:\db\filmlist.db";
+	perm $newTxt = "C:\db\new.txt";
+	perm $dbFolder = "C:\db\";
+	
 	perm $pytFolder = "D:\Google Drive\Scriptstuff\xyplorer\python\";
 	perm $scriptFolder = "D:\Google Drive\Scriptstuff\xyplorer\";
 	
@@ -127,6 +130,7 @@
 	}
 
 	function addNewTVEpisode($episode, $show){
+		step;
 		$today = now("yyyy-mm-dd");
 		$mazeID = getDbTVMaze($show);
 		$title = pythonTVMazeEpisode($mazeID, "name", $episode);
@@ -134,16 +138,17 @@
 		//writefile(filename, data, [on_exist], [mode]) 
 		$textstring = "[ " . $today . " ] [ TV ] [ " . $show . " ] [ " . $episode . " : " . $title . " ] [ Airdate: " . $airdate . " ]";
 		writefile($newTxt, $textstring . <crlf>, "a");
-		wait 1000;
+		wait 100;
 		}
 	}
 	
 	//Moves new.txt to ds/info and backups .db files
 	function backupDBfiles(void){
+		step;
 		$now = now("yyyy-mm-dd-hh-nn");
-		$backupFolder = new($dbFolder . "bak\" . $now, "dir");
+		$backupFolder = new("D:\Google Drive\Scriptstuff\MediaDb\bak\" . $now, "dir");
 		backupto $dsInfo, $newTxt;
-		copyto $backupFolder , $newTxt;
+		backupto $backupFolder, $newTxt;
 		$dbFiles = listfolder($dbFolder, "*.db", 1);
 		//$dbFiles = quicksearch("*.db", $dbFolder, "|");
 		copyto $backupFolder , $dbFiles;
@@ -167,7 +172,7 @@
 		}
 		$textstring = replace($textstring, "  ", " ");
 		writefile($newTxt, $textstring . <crlf>, "a");
-		wait 1000;
+		wait 100;
 	}
 	
 	//Writes data to TV Database
