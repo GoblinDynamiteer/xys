@@ -1,4 +1,4 @@
- include "..\lib\rar.xys";
+ include "..\lib\apps.xys";
  include "..\lib\getSelectionInfo.xys";
  include "..\lib\string.xys";
  include "..\lib\db.xys";
