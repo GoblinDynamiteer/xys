@@ -20,20 +20,6 @@
 	perm $dsTV = "\\DS\TV\";
 	perm $dsSUB = "\\DS\MISC\SUB Subtitles\";
 	
-	//Gets IMDB-id from string, returns ID in format tt######
-	function trimIMDB($string){
-		//example input string: http://www.imdb.com/title/tt0103064/
-		//returns tt0103064
-		$id = regexmatches($string, $regexIMDB);
-		if($id == ""){
-			msg "Could not extract IMDb-id from string!";
-			return 0;
-		}
-		else{
-			return $id;
-		}
-	}
-	
 	//python json_tvmaze_omdb.py tt3107288 1 Year
 	function pythonOMDB($imdb, $info){
 		$data = runret('python omdb.py "' . $imdb . '" "'. $info .'"', $pytFolder);
@@ -144,7 +130,6 @@
 	
 	//Moves new.txt to ds/info and backups .db files
 	function backupDBfiles(void){
-		step;
 		$now = now("yyyy-mm-dd-hh-nn");
 		$backupFolder = new("D:\Google Drive\Scriptstuff\MediaDb\bak\" . $now, "dir");
 		backupto $dsInfo, $newTxt;
@@ -504,7 +489,15 @@
 	function setDbTVLastAiredDate($section, $data){
 		setDbTVinfo($section, $data, "lastaireddate");
 	}
+	
+	function getDbTVLastAiredDate($section, $data){
+		return getDbTVinfo($section, "lastaireddate");
+	}
 
+	function getDbTVStatus($section){
+		return getDbTVinfo($section, "status");
+	}
+	
 	//Sets next aired episode of TV-show to TV Database
 	function setDbTVNextAired($section, $data){
 		setDbTVinfo($section, $data, "nextaired");
@@ -513,7 +506,11 @@
 	//Sets next aired episode of TV-show to TV Database
 	function setDbTVNextAiredDate($section, $data){
 		setDbTVinfo($section, $data, "nextaireddate");
-	}		
+	}
+	
+	function getDbTVNextAiredDate($section){
+		return getDbTVinfo($section, "nextaireddate");
+	}
 	
 	//Returns 0 if python script returned error
 	function checkPythonScriptError($string){
