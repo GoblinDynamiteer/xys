@@ -27,10 +27,9 @@
 			$path = $dsTV . $tvchoice . "\"  . $season;
 			copytext $path;
 			gotoFolderP2($path);
-			if($choice == $tv){
-				break;
+			if($choice == $fztv){
+				filezilla($path);
 			}
-			filezilla($path);
 			break;
 		case $fzpos:
 			filezilla($pointer);
