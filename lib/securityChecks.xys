@@ -28,3 +28,24 @@
 			return 0;
 		}
 	}
+	
+	
+/* 	"Shift"
+	Returns the held modifier keys:
+	0 = No keys held
+	1 = Shift
+	2 = Ctrl
+	3 = Ctrl + Shift
+	4 = Alt
+	5 = Shift + Alt
+	6 = Ctrl + Alt
+	7 = Ctrl + Shift + Alt */
+	function isButtonDownCTRL(){
+		$button = get("Shift");
+		if($button == 2){
+			return 1;
+		}
+		else{
+			return 0;
+		}
+	}
