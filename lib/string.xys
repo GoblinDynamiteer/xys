@@ -1,5 +1,19 @@
  include "..\lib\regex.xys";
 
+ 	//Gets IMDB-id from string, returns ID in format tt######
+	function trimIMDB($string){
+		//example input string: http://www.imdb.com/title/tt0103064/
+		//returns tt0103064
+		$id = regexmatches($string, $regexIMDB);
+		if($id == ""){
+			msg "Could not extract IMDb-id from string!";
+			return 0;
+		}
+		else{
+			return $id;
+		}
+	}
+ 
 	function removeCRLF($string){
 		return replace($string, <crlf>);
 	}
