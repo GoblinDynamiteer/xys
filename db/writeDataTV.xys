@@ -52,6 +52,8 @@
 				}
 			}
 		}
+		//Check if update is needed for tv-show, and if
+		//CTRL was pressed at script start
 		if(!$updateDb && $updateShowData){
 			$dbLastEpDate = getDbTVNextAiredDate($tvShow);
 			if($dbLastEpDate == "No data for next episode!"){
@@ -61,12 +63,12 @@
 				$datediff = datediff($dbLastEpDate);
 			}
 			$dbStatus = getDbTVStatus($tvShow);
-
 			if(($dbStatus == "Running") && ($datediff >= 0)){
 					$updateDb = 1;
 			}
 		}
 		if($updateDb){
+			//Updates all database data for tv-shows
 			status "Updating databases with new Show-info.", $hexGreen, "ready";
 			setDBTVFiles($tvShow);
 			setDbTVGenre($tvShow, getGenre($tvShow));
