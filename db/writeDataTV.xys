@@ -7,16 +7,26 @@
  include "..\lib\securityChecks.xys";
  include "..\lib\string.xys";
  include "..\lib\xyplorerCommands";
+	if(isButtonDownCTRL()){
+		$updateShowData = 1;
+		msg "CTRL was held at start, will update all shows that needs updating!";
+	}
+	else{
+		$updateShowData = 0;
+	}
 	$tvShowsList = listfolder($dsTV,, 6);
 	$runBackup = 0;
 	foreach($tvShow, $tvShowsList){
+		unset $localfiles, $dbfiles;
 		$updateDb = 0;
 		status "Scanning for new episodes/shows: " . $tvShow;
+		wait 10;
 		//Checks if folder (TV-show) exists in database
 		if(getsectionlist($tvShow, $dbTV) == ""){
 			status "Found new Show: " . $tvShow;
 			$imdbID = input("Found new Show!", 
 			"Enter IMDB-id / URL for: " . $tvShow);
+			$imdbID = trimIMDB($imdbID);
 			setDbTVIMDb($tvShow, $imdbID);
 			$mazeid = getTVMaze($tvShow);
 			if(!$mazeid){
@@ -36,10 +46,24 @@
 			foreach($file, $localfiles, |){
 				//strpos returns -1 if needle isn't found in haystack
 				if(strpos($dbfiles , $file) == -1){
-					status "Found new episode: " . $file, $hexGreen, "ready";
+					status "Found new episode: " . $tvShow . ": ". $file, $hexGreen, "ready";
 					addNewTVEpisode($file, $tvShow);
 					$updateDb = 1;
 				}
+			}
+		}
+		if(!$updateDb && $updateShowData){
+			$dbLastEpDate = getDbTVNextAiredDate($tvShow);
+			if($dbLastEpDate == "No data for next episode!"){
+				$datediff = 0;
+			}
+			else{
+				$datediff = datediff($dbLastEpDate);
+			}
+			$dbStatus = getDbTVStatus($tvShow);
+
+			if(($dbStatus == "Running") && ($datediff >= 0)){
+					$updateDb = 1;
 			}
 		}
 		if($updateDb){
@@ -47,12 +71,16 @@
 			setDBTVFiles($tvShow);
 			setDbTVGenre($tvShow, getGenre($tvShow));
 			setDbTVYear($tvShow, getYear($tvShow));
-			setDbTVLocalEp($tvShow, getLastLocalEpisode($fullPath));
-			setDbTVStatus($tvShow, TVshowStatus($tvShow));
+			$lastLocalEpisode = getLastLocalEpisode($fullPath);
+			setDbTVLocalEp($tvShow, $lastLocalEpisode);
+			$showStatus = TVshowStatus($tvShow);
+			setDbTVStatus($tvShow, $showStatus);
+			
+			$nextAiredEpisode = getNextAiredEpisode($tvShow);
+			$nextAiredEpisodeDate = getNextAiredDate($tvShow);
 			$lastAiredEpisode = getLastAiredEpisode($tvShow);
 			$lastAiredEpisodeDate = getLastAiredDate($tvShow);
-			$nextAiredEpisodeDate = getNextAiredEpisode($tvShow);
-			$nextAiredEpisodeDate = getNextAiredDate($tvShow);
+			
 			setDbTVLastAired($tvShow, $lastAiredEpisode);
 			setDbTVLastAiredDate($tvShow, $lastAiredEpisodeDate);
 			setDbTVNextAired($tvShow, getNextAiredEpisode($tvShow));
