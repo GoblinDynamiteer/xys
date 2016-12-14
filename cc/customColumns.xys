@@ -2,12 +2,15 @@
 	perm $dbTV = "C:\db\tv.db";
 	perm $dbMovie = "C:\db\film.db";
 	perm $urlTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\url.txt";
+	perm $skipList = "D:\Google Drive\Scriptstuff\xyplorer\txt\skiplist.txt";
 
 "_TV : EpisodeCheck"
 	sub "_Db";
 	$localEp = getkey("localep", <cc_name>, $dbTV);
 	$lastAired = getkey("lastaired", <cc_name>, $dbTV);
-	if($lastAired == $localEp){
+	$skipCheck = strpos(readfile($skipList) , <cc_name>);
+	//$skipCheck = regexmatches(<cc_name>, );
+	if($lastAired == $localEp || $skipCheck > -1){
 		return "Done: " . $localEp;
 	}
 	else {
