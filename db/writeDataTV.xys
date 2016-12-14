@@ -14,7 +14,19 @@
 	else{
 		$updateShowData = 0;
 	}
-	$tvShowsList = listfolder($dsTV,, 6);
+	$selectedPath = getFullPath();
+	$selectedName = getFolderName();
+
+	if(isTV($selectedPath) && $selectedPath){
+		$tvShowsList = $selectedName;
+		$updateSingleShow = 1;
+		msg "Will only update: " . $selectedName;
+	}
+	else{
+		$tvShowsList = listfolder($dsTV,, 6);
+		$updateSingleShow = 0;
+	}
+
 	$runBackup = 0;
 	foreach($tvShow, $tvShowsList){
 		unset $localfiles, $dbfiles;
@@ -67,7 +79,7 @@
 					$updateDb = 1;
 			}
 		}
-		if($updateDb){
+		if($updateDb || $updateSingleShow){
 			//Updates all database data for tv-shows
 			status "Updating databases with new Show-info.", $hexGreen, "ready";
 			setDBTVFiles($tvShow);
