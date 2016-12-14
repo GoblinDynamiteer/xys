@@ -115,8 +115,9 @@
 		}
 	}
 
+	//Adds newly added tv-shows to textfile
 	function addNewTVEpisode($episode, $show){
-		step;
+
 		$today = now("yyyy-mm-dd");
 		$mazeID = getDbTVMaze($show);
 		$title = pythonTVMazeEpisode($mazeID, "name", $episode);
@@ -139,6 +140,7 @@
 		copyto $backupFolder , $dbFiles;
 	}
 	
+	//Adds newly added movies to textfile
 	function addNewMovie($section){
 		$today = now("yyyy-mm-dd");
 		$title = getTitle($section);

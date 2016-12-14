@@ -11,7 +11,7 @@
 		}
 		//Returns zero if checks trigger
 		else{
-			msg "More than one item selected!";
+			//msg "More than one item selected!";
 			return 0;
 		}
 	}
