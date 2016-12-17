@@ -1,0 +1,72 @@
+
+	//Store in C: to prevent Google Drive from locking files
+	perm $dbTV = "C:\db\tv.db";
+	perm $dbTVep = "C:\db\tvep.db";
+	perm $dbFolder = "C:\db\";
+
+	//Reads data from TV Database
+	function getDbTVinfo($section, $key){
+		$data = getkey($key, $section, $dbTV);
+		//Data not found, return 0
+		if($data == ""){
+			return 0;
+		}
+		else{
+			return $data;
+		}
+	}
+
+	//Section is folder name for tv-show
+	//Gets IMDB from TV database
+	function getDbTVIMDb($section){
+		return getDbTVinfo($section, "imdb");
+	}
+	
+	//Section is folder name for tv-show
+	//Gets TVMaze ID from TV database
+	function getDbTVMaze($section){
+		return getDbTVinfo($section, "tvmaze");
+	}	
+
+	//Gets list of files in database
+	function getDBTVFiles($section){
+		if(isIMDBid($section)){
+			msg "Error: getDBTVFiles() has gotten IMDB-id as passed argument!";
+		}
+		else{
+			return getkey("files", $section, $dbTVep);
+		}
+	}
+	
+
+	function getDbTVLocalEp($section, $data){
+		return getDbTVinfo($section, "localep");
+	}	
+
+	function getDbTVYear($section){
+		return getDbTVinfo($section, "year");
+	}
+	
+	function getDbTVGenre($section){
+		return getDbTVinfo($section, "genre");
+	}
+	
+	function getDbTVYear($section){
+		return getDbTVinfo($section, "year");
+	}
+	
+	function getDbTVLastAiredDate($section){
+		return getDbTVinfo($section, "lastaireddate");
+	}
+
+	function getDbTVLastAired($section){
+		return getDbTVinfo($section, "lastaired");
+	}
+	
+	function getDbTVStatus($section){
+		return getDbTVinfo($section, "status");
+	}
+
+	function getDbTVNextAiredDate($section){
+		return getDbTVinfo($section, "nextaireddate");
+	}

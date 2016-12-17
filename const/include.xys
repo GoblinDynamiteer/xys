@@ -1,0 +1,15 @@
+include "D:\Google Drive\Scriptstuff\xyplorer\const\const.xys"; //Has Regex
+
+include "D:\Google Drive\Scriptstuff\xyplorer\lib\dbReadTV.xys";
+include "D:\Google Drive\Scriptstuff\xyplorer\lib\dbReadMovie.xys";
+
+include "D:\Google Drive\Scriptstuff\xyplorer\lib\securityChecks.xys";
+
+
+include "D:\Google Drive\Scriptstuff\xyplorer\lib\getSelectionInfo.xys";
+include "D:\Google Drive\Scriptstuff\xyplorer\lib\getFileInfo.xys";
+//include "D:\Google Drive\Scriptstuff\xyplorer\lib\db.xys";
+//include "D:\Google Drive\Scriptstuff\xyplorer\lib\regex.xys";
+include "D:\Google Drive\Scriptstuff\xyplorer\lib\list.xys";
+include "D:\Google Drive\Scriptstuff\xyplorer\lib\string.xys";
+include "D:\Google Drive\Scriptstuff\xyplorer\lib\xyplorerCommands";
