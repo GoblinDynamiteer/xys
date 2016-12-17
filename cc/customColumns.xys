@@ -4,6 +4,8 @@
 	perm $dbTV = "C:\db\tv.db";
 	perm $regexTVpath = "^\\\\DS\\TV\\";
 	perm $regexMoviePath = "^\\\\DS\\FILM\\";
+	perm $urlTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\url.txt";
+	perm $skipList = "D:\Google Drive\Scriptstuff\xyplorer\txt\skiplist.txt";
 	
 	function isTV($path){
 		if(regexmatches($path, $regexTVpath) != ""){
