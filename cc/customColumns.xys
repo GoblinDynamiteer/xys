@@ -1,8 +1,29 @@
 "_Db"
+	//Fast than to include other libs
+	perm $dbFilm = "C:\db\film.db";
 	perm $dbTV = "C:\db\tv.db";
-	perm $dbMovie = "C:\db\film.db";
-	perm $urlTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\url.txt";
-	perm $skipList = "D:\Google Drive\Scriptstuff\xyplorer\txt\skiplist.txt";
+	perm $regexTVpath = "^\\\\DS\\TV\\";
+	perm $regexMoviePath = "^\\\\DS\\FILM\\";
+	
+	function isTV($path){
+		if(regexmatches($path, $regexTVpath) != ""){
+			return 1;
+		}
+		else{
+			//msg "Not in TV";
+			return 0;
+		}
+	}
+	
+	function isMovie($path){
+		if(regexmatches($path, $regexMoviePath) != ""){
+			return 1;
+		}
+		else{
+			//msg "Not in Movies";
+			return 0;
+		}
+	}
 
 "_TV : EpisodeCheck"
 	sub "_Db";
@@ -19,9 +40,11 @@
  
 "_TV : Year"
 	sub "_Db";
-	$year = getkey("year", <cc_name>, $dbTV);
-	if(!$year){
-		$year = getkey("year", <cc_name>, $dbMovie);
+	if(isTV(<cc_item>)){
+		$year = getkey("year", <cc_name>, $dbTV);
+	}
+	else{
+		$year = getkey("year", <cc_name>, $dbFilm);
 	}
 	return $year;
 	
@@ -49,18 +72,22 @@
 
 "_TV : Genre"
 	sub "_Db";
-	$genre = getkey("genre", <cc_name>, $dbTV);
-	if(!$genre){
-		$genre = getkey("genre", <cc_name>, $dbMovie);
+	if(isTV(<cc_item>)){
+		$year = getkey("genre", <cc_name>, $dbTV);
 	}
-	return $genre;
+	else{
+		$year = getkey("genre", <cc_name>, $dbFilm);
+	}
+	return $year;
 	
 	
 "_TV : Title"
 	sub "_Db";
-	$title = getkey("title", <cc_name>, $dbMovie);
-	if(!$title){
-		$title = getkey("title", <cc_name>, $dbTV);
+	if(isMovie(<cc_item>)){
+		$title = getkey("title", <cc_name>, $dbFilm);
+	}
+	else{
+		$title = "";
 	}
 	return $title;
 	
@@ -68,12 +95,10 @@
 	sub "_Db";
 	$path = <cc_path>;
 	$name =  <cc_name>;
-	$checkTv = regexmatches(<cc_path>, "\\\\ds\\tv\\");
-	$checkMovie = regexmatches(<cc_path>, "\\\\ds\\film\\");
 	$tvPopList = "RARBG;rarbg|TVMaze;tvmaze|IMDb;imdb";
 	//Loads file with links to various websites
 	$urls = readfile($urlTxt);
-	if($checkTv){
+	if(isTV(<cc_path>)){
 		$imdb = getkey("imdb", <cc_name>, $dbTV);
 		$mazeid = getkey("tvmaze", <cc_name>, $dbTV);
 		$choice = popupnested($tvPopList);
@@ -89,7 +114,7 @@
 			goto $site;
 		}
 	}
-	elseif($checkMovie){
+	elseif(isMovie(<cc_path>)){
 		msg "MOVIE NOT BUILT!";
 	}
 
