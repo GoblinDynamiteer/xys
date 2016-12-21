@@ -32,6 +32,10 @@
 	$localEp = getkey("localep", <cc_name>, $dbTV);
 	$lastAired = getkey("lastaired", <cc_name>, $dbTV);
 	$skipCheck = strpos(readfile($skipList) , <cc_name>);
+	//American Dad has other season ordering on TVMaze, than releases
+	if(<cc_name> == "American Dad"){
+		$localEp = replace($localEp, "S14E", "S13E");
+	}
 	//$skipCheck = regexmatches(<cc_name>, );
 	if($lastAired == $localEp || $skipCheck > -1){
 		return "Done: " . $localEp;

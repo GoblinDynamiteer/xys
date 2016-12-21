@@ -1,5 +1,3 @@
-
-	//Store in C: to prevent Google Drive from locking files
 	perm $dbTV = "C:\db\tv.db";
 	perm $dbTVep = "C:\db\tvep.db";
 	perm $dbFilm = "C:\db\film.db";
@@ -19,6 +17,9 @@
 	perm $dsInfo = "\\DS\INFO\";
 	perm $dsTV = "\\DS\TV\";
 	perm $dsSUB = "\\DS\MISC\SUB Subtitles\";
+	
+	perm $urlTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\url.txt";
+	perm $skipList = "D:\Google Drive\Scriptstuff\xyplorer\txt\skiplist.txt";
 	
 	//python json_tvmaze_omdb.py tt3107288 1 Year
 	function pythonOMDB($imdb, $info){
@@ -117,9 +118,12 @@
 
 	//Adds newly added tv-shows to textfile
 	function addNewTVEpisode($episode, $show){
-
 		$today = now("yyyy-mm-dd");
 		$mazeID = getDbTVMaze($show);
+		//American Dad has other season ordering on TVMaze, than releases
+		if($show == "American Dad"){
+			$episode = replace($episode, "S14E", "S13E");
+		}
 		$title = pythonTVMazeEpisode($mazeID, "name", $episode);
 		$airdate = pythonTVMazeEpisode($mazeID, "airdate", $episode);
 		//writefile(filename, data, [on_exist], [mode]) 
