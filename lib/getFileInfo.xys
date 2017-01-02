@@ -13,6 +13,15 @@
 		return $data;
 	}
 	
+	function listMovieFolders(){
+		$letters = listfolder($dsFilm, , 6);
+		$list = "";
+		foreach($letter, $letters, "|"){
+			$list = $list . "|" . listfolder($dsFilm . $letter);
+		}
+		return $list;
+	}
+	
 	function hasEnSub($path){
 		$files = listFiles($path, "en.srt");
 		if($files != ""){
