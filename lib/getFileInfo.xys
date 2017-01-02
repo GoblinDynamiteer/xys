@@ -12,3 +12,23 @@
 		$data = listfolder($dsTV, , 6);
 		return $data;
 	}
+	
+	function hasEnSub($path){
+		$files = listFiles($path, "en.srt");
+		if($files != ""){
+			return 1;
+		}
+		else{
+			return 0;
+		} 
+	}
+	
+	function hasSvSub($path){
+		$files = listFiles($path, "sv.srt");
+		if($files != ""){
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
