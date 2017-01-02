@@ -6,6 +6,17 @@
 	perm $regexMoviePath = "^\\\\DS\\FILM\\";
 	perm $urlTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\url.txt";
 	perm $skipList = "D:\Google Drive\Scriptstuff\xyplorer\txt\skiplist.txt";
+	perm $ctrlBlock = "ALT Down: Skipping";
+	
+	function isButtonDownALT(){
+		$button = get("Shift");
+		if($button == 4){
+			return 1;
+		}
+		else{
+			return 0;
+		}
+	}
 	
 	function isTV($path){
 		if(regexmatches($path, $regexTVpath) != ""){
@@ -46,6 +57,9 @@
  
 "_TV : Year"
 	sub "_Db";
+	if(isButtonDownALT()){
+		return $ctrlBlock;
+	}
 	if(isTV(<cc_item>)){
 		$year = getkey("year", <cc_name>, $dbTV);
 	}
@@ -53,9 +67,37 @@
 		$year = getkey("year", <cc_name>, $dbFilm);
 	}
 	return $year;
+
+"_MovieSubs : Subs"
+	sub "_Db";
+	if(isButtonDownALT()){
+		return $ctrlBlock;
+	}
+	$enSub = 0;
+	$svSub = 0;
+	$subStr = "";
+	if(quicksearch("*en.srt", <cc_item>, |) != ""){
+		$enSub = 1;
+	}
+	if(quicksearch("*sv.srt", <cc_item>, |) != ""){
+		$svSub = 1;
+	}
+	if($enSub && $svSub){
+		$subStr = "En Sv";
+	}
+	elseif($enSub && !$svSub){
+		$subStr = "En";
+	}
+	elseif(!$enSub && $svSub){
+		$subStr = "Sv";
+	}
+	return $subStr;
 	
 "_TV : Status"
 	sub "_Db";
+	if(isButtonDownALT()){
+		return $ctrlBlock;
+	}
 	$nextep = getkey("nextaired", <cc_name>, $dbTV);
 	$nextdate = getkey("nextaireddate", <cc_name>, $dbTV);
 	$lastep = getkey("lastaired", <cc_name>, $dbTV);
@@ -78,6 +120,9 @@
 
 "_TV : Genre"
 	sub "_Db";
+	if(isButtonDownALT()){
+		return $ctrlBlock;
+	}
 	if(isTV(<cc_item>)){
 		$year = getkey("genre", <cc_name>, $dbTV);
 	}
@@ -89,6 +134,9 @@
 	
 "_TV : Title"
 	sub "_Db";
+	if(isButtonDownALT()){
+		return $ctrlBlock;
+	}
 	if(isMovie(<cc_item>)){
 		$title = getkey("title", <cc_name>, $dbFilm);
 	}
