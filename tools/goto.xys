@@ -14,8 +14,9 @@
 	}
 	$tv = "TV: Last Season folder";
 	$fztv = "TV: Last Season folder: FTP";
+	$allMov = "Movies: List all Movies in paper-folder";
 	$script = "Help on scripting command";
-	$choice = popupmenu($tv . "|" .  $fztv . "|" . $script . "|" .  $fzpos);
+	$choice = popupmenu($tv . "|" .  $fztv . "|" . $script . "|" . $allMov . "|" .  $fzpos);
 	if($choice == ""){
 		end 1;
 	}
@@ -40,6 +41,9 @@
 			$scriptchoice = inputselect("Commands", $scriptlist, , 72, ,"500", "1000");
 			rtfm "idh_scripting_comref.htm#idh_sc_" . $scriptchoice;
 			break;
+		case $allMov:
+			$list = listMovieFolders();
+			paperfolder($paperMovie, $list,  "|");
 		default:
 			break;
 	} 
