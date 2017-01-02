@@ -5,6 +5,8 @@
 	perm $newTxt = "C:\db\new.txt";
 	perm $dbFolder = "C:\db\";
 	
+	perm $paperMovie = "D:\Google Drive\Scriptstuff\MediaDb\paper\movies.txt";
+	
 	perm $pytFolder = "D:\Google Drive\Scriptstuff\xyplorer\python\";
 	perm $scriptFolder = "D:\Google Drive\Scriptstuff\xyplorer\";
 	
