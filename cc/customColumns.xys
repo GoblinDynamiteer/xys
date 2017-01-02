@@ -1,22 +1,11 @@
 "_Db"
-	//Fast than to include other libs
+	//Faster than to include other libs
 	perm $dbFilm = "C:\db\film.db";
 	perm $dbTV = "C:\db\tv.db";
 	perm $regexTVpath = "^\\\\DS\\TV\\";
 	perm $regexMoviePath = "^\\\\DS\\FILM\\";
 	perm $urlTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\url.txt";
 	perm $skipList = "D:\Google Drive\Scriptstuff\xyplorer\txt\skiplist.txt";
-	perm $ctrlBlock = "ALT Down: Skipping";
-	
-	function isButtonDownALT(){
-		$button = get("Shift");
-		if($button == 4){
-			return 1;
-		}
-		else{
-			return 0;
-		}
-	}
 	
 	function isTV($path){
 		if(regexmatches($path, $regexTVpath) != ""){
@@ -57,9 +46,6 @@
  
 "_TV : Year"
 	sub "_Db";
-	if(isButtonDownALT()){
-		return $ctrlBlock;
-	}
 	if(isTV(<cc_item>)){
 		$year = getkey("year", <cc_name>, $dbTV);
 	}
@@ -70,9 +56,6 @@
 
 "_MovieSubs : Subs"
 	sub "_Db";
-	if(isButtonDownALT()){
-		return $ctrlBlock;
-	}
 	$enSub = 0;
 	$svSub = 0;
 	$subStr = "";
@@ -95,9 +78,6 @@
 	
 "_TV : Status"
 	sub "_Db";
-	if(isButtonDownALT()){
-		return $ctrlBlock;
-	}
 	$nextep = getkey("nextaired", <cc_name>, $dbTV);
 	$nextdate = getkey("nextaireddate", <cc_name>, $dbTV);
 	$lastep = getkey("lastaired", <cc_name>, $dbTV);
@@ -134,9 +114,6 @@
 	
 "_TV : Title"
 	sub "_Db";
-	if(isButtonDownALT()){
-		return $ctrlBlock;
-	}
 	if(isMovie(<cc_item>)){
 		$title = getkey("title", <cc_name>, $dbFilm);
 	}
