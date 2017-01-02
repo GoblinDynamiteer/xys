@@ -43,6 +43,8 @@
 			break;
 		case $allMov:
 			$list = listMovieFolders();
+			focus P2;
+			tab("new", "D:\");
 			paperfolder($paperMovie, $list,  "|");
 		default:
 			break;
