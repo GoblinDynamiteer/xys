@@ -4,6 +4,7 @@
 	perm $dbFilmList = "C:\db\filmlist.db";
 	perm $newTxt = "C:\db\new.txt";
 	perm $dbFolder = "C:\db\";
+	perm $nzbImportFolder = "D:\NZB Import\";
 	
 	perm $pytFolder = "D:\Google Drive\Scriptstuff\xyplorer\python\";
 	perm $scriptFolder = "D:\Google Drive\Scriptstuff\xyplorer\";
