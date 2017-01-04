@@ -13,8 +13,9 @@
 	
 	$apiKey = readfile($uncAPIKey);
 	$tv = "5000";
-	$searchString = urlencode("Shooter S01E08");
- 	$url = "https://www.usenet-crawler.com/api?t=search&cat=" . $tv . "&q=" . $searchString . "&apikey=" . $apiKey . "&o=json";
+	$movie = "2000";
+	$searchString = urlencode("star wars");
+ 	$url = "https://www.usenet-crawler.com/api?t=search&cat=" . $movie . "&q=" . $searchString . "&apikey=" . $apiKey . "&o=json";
 	$list = pythonUNCsearch($url);
 	$list = replace($list, " "); //removes spaces
 	//List is in format TITLE;nzburl|TITLE2;nzburl2
@@ -22,8 +23,14 @@
 	foreach($item, $list){
 		$titleList = $titleList . "|" . gettoken($item, 1, ";");
 	}
+	step;
 	 //userSelectList sorts list, will not have same index as URL!
 	$file = userSelectList("Choose file", $titleList);
-	if($file){ //Cancelled
+	if(!$file){ //Cancelled
 		end 1;
 	}
+	$token = gettokenindex($file, $list);
+	$url = gettoken($list, $token, "|");
+	$url = gettoken($url, 2, ";");
+	//nzbImportFolder
+	download $url, $nzbImportFolder . $file . ".nzb";
