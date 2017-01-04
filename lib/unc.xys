@@ -1,0 +1,29 @@
+ include "..\const\include.xys";
+
+	function pythonUNCsearch($url){
+		$data = runret('python unc_search.py "' . $url . '"', $pytFolder);
+		if(!checkPythonScriptError($data)){
+			status $pythErrorText, "FF0000", "alert";
+			return 0;
+		}
+		else{
+			return removeCRLF($data);
+		}
+	}
+	
+	$apiKey = readfile($uncAPIKey);
+	$tv = "5000";
+	$searchString = urlencode("Shooter S01E08");
+ 	$url = "https://www.usenet-crawler.com/api?t=search&cat=" . $tv . "&q=" . $searchString . "&apikey=" . $apiKey . "&o=json";
+	$list = pythonUNCsearch($url);
+	$list = replace($list, " "); //removes spaces
+	//List is in format TITLE;nzburl|TITLE2;nzburl2
+	$titleList = "";
+	foreach($item, $list){
+		$titleList = $titleList . "|" . gettoken($item, 1, ";");
+	}
+	 //userSelectList sorts list, will not have same index as URL!
+	$file = userSelectList("Choose file", $titleList);
+	if($file){ //Cancelled
+		end 1;
+	}
