@@ -17,3 +17,17 @@
 		$data = recase($data, "upper");
 		return $data;
 	}
+	
+	function userSelectList($caption, $list){
+		//inputselect(header, listdata, [separator="|"], [style=1], [cancel], [width=600], [height=400], [windowcaption], [preselect])
+		$filterBox = 64;
+		$genericIcons = 8;
+		$style = $filterBox + $genericIcons;
+		$width = 800;
+		$height = gettoken($list, "count", "|") * 35 + 50;
+		if($height > 1200){
+			$height = 1200;
+		}
+		$selection = inputselect($caption, sortList($list), "|", $style, "0", $width, $height);
+		return $selection;
+	}
