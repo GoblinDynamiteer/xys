@@ -8,6 +8,8 @@
 	perm $pytFolder = "D:\Google Drive\Scriptstuff\xyplorer\python\";
 	perm $scriptFolder = "D:\Google Drive\Scriptstuff\xyplorer\";
 	
+	perm $uncAPIKey = "D:\Google Drive\Scriptstuff\unc_apikey.txt";
+	
 	perm $pythErrorText =  "Python script returned error!";
 	
 	perm $hexOrange = "FF4500";
