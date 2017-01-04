@@ -100,9 +100,6 @@
 
 "_TV : Genre"
 	sub "_Db";
-	if(isButtonDownALT()){
-		return $ctrlBlock;
-	}
 	if(isTV(<cc_item>)){
 		$year = getkey("genre", <cc_name>, $dbTV);
 	}
