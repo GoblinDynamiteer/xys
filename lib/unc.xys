@@ -14,8 +14,17 @@
 	$apiKey = readfile($uncAPIKey);
 	$tv = "5000";
 	$movie = "2000";
-	$searchString = urlencode("star wars");
- 	$url = "https://www.usenet-crawler.com/api?t=search&cat=" . $movie . "&q=" . $searchString . "&apikey=" . $apiKey . "&o=json";
+	$selection = getFolderName();
+	if(!$selection){
+		end 1, "Wrong selection";
+	}
+	//Gets latest local episode
+	$episode = getDbTVLocalEp($selection);
+	//Increases episode number by 1 S01E09 --> S01E10
+	$episode = episodeNextNumber($episode);
+	//String is Showname%20S01E01
+	$searchString = urlencode($selection . " " . $episode);
+ 	$url = "https://www.usenet-crawler.com/api?t=search&cat=" . $tv . "&q=" . $searchString . "&apikey=" . $apiKey . "&o=json";
 	$list = pythonUNCsearch($url);
 	$list = replace($list, " "); //removes spaces
 	//List is in format TITLE;nzburl|TITLE2;nzburl2
@@ -23,7 +32,7 @@
 	foreach($item, $list){
 		$titleList = $titleList . "|" . gettoken($item, 1, ";");
 	}
-	step;
+	//step;
 	 //userSelectList sorts list, will not have same index as URL!
 	$file = userSelectList("Choose file", $titleList);
 	if(!$file){ //Cancelled
