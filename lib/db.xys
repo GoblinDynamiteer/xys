@@ -385,6 +385,10 @@
 		setDbTVinfo($section, $data, "localep");
 	}	
 	
+	function getDbTVLocalEp($section){
+		return getDbTVinfo($section, "localep");
+	}
+	
 	//Sets Year of TV-show to TV Database
 	function setDbTVYear($section, $data){
 		setDbTVinfo($section, $data, "year");
