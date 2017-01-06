@@ -13,7 +13,7 @@
 	//Gets all tv-folders as list, without full path.
 	$tvShowsList = listfolder($dsTV,, 6);
 	//Cleans file
-	writefile($missingEpsTxt, " - EPISODE GAPS -" . $br, "o");
+	writefile($missingEpsTxt, " - EPISODE GAPS AND MISSING AIRED -" . $br, "o");
 	//For each folder name in list
 	foreach($tvShow, $tvShowsList){
 		if($tvShow == "American Dad"){
