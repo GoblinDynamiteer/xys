@@ -18,11 +18,26 @@
 	if(!$selection){
 		end 1, "Wrong selection";
 	}
-	//Gets latest local episode
-	$episode = getDbTVLocalEp($selection);
-	//Increases episode number by 1 S01E09 --> S01E10
-	$episode = episodeNextNumber($episode);
 	//String is Showname%20S01E01
+	$searchFor = userSelectList("Search? ", "Next Episode|Select Episode|Manual");
+	switch($searchFor){
+		case "Next Episode":
+			//Gets latest local episode
+			$episode = getDbTVLocalEp($selection);
+			//Increases episode number by 1 S01E09 --> S01E10
+			$episode = episodeNextNumber($episode);
+			break;
+		case "Select Episode":
+			$epList = getLocalTVFiles($dsTV . $selection);
+			$episode = userSelectList("Select: ", getSE($epList));
+			break;
+		case "Manual":
+			$episode = input("Manual input");
+			break;
+		default:
+			$episode = "";
+			break;
+	}
 	$searchString = urlencode($selection . " " . $episode);
  	$url = "https://www.usenet-crawler.com/api?t=search&cat=" . $tv . "&q=" . $searchString . "&apikey=" . $apiKey . "&o=json";
 	$list = pythonUNCsearch($url);
