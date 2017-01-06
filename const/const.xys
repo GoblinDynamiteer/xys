@@ -7,6 +7,8 @@
 	perm $dbFolder = "C:\db\";
 	perm $nzbImportFolder = "D:\NZB Import\";
 	
+	perm $br = <crlf>;
+	
 	perm $pytFolder = "D:\Google Drive\Scriptstuff\xyplorer\python\";
 	perm $scriptFolder = "D:\Google Drive\Scriptstuff\xyplorer\";
 	
