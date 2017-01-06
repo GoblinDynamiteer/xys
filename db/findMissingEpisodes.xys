@@ -1,0 +1,106 @@
+ include "..\const\include.xys";
+ perm $line = "---------------------------------";
+ perm $writtenOnce;
+ 
+ 	function writeShowHeader($tvShow){
+		if(!$writtenOnce){
+			/*		Writes show-name to textfile. Variable $br is newline <crlf>	*/
+			writefile($missingEpsTxt, $line . $br . "[ " . $tvShow . " ]" . $br, "a");
+			$writtenOnce = 1
+		}
+	}	
+
+	//Gets all tv-folders as list, without full path.
+	$tvShowsList = listfolder($dsTV,, 6);
+	//Cleans file
+	writefile($missingEpsTxt, " - EPISODE GAPS -" . $br, "o");
+	//For each folder name in list
+	foreach($tvShow, $tvShowsList){
+		if($tvShow == "American Dad"){
+			continue;
+		}
+		$writtenOnce = 0;
+		status "Searching for missing episodes: " . $tvShow;
+		wait 1;
+		/*		Gets list of season folders in tv-show folder	*/
+		$seasonList = listfolder($dsTV . $tvShow,, 6);
+		$lastSeasonNumber = getLastListItem($seasonList);
+		/*		Counts number of season folders in list	*/
+		$countSeasons = gettoken($seasonList, "count", "|");
+		/*		Skips S00, special season/episodes	*/
+		if(regexmatches($seasonList, "S00") != ""){
+			$countSeasons--;
+		}
+		/*		If count doesn't match last season number, there are missing seasons	*/
+		if($countSeasons != format(replace($lastSeasonNumber, "S"), "#")){
+			writeShowHeader($tvShow);
+			/*		Removes the S from the last season folder name. Is now in format 00	*/
+			$numberCheck = replace($lastSeasonNumber, "S");
+			/*		To hold a list of missing seasons	*/
+			$missingSeasons = "";
+			while($numberCheck){
+				/*		Sets token to S01 format	*/
+				$token = "S" . format($numberCheck, "00");
+				/*		Returns 0 if token is missing in tokenlist	*/
+				if(!gettokenindex($token, $seasonList)){
+					$missingSeasons = $missingSeasons .  "|" . $token;
+				}
+				$numberCheck--;
+			}
+			writefile($missingEpsTxt, "Season: " . sortList($missingSeasons) . $br, "a");
+		}
+		/*		Iterates through season list	*/
+		foreach($season, $seasonList){
+			/*		Skip checks for specials	*/
+			if($season == "S00"){
+				continue;
+			}
+			/*		Gets a list of local episodes in format S01E01|S01E02|S01E03	
+					Works for double-episode files if named eg Show.S01E09.S01E10.mkv */
+			$episodes = getSE(getLocalTVFiles($dsTV . $tvShow . "\" .  $season));
+			$episodes = sortList($episodes);
+			/*		Gets the last list item / episode for the current season	*/
+			$lastEpisode = getLastListItem($episodes);
+			/*		Removes the season and, eg S01	*/
+			$lastEpisodeNumber = replace($lastEpisode, $season);
+			/*		Returns digits in format 00	*/
+			$lastEpisodeNumber = regexmatches($lastEpisodeNumber, $regexD2);
+			/*		Counts number of epsodes in list	*/
+			$countEpisodes = gettoken($episodes, "count", "|");
+			/*		If count doesnt match last episode number	*/
+			if($countEpisodes != format($lastEpisodeNumber, "#")){
+				writeShowHeader($tvShow);
+				$numberCheck = $lastEpisodeNumber;
+				$missingEpisodes = "";
+				while($numberCheck){
+					$token = $season . "e" . format($numberCheck, "00");
+					if(!gettokenindex($token, $episodes)){
+						$missingEpisodes = $missingEpisodes . "|" . recase($token, "upper");
+						wait 1;
+					}
+					$numberCheck--;
+				}
+				writefile($missingEpsTxt, sortList($missingEpisodes) . $br, "a");
+				}
+			}
+		/*		Check if local episode is the last one aired	*/
+		$localEpisode = getDbTVLocalEp($tvShow);
+		$nextEpisode = episodeNextNumber($localEpisode);
+		$mazeid = getDbTVMaze($tvShow);
+		$checkAired = TVEpisodeAirdate($mazeid ,$nextEpisode);
+		if($checkAired == 0 || $checkAired == 404 || $checkAired == ""){
+			$nextEpisode = episodeNextSeason($localEpisode);
+			$checkAired = TVEpisodeAirdate($mazeid, $nextEpisode);
+			if($checkAired == 0 || $checkAired == 404 || $checkAired == ""){
+				continue;
+			}
+		}
+		/*		Missing aired episode	*/
+		if(datediff($checkAired) >= 0){
+			writeShowHeader($tvShow);
+			writefile($missingEpsTxt, "Aired " . $checkAired . ": ". $nextEpisode . $br, "a");
+		}
+	}
+	backupDBfiles();
+	releaseglobals 3;
+
