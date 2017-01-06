@@ -2,6 +2,9 @@ include "D:\Google Drive\Scriptstuff\xyplorer\const\const.xys"; //Has Regex
 
 include "D:\Google Drive\Scriptstuff\xyplorer\lib\dbReadTV.xys";
 include "D:\Google Drive\Scriptstuff\xyplorer\lib\dbReadMovie.xys";
+include "D:\Google Drive\Scriptstuff\xyplorer\lib\getDataTV.xys";
+
+include "D:\Google Drive\Scriptstuff\xyplorer\lib\db.xys";
 
 include "D:\Google Drive\Scriptstuff\xyplorer\lib\securityChecks.xys";
 
