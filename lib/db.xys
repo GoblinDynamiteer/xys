@@ -140,7 +140,9 @@
 		$now = now("yyyy-mm-dd-hh-nn");
 		$backupFolder = new("D:\Google Drive\Scriptstuff\MediaDb\bak\" . $now, "dir");
 		backupto $dsInfo, $newTxt;
+		backupto $dsInfo, $missingEpsTxt;
 		backupto $backupFolder, $newTxt;
+		backupto $backupFolder, $missingEpsTxt;
 		$dbFiles = listfolder($dbFolder, "*.db", 1);
 		//$dbFiles = quicksearch("*.db", $dbFolder, "|");
 		copyto $backupFolder , $dbFiles;
