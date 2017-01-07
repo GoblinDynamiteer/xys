@@ -1,9 +1,5 @@
-
-	//Store in C: to prevent Google Drive from locking files
-	perm $dbTV = "C:\db\tv.db";
-	perm $dbTVep = "C:\db\tvep.db";
-	perm $dbFolder = "C:\db\";
-
+ include_once "..\const\include.xys";
+ 
 	//Reads data from TV Database
 	function getDbTVinfo($section, $key){
 		$data = getkey($key, $section, $dbTV);
@@ -15,13 +11,13 @@
 			return $data;
 		}
 	}
-
+	
 	//Section is folder name for tv-show
 	//Gets IMDB from TV database
 	function getDbTVIMDb($section){
 		return getDbTVinfo($section, "imdb");
 	}
-	
+
 	//Section is folder name for tv-show
 	//Gets TVMaze ID from TV database
 	function getDbTVMaze($section){
@@ -38,6 +34,11 @@
 		}
 	}
 	
+	//Section is folder name for tv-show
+	//Gets year from TV database
+	function getDbTVYear($section){
+		return getDbTVinfo($section, "year");
+	}
 
 	function getDbTVLocalEp($section, $data){
 		return getDbTVinfo($section, "localep");

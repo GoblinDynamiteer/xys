@@ -111,3 +111,8 @@
 			return 0;
 		}
 	}
+	
+	
+	function getSE($string){
+		return regexmatches($string, $regexSE);
+	}

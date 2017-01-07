@@ -1,16 +1,5 @@
  include_once "..\const\include.xys";
 
-	function pythonUNCsearch($url){
-		$data = runret('python unc_search.py "' . $url . '"', $pytFolder);
-		if(!checkPythonScriptError($data)){
-			status $pythErrorText, "FF0000", "alert";
-			return 0;
-		}
-		else{
-			return removeCRLF($data);
-		}
-	}
-	
 	$apiKey = readfile($uncAPIKey);
 	$tv = "5000";
 	$movie = "2000";

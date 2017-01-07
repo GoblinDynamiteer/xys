@@ -7,6 +7,8 @@
 	perm $dbFolder = "C:\db\";
 	perm $nzbImportFolder = "D:\NZB Import\";
 	
+	perm $vidExtensions = "mkv|avi|mp4|m4v";
+	
 	perm $br = <crlf>;
 	
 	perm $pytFolder = "D:\Google Drive\Scriptstuff\xyplorer\python\";

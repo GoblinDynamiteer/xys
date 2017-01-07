@@ -9,18 +9,18 @@
 			return $data;
 		}
 	}
-	
+
 	//Gets IMDB from Movie database
 	function getDbMovieIMDb($section){
 		return getDbMovieInfo($section, "imdb");
 	}
-	
+
 	//Gets list of files in database, from movie
 	function getDBMovieFiles($section){
 		$movieLetter = getMovieLetter($section);
 		return getkey("files", $movieLetter, $dbFilmList);
 	}
-	
+
 	//Gets list of files in database, from letter
 	function getDBMovieFilesByLetter($movieLetter){
 		return getkey("files", $movieLetter, $dbFilmList);
@@ -29,11 +29,22 @@
 	function getDbMovieYear($section){
 		return getDbMovieInfo($section, "year");
 	}
-	
+
 	function getDbMovieGenre($section){
 		return getDbMovieInfo($section, "genre");
 	}
-	
+
 	function getDbMovieTitle($section){
 		return getDbMovieInfo($section, "title");
+	}
+
+		//Gets list of files in database, from movie
+	function getDBMovieFiles($section){
+		$movieLetter = getMovieLetter($section);
+		return getkey("files", $movieLetter, $dbFilmList);
+	}
+
+	//Gets list of files in database, from letter
+	function getDBMovieFilesByLetter($movieLetter){
+		return getkey("files", $movieLetter, $dbFilmList);
 	}

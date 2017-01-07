@@ -1,0 +1,45 @@
+ include_once "..\const\include.xys";
+ 
+		//Writes data to Movie Database
+	function setDbMovieInfo($section, $data, $key){
+		setkey $data, $key, $section, $dbFilm;
+	}
+
+	//Sets Genre of Movie to movie Database
+	function setDbMovieYear($section, $data){
+		setDbMovieInfo($section, $data, "year");
+	}
+
+	//Sets title of Movie to movie Database
+	function setDbMovieTitle($section, $data){
+		setDbMovieInfo($section, $data, "title");
+	}
+	
+		//Sets Genre of Movie to movie Database
+	function setDbMovieGenre($section, $data){
+		setDbMovieInfo($section, $data, "genre");
+	}
+
+	//Section is folder name for tv-show
+	//Sets IMDB-id to TV database
+	function setDbMovieIMDb($section, $data){
+		setDbMovieInfo($section, $data, "imdb");
+	}
+
+	function setDBMovieFiles($section){
+		$movieLetter = getMovieLetter($section);
+		$path = $dsFilm . $movieLetter;
+		$data = listfolder($path, , 6);
+		if(!exists($path . "\" . $section)){
+			msg "Movie is not in correct letter!?";
+		}
+		else{
+			setkey $data, "files", $movieLetter, $dbFilmList;
+		}
+	}
+
+	function setDBMovieFilesByLetter($movieLetter){
+		$path = $dsFilm . $movieLetter;
+		$data = listfolder($path, , 6);
+		setkey $data, "files", $movieLetter, $dbFilmList;
+	}

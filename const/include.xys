@@ -1,18 +1,27 @@
-include_once "D:\Google Drive\Scriptstuff\xyplorer\const\const.xys"; //Has Regex
 
+/*	 Permanent variables. Has regex matches	*/
+include_once "D:\Google Drive\Scriptstuff\xyplorer\const\const.xys";
+
+/*	 Functions that retrieves data from the TV & Movie databases	*/
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\dbReadTV.xys";
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\dbReadMovie.xys";
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\getDataTV.xys";
 
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\db.xys";
+/*	 Functions that writes data to the TV & Movie databases	*/
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\dbWriteTV.xys";
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\dbWriteMovie.xys";
+
+/*	 Functions that calls on Python scripts	*/
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\python.xys";
+
+/*	 File/Folder funcions. Searches, listings etc.	*/
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\fileOperations.xys";
 
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\securityChecks.xys";
 
 
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\getSelectionInfo.xys";
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\getFileInfo.xys";
-//include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\db.xys";
-//include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\regex.xys";
+
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\list.xys";
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\string.xys";
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\xyplorerCommands";
