@@ -1,12 +1,5 @@
- include "..\lib\getDataTV.xys";
- include "..\lib\getSelectionInfo.xys";
- include "..\lib\getFileInfo.xys";
- include "..\lib\db.xys";
- include "..\lib\regex.xys";
- include "..\lib\list.xys";
- include "..\lib\securityChecks.xys";
- include "..\lib\string.xys";
- include "..\lib\xyplorerCommands";
+ include "..\const\include.xys";
+
 	if(isButtonDownCTRL()){
 		$updateShowData = 1;
 		msg "CTRL was held at start, will update all shows that needs updating!";

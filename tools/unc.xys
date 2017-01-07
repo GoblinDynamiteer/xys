@@ -1,4 +1,4 @@
- include "..\const\include.xys";
+ include_once "..\const\include.xys";
 
 	function pythonUNCsearch($url){
 		$data = runret('python unc_search.py "' . $url . '"', $pytFolder);

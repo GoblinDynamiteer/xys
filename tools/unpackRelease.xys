@@ -1,8 +1,5 @@
- include "..\lib\apps.xys";
- include "..\lib\getSelectionInfo.xys";
- include "..\lib\string.xys";
- include "..\lib\db.xys";
-
+ include_once "..\const\include.xys";
+ 
 	$selectedItemPath = getFullPath();
 	$selectedItemName = getFolderName();
 	$firstLetter = getMovieLetter($selectedItemName);

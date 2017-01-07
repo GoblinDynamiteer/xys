@@ -1,4 +1,4 @@
- include "..\lib\db.xys";
+ include_once "..\const\include.xys";
 	
 	//Various file functions
 	

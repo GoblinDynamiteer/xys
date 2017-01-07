@@ -1,4 +1,4 @@
-	include "..\const\include.xys";
+ include_once "..\const\include.xys";
 	
 	//python json_tvmaze_omdb.py tt3107288 1 Year
 	function pythonOMDB($imdb, $info){

@@ -1,3 +1,5 @@
+ include_once "..\const\include.xys";
+
 	//Checks if TV folder is in correct directory
 	function isTV($path){
 		if(regexmatches($path, $regexTVpath) != ""){

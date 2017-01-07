@@ -1,4 +1,4 @@
- include "..\const\include.xys";
+ include_once "..\const\include.xys";
  perm $line = "---------------------------------";
  perm $writtenOnce;
  

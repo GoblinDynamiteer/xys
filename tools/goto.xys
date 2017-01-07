@@ -1,8 +1,5 @@
- include "..\lib\getFileInfo.xys";
- include "..\lib\db.xys";
- include "..\lib\getDataTV.xys";
- include "..\lib\xyplorerCommands.xys";
- include "..\lib\apps.xys";
+ include_once "..\const\include.xys";
+ 
 	$pointer = itematpos();
 	if ($pointer != "") {
 		if (exists($pointer) == 2){

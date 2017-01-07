@@ -1,3 +1,5 @@
+ include_once "..\const\include.xys";
+
 	//Functions for getting selected folder/file data
 
 	//Returns full path to selected path, checks that selection is
