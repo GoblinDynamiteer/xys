@@ -16,6 +16,9 @@ include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\python.xys";
 /*	 File/Folder funcions. Searches, listings etc.	*/
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\fileOperations.xys";
 
+/*	 Functions that uses external applications.	*/
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\apps.xys";
+
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\securityChecks.xys";
 
 
