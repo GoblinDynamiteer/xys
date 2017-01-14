@@ -1,4 +1,5 @@
 	perm $unrarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\unrar.exe";
+	perm $rarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\rar.exe";
 	perm $filezillaExe = "C:\Program Files (x86)\FileZilla FTP Client\filezilla.exe";
 
 	function unrar($source, $destination) {
@@ -15,3 +16,12 @@
 	function filezilla($folder){
 		run '"' . $filezillaExe. '" --local="' . $folder . '" --site="0/whatbox/odyssey.whatbox.ca"';
 	}
+
+	/*	 Returns full path to created RAR	*/
+	function rar($filename, $source, $location, $switch){
+		run '"' . $rarExe . '" ' . $switch . ' "' . $location . $filename . '_' . now("yyyy-mm-dd") . '.rar" "' . $source . '"', , 1, 1;
+		return $location . $filename;
+	}
+	
+
+ 
