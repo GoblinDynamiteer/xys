@@ -2,6 +2,7 @@
 	perm $rarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\rar.exe";
 	perm $filezillaExe = "C:\Program Files (x86)\FileZilla FTP Client\filezilla.exe";
 	perm $szExe = "D:\Google Drive\Scriptstuff\xyplorer\app\7za.exe";
+	perm $szeExe = "C:\Program Files\7-Zip\7z.exe";
 
 	function unrar($source, $destination) {
 		//Creates desitination directory if doesnt exist
@@ -27,6 +28,17 @@
 	function szip($filename, $source, $location, $switch){
 		run '"' . $szExe . '" ' . $switch . ' "' . $location . $filename . '.7z" "' . $source . '"', , 1, 1;
 		return $location . $filename . ".7z";
+	}
+	
+	function extract($source, $destination) {
+		//Creates desitination directory if doesnt exist
+		if(!exists($destination)){
+			new($destination, "dir");
+			wait 100;
+		}
+		status "Extracting: ". $source, 000000, progress;
+		//run command, [directory], [wait=0], [show=1]
+		run '"' . $szeExe . '" x "' . $source . '" -o"' . $destination . '"', , 0, 2;
 	}
 	
 
