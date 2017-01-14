@@ -1,0 +1,42 @@
+ include_once "..\const\include.xys";
+
+	//$switch = "a -r -ep1 -x*\posters -x*\posters\* -x*.mkv";
+	$switch = "a -mx9 -t7z";
+	$desination = "D:\Temp\temprar\";
+	$compressedFiles = "";
+	
+	/*	 Remove old files	*/
+	$oldFiles = quicksearch(, $desination, "|");
+	if($oldFiles != ""){
+		delete 0, 0, $oldFiles;
+	}
+
+	/*	 Gets list of sections in file	*/
+	$list = getsectionlist(, $backupSourcesDb, "|");
+	
+	/*	 Select which item(s)	to backup */
+	$sources = userSelectListCheckBox("Select items to backup", sortList($list));
+	
+	/*	 End script if nothing selected to backup.	*/
+	if(!$sources){
+		end 1;
+	}
+	
+	/*	 Compresses each item.	*/
+	foreach($source, $sources){
+		$fileName = $source . '_' . now("yyyy-mm-dd-hhnn");
+		$path = getkey("path", $source , $backupSourcesDb);
+		$compressedFiles = $compressedFiles . "|" . szip($fileName, $path, $desination, $switch);
+	}
+
+	/*	 Remove empty list item	*/
+	$compressedFiles = sortList($compressedFiles);
+	
+	/*	 Copy compressed files to backup locations	*/
+	foreach($file, $compressedFiles){
+		copyto($backupLocGDrive, $file);
+		copyto($backupLocDS, $file);
+		copyto($backupLocDropBox, $file);
+	}
+
+	

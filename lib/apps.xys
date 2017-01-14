@@ -1,6 +1,7 @@
 	perm $unrarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\unrar.exe";
 	perm $rarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\rar.exe";
 	perm $filezillaExe = "C:\Program Files (x86)\FileZilla FTP Client\filezilla.exe";
+	perm $szExe = "D:\Google Drive\Scriptstuff\xyplorer\app\7za.exe";
 
 	function unrar($source, $destination) {
 		//Creates desitination directory if doesnt exist
@@ -19,8 +20,13 @@
 
 	/*	 Returns full path to created RAR	*/
 	function rar($filename, $source, $location, $switch){
-		run '"' . $rarExe . '" ' . $switch . ' "' . $location . $filename . '_' . now("yyyy-mm-dd") . '.rar" "' . $source . '"', , 1, 1;
-		return $location . $filename;
+		run '"' . $rarExe . '" ' . $switch . ' "' . $location . $filename . '.rar" "' . $source . '"', , 1, 1;
+		return $location . $filename . ".rar";
+	}
+	
+	function szip($filename, $source, $location, $switch){
+		run '"' . $szExe . '" ' . $switch . ' "' . $location . $filename . '.7z" "' . $source . '"', , 1, 1;
+		return $location . $filename . ".7z";
 	}
 	
 

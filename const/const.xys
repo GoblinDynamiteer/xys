@@ -10,7 +10,7 @@
 	/*	 Backup locations	*/
 	perm $backupLocGDrive = "D:\Google Drive\Backups\";
 	perm $backupLocDropBox = "E:\Dropbox\Backups\";
-	perm $backupLocDS = "\\DS\BACKUP\";
+	perm $backupLocDS = "\\DS\BACKUP\Misc";
 	perm $backupSourcesDb = "D:\Google Drive\Scriptstuff\backup_locs.db";
 	
 	perm $vidExtensions = "mkv|avi|mp4|m4v";
