@@ -18,7 +18,8 @@
 		}
 		tag "Extracted: Delete Me!", $selectedItemPath, 2, 1;
 		tag "Red", $selectedItemPath, 0, 0;
-		extract($selectedItemPath, $destination);
+		$rarFile = quicksearch("*.rar", $selectedItemPath, "|");
+		extract($rarFile, $destination);
 		wait 100;
 		$confirm = confirm("Run script to check for new movies?", , 2, 4);
 		if($confirm){
