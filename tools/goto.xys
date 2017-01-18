@@ -11,9 +11,10 @@
 	}
 	$tv = "TV: Last Season folder";
 	$fztv = "TV: Last Season folder: FTP";
-	$allMov = "Movies: List all Movies in paper-folder";
+	$allMov = "Movies: List in paper-folder";
+	$allTv = "TV: List in paper-folder";
 	$script = "Help on scripting command";
-	$choice = popupmenu($tv . "|" .  $fztv . "|" . $script . "|" . $allMov . "|" .  $fzpos);
+	$choice = popupmenu($tv . "|" .  $fztv . "|-|" . $script . "|-|" . $allMov . "|". $allTv . "|" .  $fzpos);
 	if($choice == ""){
 		end 1;
 	}
@@ -42,7 +43,12 @@
 			$list = listMovieFolders();
 			focus P2;
 			tab("new", "D:\");
-			paperfolder($paperMovie, $list,  "|");
+			paperfolder("paper", $list,  "|");
+		case $allTv:
+			$list = listfolder($dsTV, , , <crlf>);
+			focus P2;
+			tab("new", "D:\");
+			paperfolder("paper", $list,  "|");
 		default:
 			break;
 	} 
