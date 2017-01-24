@@ -2,33 +2,45 @@
  
 	$selectedItemPath = getFullPath();
 	$selectedItemName = getFolderName();
-	$firstLetter = getMovieLetter($selectedItemName);
-	//Full DS destination
-	$destination = $dsFilm . $firstLetter . "\" .  $selectedItemName;
-	//To show in confirm dialog
-	$ConfirmText = "Extract "  . <crlf> . $selectedItemName . " to "  . <crlf> . $destination;
 	
-	//confirm(text, [linebreaker="<br>"], [DefaultButton=1], [Buttons=1])
-	//Buttons = 4 = Yes/No, returns 1/0
-	$confirm = confirm($ConfirmText, , 2, 4);
-	if($confirm){
-		//Move Subs-folder to DS/Misc
-		if(exists($selectedItemPath . "\Subs")){
-			moveas $selectedItemName, $dsSUB, $selectedItemPath . "\Subs";
-		}
+	/*	 Selected folder is considered to be a tv season release	*/
+	if(isFolderTvRelease($selectedItemName)){
+		/*	 Fix moving of subs	*/
+		$destination = inputfolder($dsTV, "Select destination!");
+		unrar($selectedItemPath, $destination);
 		tag "Extracted: Delete Me!", $selectedItemPath, 2, 1;
 		tag "Red", $selectedItemPath, 0, 0;
-		$rarFile = quicksearch("*.rar", $selectedItemPath, "|");
-		extract($rarFile, $destination);
-		wait 100;
-		$confirm = confirm("Run script to check for new movies?", , 2, 4);
+	}
+	/*	 Selected folder is probably a movie release	*/
+	else{
+		$firstLetter = getMovieLetter($selectedItemName);
+		//Full DS destination
+		$destination = $dsFilm . $firstLetter . "\" .  $selectedItemName;
+		//To show in confirm dialog
+		$ConfirmText = "Extract "  . <crlf> . $selectedItemName . " to "  . <crlf> . $destination;
+		
+		//confirm(text, [linebreaker="<br>"], [DefaultButton=1], [Buttons=1])
+		//Buttons = 4 = Yes/No, returns 1/0
+		$confirm = confirm($ConfirmText, , 2, 4);
 		if($confirm){
-			load $scriptFolder . "\db\writeDataMovie.xys";
+			//Move Subs-folder to DS/Misc
+			if(exists($selectedItemPath . "\Subs")){
+				moveas $selectedItemName, $dsSUB, $selectedItemPath . "\Subs";
+			}
+			tag "Extracted: Delete Me!", $selectedItemPath, 2, 1;
+			tag "Red", $selectedItemPath, 0, 0;
+			$rarFile = quicksearch("*.rar", $selectedItemPath, "|");
+			extract($rarFile, $destination);
+			wait 100;
+			$confirm = confirm("Run script to check for new movies?", , 2, 4);
+			if($confirm){
+				load $scriptFolder . "\db\writeDataMovie.xys";
+			}
+		}
+		else{
+			status "Cancelled", $hexOrange, stop;
 		}
 	}
-	else{
-		status "Cancelled", $hexOrange, stop;
-	}
-	
+
 	releaseglobals 3;
 	end 1;
