@@ -1,5 +1,16 @@
  include_once "..\const\include.xys";
 
+
+	/*	 Return 1 if folder is a tv season release	*/
+	function isFolderTvRelease($folder){
+		if(regexmatches($folder, $regexTVRelease) != ""){
+			return 1;
+		}
+		else{
+			return 0;
+		}
+	}
+	
 	//Checks if TV folder is in correct directory
 	function isTV($path){
 		if(regexmatches($path, $regexTVpath) != ""){
