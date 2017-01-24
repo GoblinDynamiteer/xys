@@ -37,7 +37,9 @@
 	
 	//For SeasonEpisode S##E##
 	perm $regexSE = "s\d{2}e\d{2}";
-
+	
+	/*	 For checking if folder is TV Season release .SXX.720p.	*/
+	perm $regexTVRelease = "\.S\d{2}\.(720p|1080p)\.";
 	//For first string in movie folder releases
 	perm $regexThe = "^the\.";
 	perm $regexA = "^a\.";
