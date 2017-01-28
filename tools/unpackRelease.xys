@@ -30,7 +30,7 @@
 			tag "Extracted: Delete Me!", $selectedItemPath, 2, 1;
 			tag "Red", $selectedItemPath, 0, 0;
 			$rarFile = quicksearch("*.rar", $selectedItemPath, "|");
-			while(gettoken($rarfile, "count", "|") > 1){
+			while(gettoken($rarFile, "count", "|") != 1){
 				wait 100;
 				$rarFile = quicksearch("*.rar", $selectedItemPath, "|");
 				status "Waiting for subs move";
