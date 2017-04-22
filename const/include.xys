@@ -13,6 +13,9 @@ include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\dbWriteMovie.xys";
 /*	 Functions that calls on Python scripts	*/
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\python.xys";
 
+/*	 Subtitle functions	*/
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\subs.xys";
+
 /*	 File/Folder funcions. Searches, listings etc.	*/
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\fileOperations.xys";
 
