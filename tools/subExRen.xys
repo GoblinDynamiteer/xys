@@ -1,0 +1,40 @@
+  include_once "..\const\include.xys";
+
+  /* XYPlorer script
+    Extract and rename SRT subtitles
+  */
+
+
+  /* Get active pane path */
+  $path = get("path", a);
+  /*  Get current SRT files, if any */
+  $currentSrtFiles = listFiles($path, ".srt");
+  /* List zip-files in path */
+  $zipFiles = listFiles($path, ".zip");
+  /* Extract all files */
+  foreach($zip, $zipFiles, /*separator="|"*/, /*flags*/) {
+   extract($zip, $path);
+  }
+  /* Get movie file name, without path and extension  */
+  $movFile = listFiles($path, ".mkv");
+  $fileName = replace($movFile, ".mkv");
+  $fileName = replace($fileName, $path . "\");
+  $srtFiles = "";
+
+  /* Get new extracted SRT-files  */
+  while ($srtFiles == $currentSrtFiles) {
+    status "Getting SRT-files", ,"progress";
+    $srtFiles = listFiles($path, ".srt");
+    wait 50;
+  }
+  $srtFiles = replace($srtFiles, $currentSrtFiles);
+
+  /* Rename extracted SRT-files with correnct language extension  */
+  foreach($srt, $srtFiles, /*separator="|"*/, /*flags*/) {
+    if(getSubLanguage($srt) == $ENGLISH){
+      renameitem($fileName . ".en.srt", $srt, /*flags=0*/, /*numsuffix*/)
+    }
+    else{
+      renameitem($fileName . ".sv.srt", $srt, /*flags=0*/, /*numsuffix*/)
+    }
+  }
