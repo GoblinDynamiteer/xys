@@ -1,0 +1,25 @@
+  include_once "..\const\include.xys";
+
+  /* Various Subtitle functions for XYplorer-scripting  */
+
+  /* Checks if folder contains an english subtitle (extension en.srt)  */
+  function hasEnSub($path){
+    $files = listFiles($path, "en.srt");
+    if($files != ""){
+      return 1;
+    }
+    else{
+      return 0;
+    }
+  }
+
+  /* Checks if folder contains an english subtitle (extension sv.srt)  */
+  function hasSvSub($path){
+    $files = listFiles($path, "sv.srt");
+    if($files != ""){
+      return 1;
+    }
+    else {
+      return 0;
+    }
+}
