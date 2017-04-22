@@ -12,10 +12,11 @@
   $zipFiles = listFiles($path, ".zip");
   /* Extract all files */
   foreach($zip, $zipFiles, /*separator="|"*/, /*flags*/) {
-   extract($zip, $path);
-   wait 200;
+    extract($zip, $path);
+    wait 200;
   }
-
+  delete /*recycle=1*/, 0, $zipFiles;
+  wait 40;
   /* Get movie file name, without path and extension  */
   $movFile = listFiles($path, ".mkv");
   $fileName = replace($movFile, ".mkv");
