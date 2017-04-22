@@ -4,7 +4,6 @@
     Extract and rename SRT subtitles
   */
 
-
   /* Get active pane path */
   $path = get("path", a);
   /*  Get current SRT files, if any */
@@ -14,7 +13,9 @@
   /* Extract all files */
   foreach($zip, $zipFiles, /*separator="|"*/, /*flags*/) {
    extract($zip, $path);
+   wait 200;
   }
+
   /* Get movie file name, without path and extension  */
   $movFile = listFiles($path, ".mkv");
   $fileName = replace($movFile, ".mkv");
