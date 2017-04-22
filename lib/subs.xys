@@ -1,6 +1,9 @@
   include_once "..\const\include.xys";
 
-  /* Various Subtitle functions for XYplorer-scripting  */
+  perm $ENGLISH = 1;
+  perm $SWEDISH = 0;
+
+  /* Subtitle functions for XYplorer-scripting  */
 
   /* Checks if folder contains an english subtitle (extension en.srt)  */
   function hasEnSub($path){
@@ -22,4 +25,36 @@
     else {
       return 0;
     }
-}
+  }
+
+  /*  Get "points" for subtitle, to determine if it is in english or swedish */
+  function pointsSub($file, $lang) {
+    $words = "";
+    $file = readfile($file /*mode*/, /*numbytes*/, /*codepage*/, /*start=1*/);
+    if ($lang == "en") {
+      $words = readfile($engSubTxt);
+    }
+    if ($lang == "sv") {
+      $words = readfile($sweSubTxt);
+    }
+    if ($words == ""){
+      echo "Wrong language!";
+      return -1;
+    }
+    $points = 0;
+    foreach($word, $words, <crlf>, /*flags*/) {
+      /*  Check word matches in srt-file, with trailing and leading space */
+      $matches = regexmatches($file, "\s" . $word. "\s", "|", /*matchcase=0*/);
+      /*  Points is equal to amount of word matches */
+      $points = $points + gettoken($matches, "count", "|");
+    }
+    return $points;
+  }
+
+  /* Determines language of srt subtitle  */
+  function getSubLanguage($file){
+    $enPt = pointsSub($file, "en");
+    $svPt = pointsSub($file, "sv");
+    /* Return 1 if english sub, 0 if swedish  */
+    return ($enPt > $svPt);
+  }
