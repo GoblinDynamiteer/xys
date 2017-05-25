@@ -14,7 +14,18 @@
 		//run command, [directory], [wait=0], [show=1]
 		run '"' . $unrarExe . '" x "' . $source . '" "' . $destination . '"', , 0, 2;
 	}
-	
+
+	function unrarWait($source, $destination) {
+		//Creates desitination directory if doesnt exist
+		if(!exists($destination)){
+			new($destination, "dir");
+			wait 100;
+		}
+		status "Unraring: ". $source, 000000, progress;
+		//run command, [directory], [wait=0], [show=1]
+		run '"' . $unrarExe . '" x "' . $source . '" "' . $destination . '"', , 2, 2;
+	}
+
 	function filezilla($folder){
 		run '"' . $filezillaExe. '" --local="' . $folder . '" --site="0/whatbox/odyssey.whatbox.ca"';
 	}

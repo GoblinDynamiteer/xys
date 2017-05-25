@@ -1,0 +1,9 @@
+ include_once "..\const\include.xys";
+
+	$selectedItems = get("SelectedItemsPathNames");
+  $itemCount = gettoken($selectedItems, "count", <crlf>);
+  $count = 1;
+  $desitination = inputfolder("C:\", "Destination");
+  foreach($folder, $selectedItems, <crlf>, /*flags*/) {
+    unrarWait(quicksearch('*.rar', $folder), $desitination);
+  }
