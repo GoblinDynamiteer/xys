@@ -30,7 +30,7 @@
 	perm $dsFilm = "\\DS\FILM\";
 	perm $dsInfo = "\\DS\INFO\";
 	perm $dsTV = "\\DS\TV\";
-	perm $dsSUB = "\\DS\MISC\SUB Subtitles\";
+	perm $dsSUB = "\\DS\MISC\Subtitles\";
 
 	perm $urlTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\url.txt";
 	perm $engSubTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\engSub.txt";
