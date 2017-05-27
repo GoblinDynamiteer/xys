@@ -1,5 +1,5 @@
  include_once "..\const\include.xys";
- 
+
 	//Moves new.txt to ds/info and backups .db files
 	function backupDBfiles(void){
 		$now = now("yyyy-mm-dd-hh-nn");
@@ -12,7 +12,7 @@
 		//$dbFiles = quicksearch("*.db", $dbFolder, "|");
 		copyto $backupFolder , $dbFiles;
 	}
- 
+
 	//Returns list of video files in path, in subfolders
 	function getLocalTVFiles($path){
 		$fileList =  "";
@@ -25,20 +25,20 @@
 		$data = replace($fileList, $path . "\");
 		return $data;
 	}
-	
+
 		function getSeasonsFolders($path){
 		//listfolder([path=<curpath>], [pattern=*], [flags], [separator="|"])
 		$data = listfolder($path, , 2 + 4);
 		return $data;
 	}
-	
+
 	function getLastSeasonFolder($path){
 		//listfolder([path=<curpath>], [pattern=*], [flags], [separator="|"])
 		$data = getSeasonsFolders($path);
 		$data = getLastListItem($data);
 		return $data;
 	}
-	
+
 	//Finds and returns the last episode
 	function getLastLocalEpisode($path){
 		status "Getting episode file list", "0000FF", "progress";
@@ -55,8 +55,8 @@
 		$episodes = sortList($episodes);
 		return recase(getLastListItem($episodes), "upper");
 	}
-	
-	
+
+
 		//Adds newly added tv-shows to textfile
 	function addNewTVEpisode($episode, $show){
 		$today = now("yyyy-mm-dd");
@@ -67,7 +67,7 @@
 		}
 		$title = pythonTVMazeEpisode($mazeID, "name", $episode);
 		$airdate = pythonTVMazeEpisode($mazeID, "airdate", $episode);
-		//writefile(filename, data, [on_exist], [mode]) 
+		//writefile(filename, data, [on_exist], [mode])
 		$textstring = "[ " . $today . " ] [ TV ] [ " . $show . " ] [ " . $episode . " : " . $title . " ] [ Airdate: " . $airdate . " ]";
 		writefile($newTxt, $textstring . <crlf>, "a");
 		wait 100;
@@ -95,3 +95,12 @@
 		writefile($newTxt, $textstring . <crlf>, "a");
 		wait 100;
 	}
+
+  // Generates movie.nfo, used for Kodi / Plex
+  function generateMovieNfo($MoviePath, $imdbId){
+    step;
+    if(!(isMovie($MoviePath))){
+      return 0;
+    }
+    writefile($MoviePath . "\movie.nfo", "http://www.imdb.com/title/" . $imdbId);
+  }
