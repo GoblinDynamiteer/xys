@@ -1,0 +1,11 @@
+ $MoviePath = get("path", a);
+ $Movie = gpc($MoviePath, "component", -1);
+
+ $db = "C:\db\film.db";
+ $imdbId = getkey("imdb", $Movie, $db);
+
+ $link = "http://www.imdb.com/title/";
+
+ writefile($MoviePath . "\movie.nfo", $link . $imdbId);
+
+ //echo $Movie . <crlf> . $imdbId;
