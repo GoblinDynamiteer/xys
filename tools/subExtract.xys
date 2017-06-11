@@ -1,0 +1,7 @@
+  include_once "..\const\include.xys";
+
+  /* XYPlorer script
+    Extract srt from selected mkv-file
+  */
+  $mkvFile = get("curitem", /*param1*/, /*param2*/);
+  extactSubtitle($mkvFile);

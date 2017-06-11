@@ -3,6 +3,7 @@
 	perm $filezillaExe = "C:\Program Files (x86)\FileZilla FTP Client\filezilla.exe";
 	perm $szExe = "D:\Google Drive\Scriptstuff\xyplorer\app\7za.exe";
 	perm $szeExe = "C:\Program Files\7-Zip\7z.exe";
+  perm $subEditExe = "C:\Program Files\Subtitle Edit 3\SubtitleEdit.exe";
 
 	function unrar($source, $destination) {
 		//Creates desitination directory if doesnt exist
@@ -35,13 +36,13 @@
 		run '"' . $rarExe . '" ' . $switch . ' "' . $location . $filename . '.rar" "' . $source . '"', , 1, 1;
 		return $location . $filename . ".rar";
 	}
-	
+
 	function szip($filename, $source, $location, $switch){
 		run '"' . $szExe . '" ' . $switch . ' "' . $location . $filename . '.7z" "' . $source . '"', , 1, 1;
 		return $location . $filename . ".7z";
 	}
-	
-	function extract($source, $destination) {
+
+	function extract($source, $destination){
 		//Creates desitination directory if doesnt exist
 		if(!exists($destination)){
 			new($destination, "dir");
@@ -51,6 +52,10 @@
 		//run command, [directory], [wait=0], [show=1]
 		run '"' . $szeExe . '" x "' . $source . '" -o"' . $destination . '"', , 0, 2;
 	}
-	
 
- 
+	function extactSubtitle($source){
+		// SubtitleEdit /convert "T:\House of Cards\S05\House.of.Cards.S05E04.1080p.WEB-DL.DD5.1.H.264-PLAYREADY.mkv" subrip /outputfolder:C:\Temp
+		$destination = getpathcomponent($source, "path");
+		status "Extracting SRT from ". $source, 000000, progress;
+		run '"' . $subEditExe . '" /convert "' . $source . '" subrip /outputfolder:"' . $destination . '"', , 0, 2;
+	}
