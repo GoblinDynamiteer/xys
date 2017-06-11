@@ -1,7 +1,48 @@
   include_once "..\const\include.xys";
 
+  $regex_srt_eng_suffix = "\_\d{1,3}\_eng\.srt";
+  $regex_srt_swe_suffix = "\_\d{1,3}\_swe\.srt";
+  $srt_eng_suffix = ".en.srt";
+  $srt_swe_suffix = ".en.srt";
+  $srt_min_filesize = 5000;
+
   /* XYPlorer script
     Extract srt from selected mkv-file
   */
-  $mkvFile = get("curitem", /*param1*/, /*param2*/);
-  extactSubtitle($mkvFile);
+
+  $mkv_file = get("curitem"); // full path
+  $mkv_file_path = gpc($mkv_file, "path"); //path without filename
+  $mkv_file_name = gpc($mkv_file, "base"); //only filename, without extension
+
+  /*  Wait for extraction with extactSubtitle() -- default waiting dialog*/
+  // extractSubtitle($mkv_file);
+
+  /*  List extracted srt-files */
+  $srt_files = listfolder($mkv_file_path, "*" . $mkv_file_name . "*.srt");
+
+  /*  Iterate trough srt-files */
+  foreach($srt_file, $srt_files){
+
+    /*  Delete small srt-files, probably forced for non-english parts */
+    if(filesize($srt_file) < $srt_min_filesize){
+      deletefile $srt_file;
+      continue;
+    }
+
+    /*  Rename extracted srt files */
+    if(regexmatches($srt_file, $regex_srt_eng_suffix)){
+      $new_name = regexreplace(gpc($srt_file, "file"),
+        $regex_srt_eng_suffix, $srt_eng_suffix);
+      renameitem($new_name, $srt_file);
+    }
+    elseif(regexmatches($srt_file, $regex_srt_swe_suffix)){
+      $new_name = regexreplace(gpc($srt_file, "file"),
+        $regex_srt_swe_suffix, $srt_swe_suffix);
+      renameitem($new_name, $srt_file);
+    }
+
+    /*  Srt is neither eng or swe, delete  */
+    deletefile $srt_file;
+  }
+
+  /*  Todo: Remove HI */

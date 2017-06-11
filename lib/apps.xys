@@ -57,5 +57,5 @@
 		// SubtitleEdit /convert "T:\House of Cards\S05\House.of.Cards.S05E04.1080p.WEB-DL.DD5.1.H.264-PLAYREADY.mkv" subrip /outputfolder:C:\Temp
 		$destination = getpathcomponent($source, "path");
 		status "Extracting SRT from ". $source, 000000, progress;
-		run '"' . $subEditExe . '" /convert "' . $source . '" subrip /outputfolder:"' . $destination . '"', , 0, 2;
+		run '"' . $subEditExe . '" /convert "' . $source . '" subrip /outputfolder:"' . $destination . '"', , 1, 1;
 	}
