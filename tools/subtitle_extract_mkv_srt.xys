@@ -6,8 +6,6 @@
 
     include_once "..\const\include.xys";
 
-    $regex_mkv_info_numbers = "Track\snumber\:\s\d{1,2}";
-    $regex_mkv_info_type = "Track\stype\:\s.{1,10}";
     $srt_min_filesize = 5000;
     $srt_word_treshold = 200;
     $srt_word_hi_treshold = 20;
@@ -19,14 +17,14 @@
         $mkv_file_path = gpc($mkv_file, "path"); //path without filename
         $mkv_file_name = gpc($mkv_file, "base"); //only filename, without extension
 
-        $info =  APP_MkvInfo($mkv_file);
+        $mkv_info = APP_MkvInfo($mkv_file);
 
-        $track_numbers = regexmatches($info, $regex_mkv_info_numbers, "|");
-        $track_types = regexmatches($info, $regex_mkv_info_type, "|");
-        $track_id = 0;
+        $track_numbers = regexmatches($mkv_info, $REGEX_SUBTITLE_MKV_INFO_NUMBERS, "|");
+        $track_types = regexmatches($mkv_info, $REGEX_SUBTITLE_MKV_INFO_TYPES, "|");
 
+        /*  List subtitle tracks for extraction */
         $track_extraction = "";
-
+        $track_id = 0;
         foreach($track, $track_types){
             if(regexmatches($track, "subtitles")){
                 $track_extraction = $track_extraction . "|" . $track_id;
