@@ -1,42 +1,39 @@
- include_once "..\const\include.xys";
+    include_once "..\const\include.xys";
 
 	//$switch = "a -r -ep1 -x*\posters -x*\posters\* -x*.mkv";
 	$switch = "a -mx9 -t7z";
-	$desination = "D:\Temp\temprar\";
-	$compressedFiles = "";
-	
-	/*	 Remove old files	*/
-	$oldFiles = quicksearch(, $desination, "|");
-	if($oldFiles != ""){
-		delete 0, 0, $oldFiles;
-	}
+	$compressed_files = "";
 
-	/*	 Gets list of sections in file	*/
-	$list = getsectionlist(, $backupSourcesDb, "|");
-	
+	/*	 Remove old files	*/
+    $old_files = quicksearch(, $PATH_BACKUP_TEMP, "|");
+    if($old_files){
+        delete 0, 0, $old_files;
+    }
+
+	$list = getsectionlist(, $PATH_BACKUP_LOCATIONS, "|");
+
 	/*	 Select which item(s)	to backup */
-	$sources = userSelectListCheckBox("Select items to backup", sortList($list));
-	
+	$sources = LIST_UserSelectionListCheckbox(
+                    "Select items to backup",
+                    LIST_Sort($list)
+               );
+
 	/*	 End script if nothing selected to backup.	*/
 	if(!$sources){
 		end 1;
 	}
-	
+
 	/*	 Compresses each item.	*/
 	foreach($source, $sources){
-		$fileName = $source . '_' . now("yyyy-mm-dd-hhnn");
-		$path = getkey("path", $source , $backupSourcesDb);
-		$compressedFiles = $compressedFiles . "|" . szip($fileName, $path, $desination, $switch);
+		$file_name = $source . '_' . now("yyyy-mm-dd-hhnn");
+		$path = getkey("path", $source , $PATH_BACKUP_LOCATIONS);
+		$compressed_files = $compressed_files . "|" .
+            APP_SevenZip($file_name, $path, $PATH_BACKUP_TEMP, $switch);
 	}
 
-	/*	 Remove empty list item	*/
-	$compressedFiles = sortList($compressedFiles);
-	
 	/*	 Copy compressed files to backup locations	*/
-	foreach($file, $compressedFiles){
-		copyto($backupLocGDrive, $file);
-		copyto($backupLocDS, $file);
-		copyto($backupLocDropBox, $file);
+	foreach($file, LIST_Sort($compressed_files)){
+		copyto($PATH_BACKUP_GOOGLE_DRIVE, $file);
+		copyto($PATH_BACKUP_DS, $file);
+		copyto($PATH_BACKUP_DROPBOX, $file);
 	}
-
-	
