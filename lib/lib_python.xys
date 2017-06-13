@@ -109,12 +109,11 @@
 	}
 
 	//Gets Genre of Movie / TV-show from OMDB with python-script
-	function PYT_Genre($section){
-		$imdb = DB_MOVIE_Read($section, "imdb");
-		if(!$imdb){
-			$imdb = DB_TV_Read($section, "imdb");
-		}
-		$data = PYT_OMDB_Read($imdb, "Genre");
+	function PYT_Genre($tv_or_movie){
+        $data = PYT_OMDB_Read(
+            DB_GetImdb($tv_or_movie),
+            "Genre"
+        );
 		//If OMDB returns N/A as genre, gets from TVMaze API
 		if($data == "N/A"){
 			$mazeid = DB_TV_Read($section, "tvmaze");
@@ -123,7 +122,7 @@
 			$data = replace($data, "[");
 			$data = replace($data, "]");
 		}
-		status "Got genre from OMDB: " . $data, "0000FF", "progress";
+		status "Got genre from OMDB: " . $data, $STATUS_COLOR_BLUE, "progress";
 		return $data;
 	}
 
@@ -206,24 +205,22 @@
 	}
 
 	//Gets Title of Movie / TV-show from OMDB with python-script
-	function PYT_Title($section){
-		$imdb = DB_MOVIE_Read($section, "imdb");
-		if(!isset($imdb)){
-			$imdb = DB_TV_Read($section, "imdb");
-		}
-		$data = PYT_OMDB_Read($imdb, "Title");
-		status "Got title from OMDB: " . $data, "0000FF", "progress";
+	function PYT_Title($tv_or_movie){
+		$data = PYT_OMDB_Read(
+            DB_GetImdb($tv_or_movie),
+            "Title"
+        );
+		status "Got title from OMDB: " . $data, $STATUS_COLOR_BLUE, "progress";
 		return $data;
 	}
 
 	//Gets Year of Movie / TV-show from OMDB with python-script
-	function PYT_Year($section){
-		$imdb = DB_MOVIE_Read($section, "imdb");
-		if(!$imdb){
-			$imdb = DB_TV_Read($section, "imdb");
-		}
-		$data = PYT_OMDB_Read($imdb, "Year");
-		status "Got year from OMDB: " . $data, "0000FF", "progress";
+	function PYT_Year($tv_or_movie){
+		$data = PYT_OMDB_Read(
+            DB_GetImdb($tv_or_movie),
+            "Year"
+        );
+		status "Got year from OMDB: " . $data, $STATUS_COLOR_BLUE, "progress";
 		if(strlen($data) > 4){
 			$data = regexmatches($data, $REGEX_DIGIT_4);
 			if(gettoken($data, "count", |) > 1){

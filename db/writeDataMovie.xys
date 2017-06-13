@@ -1,52 +1,37 @@
- include_once "..\const\include.xys";
+    include_once "..\const\include.xys";
 
-	//Lists and returns folders with full path in NAS movie directory,
-	//separated with | (default)
-	$movieLetters = listfolder($dsFilm,, 6);
-	$runBackup = 0;
-	foreach($letter, $movieLetters){
-		//Lists and returns movie folders in letter-folder
-		$localFolders = listfolder($dsFilm . $letter, , 6);
-		$dbFolders = getDBMovieFilesByLetter($letter);
+	$movie_letters = listfolder($PATH_DS_MOVIE, $LISTFOLDER_PATTERN_ALL,
+        $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS);
+	$flag_backup_db = 0;
+
+	foreach($letter, $movie_letters){
+		$movies = listfolder($PATH_DS_MOVIE . $letter, $LISTFOLDER_PATTERN_ALL,
+            $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS);
+		$movies_database = DB_MOVIE_LIST_Read($letter);
 		status "Checking for new movies in: " . $letter;
-		if($localFolders != $dbFolders){
-			$runBackup = 1;
+		if($movies != $movies_database){
+			$flag_backup_db = 1;
 			wait 1;
-			foreach($localMovie, $localFolders){
-				//New movie found, will ask for IMDB input:
-				if(strpos($dbFolders , $localMovie) == -1){
-					status "Found new movie: " . $localMovie;
-					$imdbID = input("Found new movie!",
-					"Enter IMDB-id / URL for " . $localMovie);
-					$imdbID = trimIMDB($imdbID);
-          generateMovieNfo($dsFilm . $letter . "\" . $localMovie, $imdbID);
-					//ends script if IMDB-id incorrect, to prevent writing new
-					//movies to databas
-					if(!$imdbID){
-						end 1;
-					}
-					//Sets DB data for new movie
-					setDbMovieIMDb($localMovie, $imdbID);
-					$title = getTitle($localMovie);
-					$year = getYear($localMovie);
-					$genre = getGenre($localMovie);
-					setDbMovieGenre($localMovie, $genre);
-					setDbMovieYear($localMovie, $year);
-					setDbMovieTitle($localMovie, $title);
-					status "Data set for: " . $localMovie;
-					//Lists movie as newly added
-					addNewMovie($localMovie);
+			foreach($movie, $movies){
+				if(strpos($movies_database , $movie) == $STRPOS_NOT_FOUND){
+					status "Found new movie: " . $movie;
+					$imdb_id = INPUT_Imdb($movie);
+                    FILE_GenerateMovieNfo($PATH_DS_MOVIE . $letter . "\" .
+                        $movie, $imdb_id)
+					DB_MOVIE_Write($movie, "imdb", $imdb_id);
+					status "Data set for: " . $movie;
+					FILE_NEW_Movie($movie);
 				}
 			}
-			//Updates list of movies in database
-			setDBMovieFilesByLetter($letter);
+			DB_MOVIE_LIST_Update($letter);
 		}
 		wait 1;
 	}
-	//Moves new.txt to ds/info and backups .db files
-	if($runBackup){
-		backupDBfiles();
+
+	if($flag_backup_db){
+		FILE_BACKUP_Db();
 	}
+
 	status "Done!";
 	releaseglobals 3;
 	end 1;
