@@ -67,7 +67,7 @@
             $LISTFOLDER_PATTERN_ALL,
             $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS
         );
-        setkey $data, "files", $movieLetter, $dbFilmList;
+        setkey $data, "files", $letter, $PATH_DB_MOVIE_LIST;
     }
 
     /*  Update TV database with new TV-show info from TVMaze */
@@ -97,9 +97,9 @@
         $year = PYT_Year($movie);
         $title = PYT_Title($movie);
 
-        DB_TV_Write($movie, "genre", $genre);
-        DB_TV_Write($movie, "year", $year);
-        DB_TV_Write($movie, "title", $title);
+        DB_MOVIE_Write($movie, "genre", $genre);
+        DB_MOVIE_Write($movie, "year", $year);
+        DB_MOVIE_Write($movie, "title", $title);
     }
 
     /*  Get IMDb from database, works for both TV-show and Movie */
