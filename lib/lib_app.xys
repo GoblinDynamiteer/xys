@@ -7,7 +7,7 @@
 	perm $mkvInfoExe = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvinfo.exe";
 	perm $mkvExtractExe = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvextract.exe";
 
-	function unrar($source, $destination) {
+	function APP_Unrar($source, $destination) {
 		//Creates desitination directory if doesnt exist
 		if(!exists($destination)){
 			new($destination, "dir");
@@ -18,7 +18,7 @@
 		run '"' . $unrarExe . '" x "' . $source . '" "' . $destination . '"', , 0, 2;
 	}
 
-	function unrarWait($source, $destination) {
+	function APP_UnrarWait($source, $destination) {
 		//Creates desitination directory if doesnt exist
 		if(!exists($destination)){
 			new($destination, "dir");
@@ -29,22 +29,22 @@
 		run '"' . $unrarExe . '" x "' . $source . '" "' . $destination . '"', , 2, 2;
 	}
 
-	function filezilla($folder){
+	function APP_FileZilla($folder){
 		run '"' . $filezillaExe. '" --local="' . $folder . '" --site="0/whatbox/odyssey.whatbox.ca"';
 	}
 
 	/*	 Returns full path to created RAR	*/
-	function rar($filename, $source, $location, $switch){
+	function APP_Rar($filename, $source, $location, $switch){
 		run '"' . $rarExe . '" ' . $switch . ' "' . $location . $filename . '.rar" "' . $source . '"', , 1, 1;
 		return $location . $filename . ".rar";
 	}
 
-	function szip($filename, $source, $location, $switch){
+	function APP_SevenZip($filename, $source, $location, $switch){
 		run '"' . $szExe . '" ' . $switch . ' "' . $location . $filename . '.7z" "' . $source . '"', , 1, 1;
 		return $location . $filename . ".7z";
 	}
 
-	function extract($source, $destination){
+	function APP_Extract($source, $destination){
 		//Creates desitination directory if doesnt exist
 		if(!exists($destination)){
 			new($destination, "dir");
@@ -55,7 +55,7 @@
 		run '"' . $szeExe . '" x "' . $source . '" -o"' . $destination . '"', , 0, 2;
 	}
 
-	function extractSubtitle($source, $track_numbers){
+	function APP_ExtractSubtitle($source, $track_numbers){
 		$path = getpathcomponent($source, "path");
 		$base = getpathcomponent($source, "base");
 		$output_file = "";
@@ -67,6 +67,6 @@
 		run '"' . $mkvExtractExe . '" tracks "' . $source . '" '. $output_file, , 1, 2;
 	}
 
-	function mkvInfo($source){
+	function APP_MkvInfo($source){
 		return runret($mkvInfoExe . ' "' . $source . '"');
 	}

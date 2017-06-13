@@ -7,7 +7,7 @@
   /* Subtitle functions for XYplorer-scripting  */
 
   /* Checks if folder contains an english subtitle (extension en.srt)  */
-  function hasEnSub($path){
+  function SUB_PathHasEnSub($path){
     $files = listFiles($path, "en.srt");
     if($files != ""){
       return 1;
@@ -18,8 +18,8 @@
   }
 
   /* Checks if folder contains an english subtitle (extension sv.srt)  */
-  function hasSvSub($path){
-    $files = listFiles($path, "sv.srt");
+  function SUB_PathHasSvSub($path){
+    $files = FILE_ListFilesWithExtension($path, "sv.srt");
     if($files != ""){
       return 1;
     }
@@ -29,21 +29,21 @@
   }
 
   /*  Get "points" for subtitle, to determine if it is in english/swedish/HI */
-  function pointsSub($srt_file, $lang) {
+  function SUB_Points($srt_file, $language) {
     $words = "";
     $check_hi = 0;
     $subtitle_text = readfile($srt_file);
     $points = 0;
 
-    switch ($lang) {
+    switch ($language) {
       case "en":
-        $words = readfile($engSubTxt);
+        $words = readfile($PATH_SUB_ENG_WORDLIST_TXT);
         break;
       case "sv":
-        $words = readfile($sweSubTxt);
+        $words = readfile($PATH_SUB_SWE_WORDLIST_TXT);
         break;
-      case "hi":
-        $words = readfile($hiSubTxt);
+      case "hi": // Hearing impaired
+        $words = readfile($PATH_SUB_HI_WORDLIST_TXT);
         $check_hi = 1;
         break;
       default:
@@ -68,9 +68,9 @@
   }
 
   /* Determines language of srt subtitle  */
-  function getSubLanguage($file){
-    $enPt = pointsSub($file, "en");
-    $svPt = pointsSub($file, "sv");
+  function SUB_DetermineLanguage($file){
+    $eng_points = pointsSub($file, "en");
+    $swe_points = pointsSub($file, "sv");
     /* Return 1 if english sub, 0 if swedish  */
-    return ($enPt > $svPt);
+    return ($eng_points > $swe_points);
   }

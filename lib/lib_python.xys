@@ -1,0 +1,241 @@
+    include_once "..\const\include.xys";
+
+	//Returns 1 if python script returned error
+	function PYT_CheckError($string){
+		$retval = regexmatches($string, "Traceback") ? 1 : 0;
+    return $retval;
+	}
+
+	function pythonUNCsearch($url){
+		$data = runret('python unc_search.py "' . $url . '"',
+                        $PATH_PYTHON_SCRIPTS);
+        $retval = PYT_CheckError($data) ? 0 : STRING_RemoveCrlf($data);
+		return $retval;
+	}
+
+	function PYT_OMDB_Read($imdb, $info){
+		$data = runret('python omdb.py "' . $imdb . '" "'. $info .'"',
+                        $PATH_PYTHON_SCRIPTS);
+        $retval = PYT_CheckError($data) ? 0 : STRING_RemoveCrlf($data);
+        return $retval;
+	}
+
+	//Gets TVMaze data (last aired ep) with API, using python-script
+	function PYT_MAZE_ReadLastEp($mazeid, $info){
+		$data = runret('python tvmaze_tvmid_prevep.py "' . $mazeid .
+                        '" "'. $info .'" ', $PATH_PYTHON_SCRIPTS);
+		if(PYT_CheckError($data)){
+			if(regexmatches($data, "404"){
+				return 404;
+			} else {
+				return 0;
+			}
+		}
+		else{
+			return STRING_RemoveCrlf($data);
+		}
+	}
+
+	//Gets TVMaze data (next aired ep) with API, using python-script
+	function PYT_MAZE_ReadNextEp($mazeid, $info){
+		$data = runret('python tvmaze_tvmid_nextep.py "' . $mazeid . '" "'. $info .'" ', $PATH_PYTHON_SCRIPTS);
+		if(strpos($data, "KeyError") != -1) {
+			status "TVMaze: No data for next episode!", $STATUS_COLOR_ORANGE, "alert";
+			return -1;
+		}
+		elseif(PYT_CheckError($data)){
+			status $ERROR_MESSAGE_PYTHON, $STATUS_COLOR_RED, "alert";
+			return 0;
+		}
+		else{
+			status "TVMaze: Found data for next episode!", $STATUS_COLOR_GREEN, "ready";
+			return STRING_RemoveCrlf($data);
+		}
+	}
+
+	/* Get TVMaze data with python script */
+	function PYT_MAZE_ReadEpisode($mazeid, $info, $episode){
+		if(CHECK_IsImdb($mazeid)){
+			msg "Error: PYT_MAZE_ReadEpisode() needs TVMaze-id, not IMDB-id!";
+			status $ERROR_MESSAGE_PYTHON, $STATUS_COLOR_RED, "alert"
+			return 0;
+		}
+
+		$seasonepisode = regexmatches($episode, $REGEX_DIGIT_2);
+		$season = gettoken($seasonepisode, 1, "|");
+		$number = gettoken($seasonepisode, -1, "|");
+		$data = runret('python tvmaze_tvmid_episode.py "' . $mazeid . '" "' .
+            $season . '" "' . $number . '" "'. $info .'" ',
+            $PATH_PYTHON_SCRIPTS);
+		if(PYT_CheckError($data)){
+			if(regexmatches($data, "404"){
+				return 404;
+			}
+			else{
+				return 0;
+			}
+		}
+		else{
+			return STRING_RemoveCrlf($data);
+		}
+
+	}
+
+	//Gets TVMaze data (show-info) with API, suing python-script
+	function PYT_MAZE_Read($mazeid, $info){
+		if(CHECK_IsImdb($mazeid)){
+			$data = runret('python tvmaze_imdb.py "' . $mazeid . '" "'. $info .'" ', $PATH_PYTHON_SCRIPTS);
+		}
+		else{
+			$data = runret('python tvmaze_tvmid.py "' . $mazeid . '" "'. $info .'" ', $PATH_PYTHON_SCRIPTS);
+		}
+		if(PYT_CheckError($data)){
+			if(regexmatches($data, "404"){
+				return 404;
+			}
+			else{
+				return 0;
+			}
+		}
+		else{
+			return STRING_RemoveCrlf($data);
+		}
+	}
+
+	//Gets Rating of Movie / TV-show from OMDB with python-script
+	function PYT_Rating($section){
+		$imdb = DB_TV_Read($section, "imdb");
+		return PYT_OMDB_Read($imdb, "imdbRating");
+	}
+
+	//Gets Genre of Movie / TV-show from OMDB with python-script
+	function PYT_Genre($section){
+		$imdb = DB_MOVIE_Read($section, "imdb");
+		if(!$imdb){
+			$imdb = DB_TV_Read($section, "imdb");
+		}
+		$data = PYT_OMDB_Read($imdb, "Genre");
+		//If OMDB returns N/A as genre, gets from TVMaze API
+		if($data == "N/A"){
+			$mazeid = DB_TV_Read($section, "tvmaze");
+			$data = PYT_MAZE_Read($mazeid, "genres");
+			$data = replace($data, "'");
+			$data = replace($data, "[");
+			$data = replace($data, "]");
+		}
+		status "Got genre from OMDB: " . $data, "0000FF", "progress";
+		return $data;
+	}
+
+	//Gets airdate for last aired episode
+	function PYT_DateEpisodeLast($section){
+		$mazeid = DB_TV_Read($section, "tvmaze");
+		return PYT_MAZE_ReadLastEp($mazeid, "airdate");
+	}
+
+	//Gets airdate for next unaired episode
+	function PYT_DateEpisodeNext($section){
+		$mazeid = DB_TV_Read($section, "tvmaze");
+		$data = PYT_MAZE_ReadNextEp($mazeid, "airdate");
+		if($data == -1){
+			return "No data for next episode!";
+		}
+		else {
+			return $data;
+		}
+	}
+
+	//Gets next unaired episode
+	function PYT_EpisodeNext($section){
+		$mazeid = DB_TV_Read($section, "tvmaze");
+		//API JSON : "season":6,"number":10
+		$season = PYT_MAZE_ReadNextEp($mazeid, "season");
+		if($season == -1){
+			return "No data for next episode!";
+		}
+		else{
+			$episode = PYT_MAZE_ReadNextEp($mazeid, "number");
+			// format(1, "000"); //001
+			$season = format($season, "00");
+			$episode = format($episode, "00");
+			return "S" . $season . "E" . $episode;
+		}
+	}
+
+	//Gets status of tv show: ended/running etc
+	function PYT_ShowStatus($section){
+		$mazeid = DB_TV_Read($section, "tvmaze");
+		return PYT_MAZE_Read($mazeid, "status");
+	}
+
+	//Checks if episode exists in TVMaze database
+	function PYT_EpisodeStatus($tvmazeid, $episode){
+		$name = PYT_MAZE_ReadEpisode($tvmazeid, "name", $episode);
+    $retval = $name == 404 ? 0 : 1;
+    return $retval;
+	}
+
+	//Checks if episode exists in TVMaze database
+	function PYT_DateEpisode($tvmazeid, $episode){
+		return PYT_MAZE_ReadEpisode($tvmazeid, "airdate", $episode);
+	}
+
+	//Gets last aired episode
+	function PYT_EpisodeLast($section){
+		$mazeid = DB_TV_Read($section, "tvmaze");
+		//API JSON : "season":6,"number":10
+		$season = PYT_MAZE_ReadLastEp($mazeid, "season");
+		$episode = PYT_MAZE_ReadLastEp($mazeid, "number");
+		// format(1, "000"); //001
+		$season = format($season, "00");
+		$episode = format($episode, "00");
+		return "S" . $season . "E" . $episode;
+	}
+
+		//Gets TVMaze ID from TVMaze Database
+	function PYT_GetMazeIdFromImdbId($section){
+		$imdb = DB_TV_Read($section, "imdb");
+		$data = PYT_MAZE_Read($imdb, "id");
+		//Checks response from python function
+		if((strlen($data) > 10) || ($data == 0) || ($data == 404)){
+			return 0;
+		}
+		else {
+			return $data;
+		}
+	}
+
+	//Gets Title of Movie / TV-show from OMDB with python-script
+	function PYT_Title($section){
+		$imdb = DB_MOVIE_Read($section, "imdb");
+		if(!isset($imdb)){
+			$imdb = DB_TV_Read($section, "imdb");
+		}
+		$data = PYT_OMDB_Read($imdb, "Title");
+		status "Got title from OMDB: " . $data, "0000FF", "progress";
+		return $data;
+	}
+
+	//Gets Year of Movie / TV-show from OMDB with python-script
+	function PYT_Year($section){
+		$imdb = DB_MOVIE_Read($section, "imdb");
+		if(!$imdb){
+			$imdb = DB_TV_Read($section, "imdb");
+		}
+		$data = PYT_OMDB_Read($imdb, "Year");
+		status "Got year from OMDB: " . $data, "0000FF", "progress";
+		if(strlen($data) > 4){
+			$data = regexmatches($data, $REGEX_DIGIT_4);
+			if(gettoken($data, "count", |) > 1){
+				$startyear = gettoken($data, 1, |);
+				$endyear = gettoken($data, -1, |);
+				return $startyear . "-" . $endyear;
+			}
+			else{
+				return $data . "-";
+			}
+		}
+		else{
+			return $data;
+		}
+	}

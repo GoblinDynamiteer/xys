@@ -1,107 +1,79 @@
- include "..\const\include.xys";
+    include "..\const\include.xys";
 
-	if(isButtonDownCTRL()){
-		$updateShowData = 1;
-		msg "CTRL was held at start, will update all shows that needs updating!";
-	}
-	else{
-		$updateShowData = 0;
-	}
-	$selectedPath = getFullPath();
-	$selectedName = getFolderName();
+    $flag_update_all = 0;
+    $flag_update_single_show = 0;
+    $flag_update_database = 0;
 
-	if(isTV($selectedPath) && $selectedPath){
-		$tvShowsList = $selectedName;
-		$updateSingleShow = 1;
-		msg "Will only update: " . $selectedName;
-	}
-	else{
-		$tvShowsList = listfolder($dsTV,, 6);
-		$updateSingleShow = 0;
-	}
+    if(CHECK_CtrlDown()){
+        $flag_update_all = 1;
+        msg "CTRL held, will update all shows that needs updating!";
+    }
 
-	$runBackup = 0;
-	foreach($tvShow, $tvShowsList){
-		unset $localfiles, $dbfiles;
-		$updateDb = 0;
-		status "Scanning for new episodes/shows: " . $tvShow;
-		wait 10;
-		//Checks if folder (TV-show) exists in database
-		if(getsectionlist($tvShow, $dbTV) == ""){
-			status "Found new Show: " . $tvShow;
-			$imdbID = input("Found new Show!", 
-			"Enter IMDB-id / URL for: " . $tvShow);
-			$imdbID = trimIMDB($imdbID);
-			setDbTVIMDb($tvShow, $imdbID);
-			$mazeid = getTVMaze($tvShow);
-			if(!$mazeid){
-				$mazeid = input("TVMaze Id could not be set!", 
-				"Enter manually for: " . $tvShow);
-			}
-			setDbTVMaze($tvShow, $mazeid);
-			$updateDb = 1; //To trigger setting of data to Db
-		}
-		$fullPath = $dsTV . $tvShow;
-		//Checks for new episodes, compares to database
-		$dbfiles = getDBTVFiles($tvShow);
-		$localfiles = getLocalTVFiles($fullPath);
-		$localfiles  = episodeSorter($localfiles);
-		//Local episodes doesnt match with Database-episodes
-		if($localfiles != $dbfiles){
-			foreach($file, $localfiles, |){
-				//strpos returns -1 if needle isn't found in haystack
-				if(strpos($dbfiles , $file) == -1){
-					status "Found new episode: " . $tvShow . ": ". $file, $hexGreen, "ready";
-					addNewTVEpisode($file, $tvShow);
-					$updateDb = 1;
-				}
-			}
-		}
-		//Check if update is needed for tv-show, and if
-		//CTRL was pressed at script start
-		if(!$updateDb && $updateShowData){
-			$dbLastEpDate = getDbTVNextAiredDate($tvShow);
-			if($dbLastEpDate == "No data for next episode!"){
-				$datediff = 0;
-			}
-			else{
-				$datediff = datediff($dbLastEpDate);
-			}
-			$dbStatus = getDbTVStatus($tvShow);
-			if(($dbStatus == "Running") && ($datediff >= 0)){
-					$updateDb = 1;
-			}
-		}
-		if($updateDb || $updateSingleShow){
-			//Updates all database data for tv-shows
-			status "Updating databases with new Show-info.", $hexGreen, "ready";
-			setDBTVFiles($tvShow);
-			setDbTVGenre($tvShow, getGenre($tvShow));
-			setDbTVYear($tvShow, getYear($tvShow));
-			$lastLocalEpisode = getLastLocalEpisode($fullPath);
-			setDbTVLocalEp($tvShow, $lastLocalEpisode);
-			$showStatus = TVshowStatus($tvShow);
-			setDbTVStatus($tvShow, $showStatus);
-			
-			$nextAiredEpisode = getNextAiredEpisode($tvShow);
-			$nextAiredEpisodeDate = getNextAiredDate($tvShow);
-			$lastAiredEpisode = getLastAiredEpisode($tvShow);
-			$lastAiredEpisodeDate = getLastAiredDate($tvShow);
-			
-			setDbTVLastAired($tvShow, $lastAiredEpisode);
-			setDbTVLastAiredDate($tvShow, $lastAiredEpisodeDate);
-			setDbTVNextAired($tvShow, getNextAiredEpisode($tvShow));
-			setDbTVNextAiredDate($tvShow, $nextAiredEpisodeDate);
-			$runBackup = 1;
-		}
-	}
-	//Moves new.txt to ds/info and backups .db files
-	if($runBackup){
-		backupDBfiles();
-	}
-	status "Done!";
-	releaseglobals 3;
-	end 1;
+    $selection_full_path = SELECT_FullPath();
+    $selection_name = SELECT_FolderName();
 
+    if(CHECK_PathInTV($selection_full_path) && $selection_full_path){
+        $tv_shows_to_update = $selection_name;
+        $flag_update_single_show = 1;
+        msg "Will only update: " . $selection_name;
+    } else {
+    	$tv_shows_to_update = FILE_ListTvFolders();
+    }
 
+    foreach($tv_show, $tv_shows_to_update){
+    	unset $episodes_local, $database_episodes;
+    	$flag_update_database = 0;
+    	status "Scanning for new episodes/shows: " . $tv_show;
+    	wait 2;
 
+        /*  Check if TV-show is new (not in database) */
+    	if(FILE_TV_IsNew($tv_show)){
+    		status "Found new Show: " . $tv_show;
+    		$imdb_id = INPUT_Imdb($tv_show);
+    		DB_TV_Write($tv_show, "imdb", $imdb_id);
+    		$tv_maze_id = PYT_GetMazeIdFromImdbId($tv_show);
+    		if(!$tv_maze_id){
+    			$tv_maze_id = input("TVMaze Id could not be set!",
+    			    "Enter manually for: " . $tv_show);
+    		}
+    		DB_TV_Write($tv_show, "tvmaze", $tv_maze_id);
+    		$flag_update_database = 1;
+    	}
+
+        /*  Check if show has new episodes (not in database) */
+    	$new_episodes = FILE_TV_NewEps($tv_show);
+
+        if($new_episodes){
+            foreach($episode, $new_episodes) {
+                status "Found new episode: " . $tv_show . ": ". $episode,
+                    $STATUS_COLOR_GREEN, "ready";
+                /*  Add episode to new.txt */
+                FILE_NEW_Episode($episode, $tv_show);
+            }
+            $flag_update_database = 1;
+        }
+
+    	if(!$flag_update_database && $flag_update_all){
+    		$episode_air_date = DB_TV_Read($tv_show, "lastaireddate");
+    		if($episode_air_date == "No data for next episode!"){
+    			$date_diff = 0;
+    		} else {
+                $date_diff = datediff($episode_air_date);
+    		}
+    		$tv_status = DB_TV_Read($tv_show, "status");
+    		if(($tv_status == "Running") && ($v >= 0)){
+    			$flag_update_database = 1;
+    		}
+    	}
+
+    	if($flag_update_database || $flag_update_single_show){
+    		status "Updating databases with new Show-info.",
+                $STATUS_COLOR_GREEN, "ready";
+    		DB_EPISODE_UpdateEpisodes($tv_show);
+            DB_TV_UpdateShowInfo($tv_show);
+    	}
+    }
+    FILE_BACKUP_Db();
+    status "Done!";
+    releaseglobals 3;
+    end 1;

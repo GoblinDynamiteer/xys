@@ -1,0 +1,94 @@
+    include_once "..\const\include.xys";
+
+ 	//Gets IMDB-id from string, returns ID in format tt######
+	function STRING_TrimImdb($string){
+		$id = regexmatches($string, $REGEX_STRING_IMDB_ID);
+		if($id == ""){
+			msg "Could not extract IMDb-id from string!";
+			return 0;
+		}
+		else{
+			return $id;
+		}
+	}
+
+	function STRING_RemoveCrlf($string){
+		return replace($string, <crlf>);
+	}
+
+	//Gets S01E09, returns S01E10
+	function STRING_TvNextEpisode($episode){
+		//gets ##|## from S##E##
+		$season_episode = regexmatches($episode, $REGEX_DIGIT_2);
+		//gets first token from ##|##
+		$season = gettoken($season_episode, 1, "|");
+		//gets last token from ##|##
+		$number = gettoken($season_episode, -1, "|") + 1;
+		return "S" . format($season, "00") . "E" . format($number, "00");
+	}
+
+	function STRING_TvNextSeason($episode){
+		$season_episode = regexmatches($episode, $REGEX_DIGIT_2);
+		$season = gettoken($season_episode, 1, "|") + 1;
+		return "S" . format($season, "00") . "E01";
+	}
+
+	function STRING_Moviefirst_letter($string){
+		//Skips The/An/A
+		if(regexmatches($string, $REGEX_MOVIE_PREFIX_THE) != ""){
+			$first_letter = substr($string, 4, 1);
+		}
+		elseif(regexmatches($string, $REGEX_MOVIE_PREFIX_AN) != ""){
+			$first_letter = substr($string, 3, 1);
+		}
+		elseif(regexmatches($string, $REGEX_MOVIE_PREFIX_A) != ""){
+			$first_letter = substr($string, 2, 1);
+		}
+		else{
+			$first_letter = substr($string, 0, 1);
+		}
+		//If first letter is a digit
+		if(regexmatches($first_letter, $REGEX_DIGIT_1) != ""){
+			$first_letter = "#";
+		}
+		// V and W should be in folder VW
+		elseif(($first_letter == "V") || ($first_letter == "W")) {
+			$first_letter = "VW";
+		}
+		else {
+			$first_letter = $first_letter;
+		}
+		return $first_letter;
+	}
+
+	function STRING_MovieResolution($string){
+		$data = regexmatches($string, $REGEX_RELEASE_RESOLUTION);
+    $retval = $data ? recase($data, "lower") : "Unknown Res";
+    return $retval;
+	}
+
+	function STRING_MovieSource($string){
+		$data = regexmatches($string, $REGEX_RELEASE_SOURCE);
+    $retval = $data ? $data : 0;
+    return $retval;
+	}
+
+	function STRING_MovieSpecial($string){
+		$data = regexmatches($string, $REGEX_RELEASE_SPECIAL);
+		$data = replace($data, ".dc.", "Director's Cut");
+		$data = replace($data, "|", " | ");
+    $retval = $data ? $data : 0;
+    return $retval;
+	}
+
+	function STRING_MovieSceneSpecial($string){
+		$data = regexmatches($string, $REGEX_RELEASE_SCENE_SPECIAL);
+        $retval = $data ? $data : 0;
+		return $retval;
+	}
+
+	function STRING_FilterSE($string){
+        $data = regexmatches($string, $REGEX_SEASON_EPISODE);
+        $retval = $data ? $data : 0;
+		return $retval;
+	}

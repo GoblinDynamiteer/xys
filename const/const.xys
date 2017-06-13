@@ -1,65 +1,63 @@
-	perm $dbTV = "C:\db\tv.db";
-	perm $dbTVep = "C:\db\tvep.db";
-	perm $dbFilm = "C:\db\film.db";
-	perm $dbFilmList = "C:\db\filmlist.db";
-	perm $newTxt = "C:\db\new.txt";
-	perm $missingEpsTxt = "C:\db\missing_eps.txt";
-	perm $dbFolder = "C:\db\";
-	perm $nzbImportFolder = "D:\NZB Import\";
+    /* File paths	*/
+	perm $PATH_DB_TV = "C:\db\tv.db";
+	perm $PATH_DB_EPISODES = "C:\db\tvep.db";
+	perm $PATH_DB_MOVIE = "C:\db\film.db";
+	perm $PATH_DB_MOVIE_LIST = "C:\db\filmlist.db";
+	perm $PATH_NEW_TXT = "C:\db\new.txt";
+	perm $PATH_MISSING_EPISODES_TXT = "C:\db\missing_eps.txt";
+	perm $PATH_DS_MOVIE = "\\DS\FILM\";
+	perm $PATH_DS_INFO = "\\DS\INFO\";
+	perm $PATH_DS_TV = "\\DS\TV\";
+	perm $PATH_DS_SUBTITLES = "\\DS\MISC\Subtitles\";
+	perm $PATH_DB = "C:\db\";
+	perm $PATH_NZB_IMPORT = "D:\NZB Import\";
+	perm $PATH_BACKUP_GOOGLE_DRIVE = "D:\Google Drive\Backups\";
+	perm $PATH_BACKUP_DROPBOX = "E:\Dropbox\Backups\";
+	perm $PATH_BACKUP_DS = "\\DS\BACKUP\Misc";
+	perm $PATH_BACKUP_LOCATIONS = "D:\Google Drive\Scriptstuff\backup_locs.db";
+	perm $PATH_PYTHON_SCRIPTS = "D:\Google Drive\Scriptstuff\xyplorer\python\";
+	perm $PATH_XYS_SCRIPTS = "D:\Google Drive\Scriptstuff\xyplorer\";
+	perm $PATH_UNC_API_KEY_TXT = "D:\Google Drive\Scriptstuff\unc_apikey.txt";
+	perm $PATH_URL_TXT = "D:\Google Drive\Scriptstuff\xyplorer\txt\url.txt";
+	perm $PATH_SUB_ENG_WORDLIST_TXT = "D:\Google Drive\Scriptstuff\xyplorer\txt\engSub.txt";
+	perm $PATH_SUB_SWE_WORDLIST_TXT = "D:\Google Drive\Scriptstuff\xyplorer\txt\sweSub.txt";
+	perm $PATH_SUB_HI_WORDLIST_TXT = "D:\Google Drive\Scriptstuff\xyplorer\txt\hiSub.txt";
+	perm $PATH_TV_SKIPLIST_TXT = "D:\Google Drive\Scriptstuff\xyplorer\txt\skiplist.txt";
 
-	/*	 Backup locations	*/
-	perm $backupLocGDrive = "D:\Google Drive\Backups\";
-	perm $backupLocDropBox = "E:\Dropbox\Backups\";
-	perm $backupLocDS = "\\DS\BACKUP\Misc";
-	perm $backupSourcesDb = "D:\Google Drive\Scriptstuff\backup_locs.db";
+	perm $VIDEO_FILE_EXTENSIONS = "mkv|avi|mp4|m4v";
 
-	perm $vidExtensions = "mkv|avi|mp4|m4v";
+	perm $LINE_BREAK = <crlf>;
 
-	perm $br = <crlf>;
+	/* Standard function parameters	*/
+	perm $WRITEFILE_ON_EXIST_APPEND = "a";
+	perm $LISTFOLDER_PATTERN_ALL = "*";
+	perm $LISTFOLDER_NO_FILES = 2;
+	perm $LISTFOLDER_NO_PATHS = 4;
+	perm $STRPOS_NOT_FOUND = -1;
 
-	perm $pytFolder = "D:\Google Drive\Scriptstuff\xyplorer\python\";
-	perm $scriptFolder = "D:\Google Drive\Scriptstuff\xyplorer\";
+	perm $ERROR_MESSAGE_PYTHON =  "Python script returned error!";
 
-	perm $uncAPIKey = "D:\Google Drive\Scriptstuff\unc_apikey.txt";
+	/* Status text colors	*/
+	perm $STATUS_COLOR_ORANGE = "FF4500";
+	perm $STATUS_COLOR_GREEN = "2E8B57";
+	perm $STATUS_COLOR_RED = "FF0000";
 
-	perm $pythErrorText =  "Python script returned error!";
+	perm $REGEX_SEASON_EPISODE = "s\d{2}e\d{2}";
+	perm $REGEX_TV_SEASON_RELEASE = "\.S\d{2}\.(720p|1080p)\.";
 
-	perm $hexOrange = "FF4500";
-	perm $hexGreen = "2E8B57";
+	perm $REGEX_MOVIE_PREFIX_THE = "^the\.";
+	perm $REGEX_MOVIE_PREFIX_A = "^a\.";
+	perm $REGEX_MOVIE_PREFIX_AN = "^an\.";
 
-	perm $dsFilm = "\\DS\FILM\";
-	perm $dsInfo = "\\DS\INFO\";
-	perm $dsTV = "\\DS\TV\";
-	perm $dsSUB = "\\DS\MISC\Subtitles\";
+	perm $REGEX_DIGIT_1 = "\d{1}";
+	perm $REGEX_DIGIT_2 = "\d{2}";
+	perm $REGEX_DIGIT_4 = "\d{4}";
 
-	perm $urlTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\url.txt";
-	perm $engSubTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\engSub.txt";
-	perm $sweSubTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\sweSub.txt";
-	perm $hiSubTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\hiSub.txt";
-	perm $skipList = "D:\Google Drive\Scriptstuff\xyplorer\txt\skiplist.txt";
+	perm $REGEX_STRING_IMDB_ID = "tt\d{1,}";
+	perm $REGEX_PATH_DS_TV = "^\\\\DS\\TV\\";
+	perm $REGEX_PATH_DS_MOVIE = "^\\\\DS\\FILM\\";
 
-	//For SeasonEpisode S##E##
-	perm $regexSE = "s\d{2}e\d{2}";
-
-	/*	 For checking if folder is TV Season release .SXX.720p.	*/
-	perm $regexTVRelease = "\.S\d{2}\.(720p|1080p)\.";
-	//For first string in movie folder releases
-	perm $regexThe = "^the\.";
-	perm $regexA = "^a\.";
-	perm $regexAn = "^an\.";
-
-	//Gets 1/2/4 digits
-	perm $regexD1 = "\d{1}";
-	perm $regexD2 = "\d{2}";
-	perm $regexD4 = "\d{4}"; //eg. for year 1922
-
-	//Regex for getting IMDB-id
-	perm $regexIMDB = "tt\d{1,}";
-	perm $regexTVpath = "^\\\\DS\\TV\\";
-	perm $regexMoviePath = "^\\\\DS\\FILM\\";
-
-	//For various Movie release info
-	perm $regexRes = "(720p|1080p|2160p)";
-	perm $regexSpecialRelease = "(remastered|directors.cut|extended|unrated|dircut|\.dc\.|uncut)";
-	perm $regexSpecialScene = "(proper|repack|rerip|remux)";
-	perm $regexSource = "(bluray|hddvd|web.dl|web.rip|blu.ray|hdtv|webrip|dvdscr)";
+	perm $REGEX_RELEASE_RESOLUTION = "(720p|1080p|2160p)";
+	perm $REGEX_RELEASE_SPECIAL = "(remastered|directors.cut|extended|unrated|dircut|\.dc\.|uncut)";
+	perm $REGEX_RELEASE_SCENE_SPECIAL = "(proper|repack|rerip|remux)";
+	perm $REGEX_RELEASE_SOURCE = "(bluray|hddvd|web.dl|web.rip|blu.ray|hdtv|webrip|dvdscr)";

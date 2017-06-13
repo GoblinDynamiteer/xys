@@ -1,0 +1,31 @@
+ include_once "..\const\include.xys";
+
+	/*	 Check if folder is a TV Season release */
+	function CHECK_IsTvRelease($folder){
+		$retval = regexmatches($folder, $REGEX_TV_SEASON_RELEASE) ? 1 : 0;
+    return $retval;
+	}
+
+	/*  Check if folder path is in DS/TV directory */
+	function CHECK_PathInTV($path){
+		$retval = regexmatches($path, $REGEX_PATH_DS_TV) ? 1 : 0;
+    return $retval;
+	}
+
+  /*  Check if folder path is in DS/Movie directory */
+	function CHECK_PathInMovie($path){
+    $retval = regexmatches($path, $REGEX_PATH_DS_MOVIE) ? 1 : 0;
+    return $retval;
+	}
+
+	/* Check if string contains an IMDb-id */
+	function CHECK_IsImdb($string){
+		$retval = regexmatches($string, $REGEX_STRING_IMDB_ID) ? 1 : 0;
+    return $retval;
+	}
+
+  /* Return state of CTRL button  */
+	function CHECK_CtrlDown(void){
+		$retval = get("Shift") == 2 ? 1 : 0;
+    return $retval;
+	}

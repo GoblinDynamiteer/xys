@@ -1,0 +1,42 @@
+ include_once "..\const\include.xys";
+
+	//Sorts list ascending A-Z
+	function LIST_Sort($list){
+		return formatlist($list, "eds", "|");
+	}
+
+	//Returns the last item in a |-separated list
+	function LIST_GetLastItem($list){
+		return gettoken($list, -1, "|");
+	}
+
+	//Converts a list of episode files to S##E## and sorts it
+	function LIST_FilterEpisodes($list){
+		$data = STRING_FilterSE($list);
+		$data = LIST_Sort($data);
+		$data = recase($data, "upper");
+		return $data;
+	}
+
+	function LIST_UserSelectionList($caption, $list){
+		$filterBox = 64;
+		$genericIcons = 8;
+		$style = $filterBox + $genericIcons;
+		$width = 800;
+		$height = gettoken($list, "count", "|") * 35 + 150;
+		$height = $height > 1200 ? 1200 : $height;
+		$selection = inputselect($caption, LIST_Sort($list), "|", $style, "0", $width, $height);
+		return $selection;
+	}
+
+	function LIST_UserSelectionListCheckbox($caption, $list){
+		$filterBox = 64;
+		$genericIcons = 8;
+		$checkboxes = 2;
+		$style = $filterBox + $genericIcons + $checkboxes;
+		$width = 800;
+		$height = gettoken($list, "count", "|") * 35 + 150;
+		$height = $height > 1200 ? 1200 : $height;
+		$selection = inputselect($caption, LIST_Sort($list), "|", $style, "0", $width, $height);
+		return $selection;
+	}

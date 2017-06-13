@@ -1,7 +1,11 @@
+
+  /* XYPlorer script
+    Extract srt from selected mkv-file(s) and rename according to language.
+    Uses MKVToolnix
+  */
+
   include_once "..\const\include.xys";
 
-  $regex_srt_eng_suffix = "\_\d{1,3}\_eng\.srt";
-  $regex_srt_swe_suffix = "\_\d{1,3}\_swe\.srt";
   $regex_mkv_info_numbers = "Track\snumber\:\s\d{1,2}";
   $regex_mkv_info_type = "Track\stype\:\s.{1,10}";
   $srt_eng_suffix = ".en.srt";
@@ -10,10 +14,6 @@
   $srt_word_treshold = 200;
   $srt_word_hi_treshold = 20;
 
-  /* XYPlorer script
-    Extract srt from selected mkv-file(s)
-  */
-
   $mkv_files = get("SelectedItemsPathNames", "|");
 
   foreach($mkv_file, $mkv_files){
@@ -21,7 +21,7 @@
     $mkv_file_path = gpc($mkv_file, "path"); //path without filename
     $mkv_file_name = gpc($mkv_file, "base"); //only filename, without extension
 
-    $info =  mkvInfo($mkv_file);
+    $info =  APP_MkvInfo($mkv_file);
 
     $track_numbers = regexmatches($info, $regex_mkv_info_numbers, "|");
     $track_types = regexmatches($info, $regex_mkv_info_type, "|");
@@ -37,7 +37,7 @@
     }
 
     $track_extraction = sortList($track_extraction);
-    extractSubtitle($mkv_file, $track_extraction);
+    APP_ExtractSubtitle($mkv_file, $track_extraction);
 
     /*  List extracted srt-files */
     $srt_files = listfolder($mkv_file_path, "*" . $mkv_file_name . "*.srt");
@@ -52,13 +52,16 @@
       }
 
       /*  Rename files */
-      if(pointsSub($srt_file, "en") > $srt_word_treshold){
-        if(pointsSub($srt_file, "hi") > $srt_word_hi_treshold){
+      if(SUB_Points($srt_file, "en") > $srt_word_treshold){
+        if(SUB_Points($srt_file, "hi") > $srt_word_hi_treshold){
+            /*  Todo: Remove HI */
           tag "HEARING IMPAIRED", $srt_file, 2;
         }
+        /*  Todo: Check for collision, if file already exists */
         renameitem($mkv_file_name . $srt_eng_suffix, $srt_file);
       }
-      elseif(pointsSub($srt_file, "sv") > $srt_word_treshold){
+      elseif(SUB_Points($srt_file, "sv") > $srt_word_treshold){
+        /*  Todo: Check for collision, if file already exists */
         renameitem($mkv_file_name . $srt_swe_suffix, $srt_file);
       }
       /*  Srt is neither eng or swe, delete  */
@@ -67,5 +70,3 @@
       }
     }
   }
-
-  /*  Todo: Remove HI */

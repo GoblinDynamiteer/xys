@@ -1,33 +1,12 @@
-
-/*	 Permanent variables. Has regex matches	*/
 include_once "D:\Google Drive\Scriptstuff\xyplorer\const\const.xys";
-
-/*	 Functions that retrieves data from the TV & Movie databases	*/
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\dbReadTV.xys";
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\dbReadMovie.xys";
-
-/*	 Functions that writes data to the TV & Movie databases	*/
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\dbWriteTV.xys";
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\dbWriteMovie.xys";
-
-/*	 Functions that calls on Python scripts	*/
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\python.xys";
-
-/*	 Subtitle functions	*/
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\subs.xys";
-
-/*	 File/Folder funcions. Searches, listings etc.	*/
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\fileOperations.xys";
-
-/*	 Functions that uses external applications.	*/
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\apps.xys";
-
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\securityChecks.xys";
-
-
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\getSelectionInfo.xys";
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\getFileInfo.xys";
-
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\list.xys";
-include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\string.xys";
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_db.xys";
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_python.xys";
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_sub.xys";
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_file.xys";
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_app.xys";
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_check.xys";
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_select.xys";
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_list.xys";
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_string.xys";
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_input.xys";
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\xyplorerCommands";

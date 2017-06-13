@@ -1,0 +1,6 @@
+    include "..\const\include.xys";
+
+    function INPUT_Imdb($title) {
+        $imdb = input("Enter IMDB-id / URL for: " . $title);
+        return STRING_TrimImdb($imdb);
+    }

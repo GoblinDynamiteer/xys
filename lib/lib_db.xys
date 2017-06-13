@@ -1,0 +1,62 @@
+    include_once "..\const\include.xys";
+
+    /* Write data do TV database
+        Valid keys: imdb, tvmaze, genre, localep,
+        year, status, lastaired, lastaireddate, nextaired, nextaireddate   */
+	function DB_TV_Write($tv_show, $key, $data){
+		setkey $data, $key, $tv_show, $PATH_DB_TV;
+	}
+
+    /*  Read data from TV database */
+    function DB_TV_Read($tv_show, $key){
+        return getkey($key, $tv_show, $PATH_DB_TV);
+    }
+
+    /*  Read data from TV episode database */
+    function DB_EPISODE_Read($tv_show, $key){
+        return getkey($key, $tv_show, $PATH_DB_EPISODES);
+    }
+
+    /*  Update TV episode database with current local episodes */
+	function DB_EPISODE_UpdateEpisodes($tv_show){
+		$path = $PATH_DS_TV . $tv_show;
+		$current_episodes = FILE_ListVideoFiles($path);
+		$current_episodes = STRING_FilterSE($current_episodes);
+		$old_episodes = getkey("files", $tv_show, $PATH_DB_EPISODES);
+		setkey $current_episodes, "files", $tv_show, $PATH_DB_EPISODES;
+		setkey $old_episodes, "files_pre", $tv_show, $PATH_DB_EPISODES;
+	}
+
+    /*  Read data from movie database
+        Valid keys: year, genre, title, imdb    */
+	function DB_MOVIE_Read($movie, $key){
+		$data = getkey($key, $movie, $PATH_DB_MOVIE);
+		$retval = $data == "" ? 0 : $data;
+        return $retval;
+	}
+
+    /*  Write data to movie database */
+    function DB_MOVIE_Write($movie, $key, $data){
+		setkey $data, $key, $movie, $PATH_MOVIE_TV;
+	}
+
+    /*  Update TV database with new TV-show info from TVMaze */
+    function DB_TV_UpdateShowInfo($tv_show){
+        $genre = PYT_Genre($tv_show);
+        $year = PYT_Year($tv_show);
+        $last_local_episode = FILE_TV_LastLocalEpisode($PATH_DS_TV . $tv_show);
+        $show_status = PYT_ShowStatus($tv_show);
+        $episode_next = PYT_EpisodeNext($tv_show);
+        $episode_next_date = PYT_DateEpisodeNext($tv_show);
+        $episode_last = PYT_EpisodeLast($tv_show);
+        $episode_last_date = PYT_DateEpisodeLast($tv_show);
+
+        DB_TV_Write($tv_show, "genre", $genre);
+        DB_TV_Write($tv_show, "year", $year);
+        DB_TV_Write($tv_show, "localep", $last_local_episode);
+        DB_TV_Write($tv_show, "status", $show_status);
+        DB_TV_Write($tv_show, "lastaired", $episode_last);
+        DB_TV_Write($tv_show, "lastaireddate", $episode_last_date);
+        DB_TV_Write($tv_show, "nextaired", $episode_next);
+        DB_TV_Write($tv_show, "nextaireddate", $episode_next_date);
+    }
