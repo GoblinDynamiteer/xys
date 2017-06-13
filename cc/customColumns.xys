@@ -6,25 +6,13 @@
 	perm $regexMoviePath = "^\\\\DS\\FILM\\";
 	perm $urlTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\url.txt";
 	perm $skipList = "D:\Google Drive\Scriptstuff\xyplorer\txt\skiplist.txt";
-	
+
 	function isTV($path){
-		if(regexmatches($path, $regexTVpath) != ""){
-			return 1;
-		}
-		else{
-			//msg "Not in TV";
-			return 0;
-		}
+		return (regexmatches($path, $regexTVpath));
 	}
-	
+
 	function isMovie($path){
-		if(regexmatches($path, $regexMoviePath) != ""){
-			return 1;
-		}
-		else{
-			//msg "Not in Movies";
-			return 0;
-		}
+		return (regexmatches($path, $regexMoviePath));
 	}
 
 "_TV : EpisodeCheck"
@@ -36,89 +24,60 @@
 	if(<cc_name> == "American Dad"){
 		$localEp = replace($localEp, "S14E", "S13E");
 	}
-	//$skipCheck = regexmatches(<cc_name>, );
-	if($lastAired == $localEp || $skipCheck > -1){
-		return "Done: " . $localEp;
-	}
-	else {
-		return "** Last: " . $lastAired . " [Local: " . $localEp . "]";
-	}
- 
+
+    $retval = ($lastAired == $localEp || $skipCheck > -1) ?
+        "Done: " . $localEp :
+        "** Last: " . $lastAired . " [Local: " . $localEp . "]";
+    return $retval;
+
 "_TV : Year"
 	sub "_Db";
-	if(isTV(<cc_item>)){
-		$year = getkey("year", <cc_name>, $dbTV);
-	}
-	else{
-		$year = getkey("year", <cc_name>, $dbFilm);
-	}
+    $year = isTV(<cc_item>) ?
+        getkey("year", <cc_name>, $dbTV) :
+        getkey("year", <cc_name>, $dbFilm);
 	return $year;
 
 "_MovieSubs : Subs"
 	sub "_Db";
-	$enSub = 0;
-	$svSub = 0;
-	$subStr = "";
-	if(quicksearch("*en.srt", <cc_item>, |) != ""){
-		$enSub = 1;
-	}
-	if(quicksearch("*sv.srt", <cc_item>, |) != ""){
-		$svSub = 1;
-	}
-	if($enSub && $svSub){
-		$subStr = "En Sv";
-	}
-	elseif($enSub && !$svSub){
-		$subStr = "En";
-	}
-	elseif(!$enSub && $svSub){
-		$subStr = "Sv";
-	}
+	$enSub = quicksearch("*en.srt", <cc_item>, |) ? 2 : 0;
+	$svSub = quicksearch("*sv.srt", <cc_item>, |) ? 1 : 0;
+	$subTot = $enSub + $svSub;
+    $subStr = "";
+
+    switch ($subTot) {
+        case 1:
+            $subStr = "Sv";
+            break;
+        case 2:
+            $subStr = "En";
+            break;
+        case 3:
+            $subStr = "En Sv";
+            break;
+    }
+
 	return $subStr;
-	
+
 "_TV : Status"
 	sub "_Db";
-	$nextep = getkey("nextaired", <cc_name>, $dbTV);
-	$nextdate = getkey("nextaireddate", <cc_name>, $dbTV);
-	$lastep = getkey("lastaired", <cc_name>, $dbTV);
-	$lastepdate = getkey("lastaireddate", <cc_name>, $dbTV);
 	$status = getkey("status", <cc_name>, $dbTV);
-	if($status == "Running"){
-		if($nextep == "No data for next episode!"){
-			return $status . " (No data for next episode)";
-		}
-		else{
-			return $status . ": " . $nextep . " (" . $nextdate .  ")";
-		}
-	}
-	elseif($status == "Ended"){
-		return $status . " (" . $lastepdate . ")";
-	}
-	else{
-		return $status;
-	}
+    return $status;
 
 "_TV : Genre"
-	sub "_Db";
-	if(isTV(<cc_item>)){
-		$year = getkey("genre", <cc_name>, $dbTV);
-	}
-	else{
-		$year = getkey("genre", <cc_name>, $dbFilm);
-	}
-	return $year;
-	
-	
+    sub "_Db";
+    $genre = isTV(<cc_item>) ?
+        getkey("genre", <cc_name>, $dbTV) :
+        getkey("genre", <cc_name>, $dbFilm);
+    return $genre;
+
+
 "_TV : Title"
-	sub "_Db";
-	if(isMovie(<cc_item>)){
-		$title = getkey("title", <cc_name>, $dbFilm);
-	}
-	else{
-		$title = "";
-	}
-	return $title;
-	
+    sub "_Db";
+    $title = isMovie(<cc_item>) ?
+        getkey("Title", <cc_name>, $dbTV) :
+        "";
+    return $title;
+
 "_LINKS : Links"
 	sub "_Db";
 	$path = <cc_path>;
@@ -145,4 +104,3 @@
 	elseif(isMovie(<cc_path>)){
 		msg "MOVIE NOT BUILT!";
 	}
-

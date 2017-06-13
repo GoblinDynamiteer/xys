@@ -36,7 +36,14 @@
       $track_id++;
     }
 
-    $track_extraction = sortList($track_extraction);
+    $track_extraction = LIST_Sort($track_extraction);
+
+    /*  If mkv did not contain any subtitle tracks */
+    if(!$track_extraction){
+        status "No subtitles found in: " . $mkv_file;
+        continue;
+    }
+
     APP_ExtractSubtitle($mkv_file, $track_extraction);
 
     /*  List extracted srt-files */
