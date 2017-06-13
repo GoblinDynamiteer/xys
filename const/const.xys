@@ -35,6 +35,7 @@
 	perm $urlTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\url.txt";
 	perm $engSubTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\engSub.txt";
 	perm $sweSubTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\sweSub.txt";
+	perm $hiSubTxt = "D:\Google Drive\Scriptstuff\xyplorer\txt\hiSub.txt";
 	perm $skipList = "D:\Google Drive\Scriptstuff\xyplorer\txt\skiplist.txt";
 
 	//For SeasonEpisode S##E##

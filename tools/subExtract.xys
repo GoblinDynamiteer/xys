@@ -7,7 +7,8 @@
   $srt_eng_suffix = ".en.srt";
   $srt_swe_suffix = ".sv.srt";
   $srt_min_filesize = 5000;
-  $srt_word_treshold = 1000;
+  $srt_word_treshold = 200;
+  $srt_word_hi_treshold = 20;
 
   /* XYPlorer script
     Extract srt from selected mkv-file(s)
@@ -26,7 +27,6 @@
     $track_types = regexmatches($info, $regex_mkv_info_type, "|");
     $track_id = 0;
 
-    /* Extract subtitles */
     $track_extraction = "";
 
     foreach($track, $track_types){
@@ -53,6 +53,9 @@
 
       /*  Rename files */
       if(pointsSub($srt_file, "en") > $srt_word_treshold){
+        if(pointsSub($srt_file, "hi") > $srt_word_hi_treshold){
+          tag "HEARING IMPAIRED", $srt_file, 2;
+        }
         renameitem($mkv_file_name . $srt_eng_suffix, $srt_file);
       }
       elseif(pointsSub($srt_file, "sv") > $srt_word_treshold){

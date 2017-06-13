@@ -2,6 +2,7 @@
 
   perm $ENGLISH = 1;
   perm $SWEDISH = 0;
+  perm $SUB_WRONG_LANGUAGE = -1;
 
   /* Subtitle functions for XYplorer-scripting  */
 
@@ -27,24 +28,39 @@
     }
   }
 
-  /*  Get "points" for subtitle, to determine if it is in english or swedish */
-  function pointsSub($file, $lang) {
+  /*  Get "points" for subtitle, to determine if it is in english/swedish/HI */
+  function pointsSub($srt_file, $lang) {
     $words = "";
-    $file = readfile($file /*mode*/, /*numbytes*/, /*codepage*/, /*start=1*/);
-    if ($lang == "en") {
-      $words = readfile($engSubTxt);
-    }
-    if ($lang == "sv") {
-      $words = readfile($sweSubTxt);
-    }
-    if ($words == ""){
-      echo "Wrong language!";
-      return -1;
-    }
+    $check_hi = 0;
+    $subtitle_text = readfile($srt_file);
     $points = 0;
-    foreach($word, $words, <crlf>, /*flags*/) {
+
+    switch ($lang) {
+      case "en":
+        $words = readfile($engSubTxt);
+        break;
+      case "sv":
+        $words = readfile($sweSubTxt);
+        break;
+      case "hi":
+        $words = readfile($hiSubTxt);
+        $check_hi = 1;
+        break;
+      default:
+        echo "Wrong language!";
+        return $SUB_WRONG_LANGUAGE;
+    }
+
+    /*  Iterate trhough word in language text-files */
+    foreach($word, $words, <crlf>) {
       /*  Check word matches in srt-file, with trailing and leading space */
-      $matches = regexmatches($file, "\s" . $word. "\s", "|", /*matchcase=0*/);
+      if($check_hi){
+        $matches = regexmatches($subtitle_text, $word, "|");
+      }
+      else {
+        $matches = regexmatches($subtitle_text, "\s" . $word . "\s", "|");
+      }
+
       /*  Points is equal to amount of word matches */
       $points = $points + gettoken($matches, "count", "|");
     }
