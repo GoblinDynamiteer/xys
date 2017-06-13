@@ -1,0 +1,8 @@
+    include_once "..\const\include.xys";
+
+    function SEARCH_OmdbMovie($title, $year){
+        $data = runret('python omdb_search.py "' . $title . '" "'. $year .'"',
+                        $PATH_PYTHON_SCRIPTS);
+        $retval = PYT_CheckError($data) ? 0 : STRING_RemoveCrlf($data);
+        return $retval;
+    }

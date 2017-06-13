@@ -67,39 +67,20 @@
 		$data = runret('python tvmaze_tvmid_episode.py "' . $mazeid . '" "' .
             $season . '" "' . $number . '" "'. $info .'" ',
             $PATH_PYTHON_SCRIPTS);
-		if(PYT_CheckError($data)){
-			if(regexmatches($data, "404"){
-				return 404;
-			}
-			else{
-				return 0;
-			}
-		}
-		else{
-			return STRING_RemoveCrlf($data);
-		}
-
+		$retval = PYT_CheckError($data) ? 0 : STRING_RemoveCrlf($data);
+		return $retval;
 	}
 
-	//Gets TVMaze data (show-info) with API, suing python-script
+	/* Gets data from TVMaze API with Python-script */
 	function PYT_MAZE_Read($mazeid, $info){
-		if(CHECK_IsImdb($mazeid)){
-			$data = runret('python tvmaze_imdb.py "' . $mazeid . '" "'. $info .'" ', $PATH_PYTHON_SCRIPTS);
-		}
-		else{
-			$data = runret('python tvmaze_tvmid.py "' . $mazeid . '" "'. $info .'" ', $PATH_PYTHON_SCRIPTS);
-		}
-		if(PYT_CheckError($data)){
-			if(regexmatches($data, "404"){
-				return 404;
-			}
-			else{
-				return 0;
-			}
-		}
-		else{
-			return STRING_RemoveCrlf($data);
-		}
+		$data = CHECK_IsImdb($mazeid) ?
+			runret('python tvmaze_imdb.py "' . $mazeid . '" "'. $info .'" ',
+                $PATH_PYTHON_SCRIPTS) :
+            runret('python tvmaze_tvmid.py "' . $mazeid . '" "'. $info .'" ',
+                $PATH_PYTHON_SCRIPTS);
+
+        $retval = PYT_CheckError($data) ? 0 : STRING_RemoveCrlf($data);
+        return $retval;
 	}
 
 	//Gets Rating of Movie / TV-show from OMDB with python-script
@@ -147,14 +128,12 @@
 	//Gets next unaired episode
 	function PYT_EpisodeNext($section){
 		$mazeid = DB_TV_Read($section, "tvmaze");
-		//API JSON : "season":6,"number":10
 		$season = PYT_MAZE_ReadNextEp($mazeid, "season");
 		if($season == -1){
 			return "No data for next episode!";
 		}
 		else{
 			$episode = PYT_MAZE_ReadNextEp($mazeid, "number");
-			// format(1, "000"); //001
 			$season = format($season, "00");
 			$episode = format($episode, "00");
 			return "S" . $season . "E" . $episode;

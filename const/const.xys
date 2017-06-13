@@ -23,8 +23,11 @@
 	perm $PATH_SUB_SWE_WORDLIST_TXT = "D:\Google Drive\Scriptstuff\xyplorer\txt\sweSub.txt";
 	perm $PATH_SUB_HI_WORDLIST_TXT = "D:\Google Drive\Scriptstuff\xyplorer\txt\hiSub.txt";
 	perm $PATH_TV_SKIPLIST_TXT = "D:\Google Drive\Scriptstuff\xyplorer\txt\skiplist.txt";
+    perm $PATH_BACKUP_TEMP = "D:\Temp\temprar\";
 
 	perm $VIDEO_FILE_EXTENSIONS = "mkv|avi|mp4|m4v";
+    perm $STRING_SUB_ENG_SUFFIX = ".en.srt";
+    perm $STRING_SUB_SWE_SUFFIX = ".sv.srt";
 
 	perm $LINE_BREAK = <crlf>;
 
@@ -34,6 +37,8 @@
 	perm $LISTFOLDER_NO_FILES = 2;
 	perm $LISTFOLDER_NO_PATHS = 4;
 	perm $STRPOS_NOT_FOUND = -1;
+    perm $TAG_COMMENT = 2;
+    perm $CONFIRM_YES_NO_BUTTONS = 4;
 
 	perm $ERROR_MESSAGE_PYTHON =  "Python script returned error!";
 
@@ -43,12 +48,16 @@
 	perm $STATUS_COLOR_RED = "FF0000";
     perm $STATUS_COLOR_BLUE = "0000FF";
 
+    perm $REGEX_SUBTITLE_MKV_INFO_NUMBERS = "Track\snumber\:\s\d{1,2}";
+    perm $REGEX_SUBTITLE_MKV_INFO_TYPES = "Track\stype\:\s.{1,10}";
+
 	perm $REGEX_SEASON_EPISODE = "s\d{2}e\d{2}";
 	perm $REGEX_TV_SEASON_RELEASE = "\.S\d{2}\.(720p|1080p)\.";
 
 	perm $REGEX_MOVIE_PREFIX_THE = "^the\.";
 	perm $REGEX_MOVIE_PREFIX_A = "^a\.";
 	perm $REGEX_MOVIE_PREFIX_AN = "^an\.";
+    perm $REGEX_MOVIE_TITLE = ".+?(?=\d{4})";
 
 	perm $REGEX_DIGIT_1 = "\d{1}";
 	perm $REGEX_DIGIT_2 = "\d{2}";

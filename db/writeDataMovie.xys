@@ -15,11 +15,24 @@
 			foreach($movie, $movies){
 				if(strpos($movies_database , $movie) == $STRPOS_NOT_FOUND){
 					status "Found new movie: " . $movie;
-					$imdb_id = INPUT_Imdb($movie);
+
+                    /*  Search OMDb for movie */
+                    $search_data = SEARCH_OmdbMovie(
+                            STRING_MovieTitle($movie),
+                            STRING_MovieYear($movie)
+                        );
+
+                    $imdb_id = INPUT_YesNo(
+                        "Correct data for: " . $movie . "?" . $LINE_BREAK .
+                        replace($search_data, "|", $LINE_BREAK)) ?
+                            LIST_GetLastItem($search_data) :
+                            INPUT_Imdb($movie);
+
                     FILE_GenerateMovieNfo($PATH_DS_MOVIE . $letter . "\" .
-                        $movie, $imdb_id)
+                        $movie, $imdb_id);
 					DB_MOVIE_Write($movie, "imdb", $imdb_id);
 					status "Data set for: " . $movie;
+                    DB_MOVIE_UpdateMovieInfo($movie);
 					FILE_NEW_Movie($movie);
 				}
 			}

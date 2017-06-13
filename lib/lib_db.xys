@@ -40,7 +40,7 @@
 		$data = getkey(
             $key,
             $movie,
-            $PATH_DB_MOVIE_LIST
+            $PATH_DB_MOVIE
         );
 		$retval = $data ? $data : 0;
         return $retval;
@@ -48,7 +48,7 @@
 
     /*  Write data to movie database */
     function DB_MOVIE_Write($movie, $key, $data){
-		setkey $data, $key, $movie, $PATH_MOVIE_TV;
+		setkey $data, $key, $movie, $PATH_DB_MOVIE;
 	}
 
     function DB_MOVIE_LIST_Read($letter){

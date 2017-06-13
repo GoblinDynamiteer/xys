@@ -4,3 +4,7 @@
         $imdb = input("Enter IMDB-id / URL for: " . $title);
         return STRING_TrimImdb($imdb);
     }
+
+    function INPUT_YesNo($message){
+        return confirm($message, $LINE_BREAK, 2, $CONFIRM_YES_NO_BUTTONS);
+    }

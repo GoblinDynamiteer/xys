@@ -92,3 +92,15 @@
         $retval = $data ? $data : 0;
 		return $retval;
 	}
+
+    function STRING_MovieYear($string){
+        $data = regexmatches($string, $REGEX_DIGIT_4);
+        $retval = $data ? $data : 0;
+		return $retval;
+    }
+
+    function STRING_MovieTitle($string){
+        $data = regexmatches($string, $REGEX_MOVIE_TITLE);
+        $retval = $data ? $data : 0;
+        return $retval;
+    }
