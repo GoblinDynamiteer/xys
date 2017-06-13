@@ -4,6 +4,8 @@
 	perm $szExe = "D:\Google Drive\Scriptstuff\xyplorer\app\7za.exe";
 	perm $szeExe = "C:\Program Files\7-Zip\7z.exe";
   perm $subEditExe = "C:\Program Files\Subtitle Edit 3\SubtitleEdit.exe";
+	perm $mkvInfoExe = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvinfo.exe";
+	perm $mkvExtractExe = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvextract.exe";
 
 	function unrar($source, $destination) {
 		//Creates desitination directory if doesnt exist
@@ -53,9 +55,18 @@
 		run '"' . $szeExe . '" x "' . $source . '" -o"' . $destination . '"', , 0, 2;
 	}
 
-	function extractSubtitle($source){
-		// SubtitleEdit /convert "T:\House of Cards\S05\House.of.Cards.S05E04.1080p.WEB-DL.DD5.1.H.264-PLAYREADY.mkv" subrip /outputfolder:C:\Temp
-		$destination = getpathcomponent($source, "path");
+	function extractSubtitle($source, $track_numbers){
+		$path = getpathcomponent($source, "path");
+		$base = getpathcomponent($source, "base");
+		$output_file = "";
+		foreach($track_number, $track_numbers){
+			$output_file = $track_number . ':"' . $path . '\' . $base . '_' . $track_number . '.srt" ' . $output_file;
+		}
+
 		status "Extracting SRT from ". $source, 000000, progress;
-		run '"' . $subEditExe . '" /convert "' . $source . '" subrip /outputfolder:"' . $destination . '"', , 1, 1;
+		run '"' . $mkvExtractExe . '" tracks "' . $source . '" '. $output_file, , 1, 2;
+	}
+
+	function mkvInfo($source){
+		return runret($mkvInfoExe . ' "' . $source . '"');
 	}

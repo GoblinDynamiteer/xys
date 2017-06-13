@@ -2,44 +2,66 @@
 
   $regex_srt_eng_suffix = "\_\d{1,3}\_eng\.srt";
   $regex_srt_swe_suffix = "\_\d{1,3}\_swe\.srt";
+  $regex_mkv_info_numbers = "Track\snumber\:\s\d{1,2}";
+  $regex_mkv_info_type = "Track\stype\:\s.{1,10}";
   $srt_eng_suffix = ".en.srt";
   $srt_swe_suffix = ".sv.srt";
   $srt_min_filesize = 5000;
   $srt_word_treshold = 1000;
 
   /* XYPlorer script
-    Extract srt from selected mkv-file
+    Extract srt from selected mkv-file(s)
   */
 
-  $mkv_file = get("curitem"); // full path
-  $mkv_file_path = gpc($mkv_file, "path"); //path without filename
-  $mkv_file_name = gpc($mkv_file, "base"); //only filename, without extension
+  $mkv_files = get("SelectedItemsPathNames", "|");
 
-  /*  Wait for extraction with extactSubtitle() -- default waiting dialog*/
-  extractSubtitle($mkv_file);
+  foreach($mkv_file, $mkv_files){
 
-  /*  List extracted srt-files */
-  $srt_files = listfolder($mkv_file_path, "*" . $mkv_file_name . "*.srt");
+    $mkv_file_path = gpc($mkv_file, "path"); //path without filename
+    $mkv_file_name = gpc($mkv_file, "base"); //only filename, without extension
 
-  /*  Iterate trough srt-files */
-  foreach($srt_file, $srt_files){
+    $info =  mkvInfo($mkv_file);
 
-    /*  Delete small srt-files, probably forced for non-english parts */
-    if(filesize($srt_file) < $srt_min_filesize){
-      deletefile $srt_file;
-      continue;
+    $track_numbers = regexmatches($info, $regex_mkv_info_numbers, "|");
+    $track_types = regexmatches($info, $regex_mkv_info_type, "|");
+    $track_id = 0;
+
+    /* Extract subtitles */
+    $track_extraction = "";
+
+    foreach($track, $track_types){
+      if(regexmatches($track, "subtitles")){
+        $track_extraction = $track_extraction . "|" . $track_id;
+      }
+      $track_id++;
     }
 
-    /*  Rename files */
-    if(pointsSub($srt_file, "en") > $srt_word_treshold){
-      renameitem($mkv_file_name . $srt_eng_suffix, $srt_file);
-    }
-    elseif(pointsSub($srt_file, "sv") > $srt_word_treshold){
-      renameitem($mkv_file_name . $srt_swe_suffix, $srt_file);
-    }
-    /*  Srt is neither eng or swe, delete  */
-    else{
-      deletefile $srt_file;
+    $track_extraction = sortList($track_extraction);
+    extractSubtitle($mkv_file, $track_extraction);
+
+    /*  List extracted srt-files */
+    $srt_files = listfolder($mkv_file_path, "*" . $mkv_file_name . "*.srt");
+
+    /*  Iterate trough srt-files */
+    foreach($srt_file, $srt_files){
+
+      /*  Delete small srt-files, probably forced for non-english parts */
+      if(filesize($srt_file) < $srt_min_filesize){
+        deletefile $srt_file;
+        continue;
+      }
+
+      /*  Rename files */
+      if(pointsSub($srt_file, "en") > $srt_word_treshold){
+        renameitem($mkv_file_name . $srt_eng_suffix, $srt_file);
+      }
+      elseif(pointsSub($srt_file, "sv") > $srt_word_treshold){
+        renameitem($mkv_file_name . $srt_swe_suffix, $srt_file);
+      }
+      /*  Srt is neither eng or swe, delete  */
+      else{
+        deletefile $srt_file;
+      }
     }
   }
 
