@@ -1,31 +1,48 @@
-    /* File paths	*/
-	perm $PATH_DB_TV = "C:\db\tv.db";
-	perm $PATH_DB_EPISODES = "C:\db\tvep.db";
-	perm $PATH_DB_MOVIE = "C:\db\film.db";
-	perm $PATH_DB_MOVIE_LIST = "C:\db\filmlist.db";
-	perm $PATH_NEW_TXT = "C:\db\new.txt";
-	perm $PATH_MISSING_EPISODES_TXT = "C:\db\missing_eps.txt";
-	perm $PATH_DS_MOVIE = "\\DS\FILM\";
-	perm $PATH_DS_INFO = "\\DS\INFO\";
-	perm $PATH_DS_TV = "\\DS\TV\";
-	perm $PATH_DS_SUBTITLES = "\\DS\MISC\Subtitles\";
-	perm $PATH_DB = "C:\db\";
+
+    /* File and folder locations	*/
+
+    /*  DS Locations */
+    perm $DS_SERVER_NAME = "\\DS\";
+    perm $PATH_DS_MOVIE = $DS_SERVER_NAME . "FILM\";
+    perm $PATH_DS_INFO = $DS_SERVER_NAME . "INFO\";
+    perm $PATH_DS_TV = $DS_SERVER_NAME . "TV\";
+    perm $PATH_BACKUP_DS = $DS_SERVER_NAME . "BACKUP\Misc";
+    perm $PATH_DS_SUBTITLES = $DS_SERVER_NAME . "MISC\Subtitles\";
+
+    /*  Movie and TV database location */
+    perm $PATH_DB_LOCATION = "C:\db\";
+	perm $PATH_DB_TV = $PATH_DB_LOCATION . "tv.db";
+	perm $PATH_DB_EPISODES = $PATH_DB_LOCATION . "tvep.db";
+	perm $PATH_DB_MOVIE = $PATH_DB_LOCATION . "film.db";
+	perm $PATH_DB_MOVIE_LIST = $PATH_DB_LOCATION . "filmlist.db";
+	perm $PATH_NEW_TXT = $PATH_DB_LOCATION . "new.txt";
+	perm $PATH_MISSING_EPISODES_TXT = $PATH_DB_LOCATION . "missing_eps.txt";
+
+    /*  Misc locations */
 	perm $PATH_NZB_IMPORT = "D:\NZB Import\";
 	perm $PATH_BACKUP_GOOGLE_DRIVE = "D:\Google Drive\Backups\";
 	perm $PATH_BACKUP_DROPBOX = "E:\Dropbox\Backups\";
-	perm $PATH_BACKUP_DS = "\\DS\BACKUP\Misc";
-	perm $PATH_BACKUP_LOCATIONS = "D:\Google Drive\Scriptstuff\backup_locs.db";
-	perm $PATH_PYTHON_SCRIPTS = "D:\Google Drive\Scriptstuff\xyplorer\python\";
-	perm $PATH_XYS_SCRIPTS = "D:\Google Drive\Scriptstuff\xyplorer\";
-	perm $PATH_UNC_API_KEY_TXT = "D:\Google Drive\Scriptstuff\unc_apikey.txt";
-	perm $PATH_URL_TXT = "D:\Google Drive\Scriptstuff\xyplorer\txt\url.txt";
-	perm $PATH_SUB_ENG_WORDLIST_TXT = "D:\Google Drive\Scriptstuff\xyplorer\txt\engSub.txt";
-	perm $PATH_SUB_SWE_WORDLIST_TXT = "D:\Google Drive\Scriptstuff\xyplorer\txt\sweSub.txt";
-	perm $PATH_SUB_HI_WORDLIST_TXT = "D:\Google Drive\Scriptstuff\xyplorer\txt\hiSub.txt";
-	perm $PATH_TV_SKIPLIST_TXT = "D:\Google Drive\Scriptstuff\xyplorer\txt\skiplist.txt";
     perm $PATH_BACKUP_TEMP = "D:\Temp\temprar\";
 
+    /*  Script locations */
+    perm $PATH_SCRIPT_LOCATION = "D:\Google Drive\Scriptstuff\";
+    perm $PATH_XYS_SCRIPTS = $PATH_SCRIPT_LOCATION . "xyplorer\";
+	perm $PATH_BACKUP_LOCATIONS = $PATH_SCRIPT_LOCATION . "backup_locs.db";
+	perm $PATH_PYTHON_SCRIPTS = $PATH_SCRIPT_LOCATION . "python\";
+
+    /*  Text files */
+    perm $PATH_TXT_FILES = $PATH_XYS_SCRIPTS . "\txt\";
+	perm $PATH_UNC_API_KEY_TXT = $PATH_SCRIPT_LOCATION . "unc_apikey.txt";
+	perm $PATH_URL_TXT = $PATH_TXT_FILES . "url.txt";
+	perm $PATH_SUB_ENG_WORDLIST_TXT = $PATH_TXT_FILES . "engSub.txt";
+	perm $PATH_SUB_SWE_WORDLIST_TXT = $PATH_TXT_FILES . "sweSub.txt";
+	perm $PATH_SUB_HI_WORDLIST_TXT = $PATH_TXT_FILES . "hiSub.txt";
+	perm $PATH_TV_SKIPLIST_TXT = $PATH_TXT_FILES . "skiplist.txt";
+    perm $PATH_XYPLORER_HELP_SCRIPTING_TXT = $PATH_TXT_FILES . "scripthelp.txt";
+
+    /*  File extensions */
 	perm $VIDEO_FILE_EXTENSIONS = "mkv|avi|mp4|m4v";
+	perm $AUDIO_FILE_EXTENSIONS = "mp3|flac";
     perm $STRING_SUB_ENG_SUFFIX = ".en.srt";
     perm $STRING_SUB_SWE_SUFFIX = ".sv.srt";
 
@@ -48,6 +65,7 @@
 	perm $STATUS_COLOR_RED = "FF0000";
     perm $STATUS_COLOR_BLUE = "0000FF";
 
+    /*  Regex */
     perm $REGEX_SUBTITLE_MKV_INFO_NUMBERS = "Track\snumber\:\s\d{1,2}";
     perm $REGEX_SUBTITLE_MKV_INFO_TYPES = "Track\stype\:\s.{1,10}";
 
