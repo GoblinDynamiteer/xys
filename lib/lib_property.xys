@@ -1,0 +1,33 @@
+    include_once "..\const\include.xys";
+
+	function PROPERTY_ReadFile($file, $property){
+
+        switch ($property) {
+            case "artist":
+                $retval = property("System.Music.Artist", $file);
+                if(!$retval){
+                    $retval = property("System.Music.AlbumArtist", $file);
+                }
+                break;
+
+            case "album":
+                step;
+                $retval = property("System.Music.AlbumTitle", $file);
+                if(!$retval){
+                    $retval = property("System.Media.AlbumTitle", $file);
+                }
+                break;
+
+            case "year":
+                $retval = property("System.Music.Year", $file);
+                if(!$retval){
+                    $retval = property("System.Media.Year", $file);
+                }
+                break;
+
+            default:
+                return 0;
+        }
+
+        return $retval;
+    }
