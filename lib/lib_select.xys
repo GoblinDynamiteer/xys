@@ -1,17 +1,26 @@
- include_once "..\const\include.xys";
+    include_once "..\const\include.xys";
 
-  /*  Returns full path to selected folder */
+    /*  Returns full path to selected folder */
 	function SELECT_FullPath(void){
 		$selection = get("SelectedItemsPathNames");
 		if(SELECT_CountItems($selection) == 1 && SELECT_IsFolder($selection)){
-				return $selection;
+			return $selection;
 		}
 		return 0;
 	}
 
-  /*  Count selected items */
+    /*  Returns full path to selected file */
+    function SELECT_FullPathFile(void){
+        $selection = get("SelectedItemsPathNames");
+        if(SELECT_CountItems($selection) == 1 && !SELECT_IsFolder($selection)){
+            return $selection;
+        }
+        return 0;
+      }
+
+    /*  Count selected items */
 	function SELECT_CountItems($items){
-		return gettoken($items, "count", <crlf>);
+	       return gettoken($items, "count", <crlf>);
 	}
 
 	/* Check if selection is a folder or file */
