@@ -8,7 +8,7 @@
 		backupto $PATH_DS_INFO, $PATH_MISSING_EPISODES_TXT;
 		backupto $backup_folder, $PATH_NEW_TXT;
 		backupto $backup_folder, $PATH_MISSING_EPISODES_TXT;
-		$db_files = listfolder($PATH_DB, "*.db", 1);
+		$db_files = listfolder($PATH_DB_LOCATION, "*.db", 1);
 		copyto $backup_folder , $db_files;
 	}
 
