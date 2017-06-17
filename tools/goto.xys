@@ -1,10 +1,18 @@
     include_once "..\const\include.xys";
 
-	$tv_last_season = "TV: Last Season folder";
-	$script = "Help on scripting command";
+    $mouse_pointer_item = itematpos();
+
+	$tv_last_season_popup = "TV: Last Season folder;tv_last;" . $ICON_TV . "|";
+	$script_popup = "Help on scripting command;script_help";
+    $atom_popup = exists($mouse_pointer_item) == 2 ?
+        "Open [ ". $mouse_pointer_item ." ] in Atom;open_in_atom;" .
+        $ICON_ATOM . "|-|" : $NULL;
+
+
 	$choice = popupmenu(
-        $tv_last_season . "|" .
-        $script
+        $atom_popup .
+        $tv_last_season_popup .
+        $script_popup
     );
 
     /*  End if no choice is selected */
@@ -13,7 +21,11 @@
 	}
 
 	switch($choice){
-		case $tv_last_season:
+        case "open_in_atom":
+            APP_Atom($mouse_pointer_item);
+            break;
+
+		case "tv_last":
 			$tv_show = inputselect(
                             "TV-Shows",
                             FILE_ListTvFolders(),
@@ -27,7 +39,7 @@
 			goto $PATH_DS_TV . $tv_show . "\"  . $season;;
 			break;
 
-		case $script:
+		case "script_help":
 			$script_list = readfile($PATH_XYPLORER_HELP_SCRIPTING_TXT);
 			$script_list = LIST_Sort($script_list);
 			$script_choice = inputselect(

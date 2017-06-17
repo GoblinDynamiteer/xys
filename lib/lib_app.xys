@@ -70,3 +70,7 @@
 	function APP_MkvInfo($source){
 		return runret($mkvInfoExe . ' "' . $source . '"');
 	}
+
+    function APP_Atom($path) {
+        run 'atom "' . $path . '"';
+    }

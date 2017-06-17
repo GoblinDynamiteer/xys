@@ -40,6 +40,11 @@
 	perm $PATH_TV_SKIPLIST_TXT = $PATH_TXT_FILES . "skiplist.txt";
     perm $PATH_XYPLORER_HELP_SCRIPTING_TXT = $PATH_TXT_FILES . "scripthelp.txt";
 
+    /*  Icons */
+    perm $ICON_LOCATION = "D:\Google Drive\Misc\icons\";
+    perm $ICON_ATOM = $ICON_LOCATION . "atom.ico";
+    perm $ICON_TV = $ICON_LOCATION . "tv_2.ico";
+
     /*  File extensions */
 	perm $VIDEO_FILE_EXTENSIONS = "mkv|avi|mp4|m4v";
 	perm $AUDIO_FILE_EXTENSIONS = "mp3|flac";
@@ -47,6 +52,8 @@
     perm $STRING_SUB_SWE_SUFFIX = ".sv.srt";
 
 	perm $LINE_BREAK = <crlf>;
+    perm $NOT_USED = "";
+    perm $NULL = "";
 
 	/* Standard function parameters	*/
 	perm $WRITEFILE_ON_EXIST_APPEND = "a";
