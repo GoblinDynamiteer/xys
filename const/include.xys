@@ -10,3 +10,4 @@ include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_list.xys";
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_string.xys";
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_input.xys";
 include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_search.xys";
+include_once "D:\Google Drive\Scriptstuff\xyplorer\lib\lib_log.xys";

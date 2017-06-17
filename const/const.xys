@@ -16,6 +16,7 @@
 	perm $PATH_DB_MOVIE = $PATH_DB_LOCATION . "film.db";
 	perm $PATH_DB_MOVIE_LIST = $PATH_DB_LOCATION . "filmlist.db";
 	perm $PATH_NEW_TXT = $PATH_DB_LOCATION . "new.txt";
+    perm $PATH_LOG_TXT = $PATH_DB_LOCATION . "log.txt";
 	perm $PATH_MISSING_EPISODES_TXT = $PATH_DB_LOCATION . "missing_eps.txt";
 
     /*  Misc locations */

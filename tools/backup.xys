@@ -36,4 +36,5 @@
 		copyto($PATH_BACKUP_GOOGLE_DRIVE, $file);
 		copyto($PATH_BACKUP_DS, $file);
 		copyto($PATH_BACKUP_DROPBOX, $file);
+        LOG_Backup($file);
 	}

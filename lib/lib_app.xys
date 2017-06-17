@@ -3,7 +3,7 @@
 	perm $filezillaExe = "C:\Program Files (x86)\FileZilla FTP Client\filezilla.exe";
 	perm $szExe = "D:\Google Drive\Scriptstuff\xyplorer\app\7za.exe";
 	perm $szeExe = "C:\Program Files\7-Zip\7z.exe";
-  perm $subEditExe = "C:\Program Files\Subtitle Edit 3\SubtitleEdit.exe";
+    perm $subEditExe = "C:\Program Files\Subtitle Edit 3\SubtitleEdit.exe";
 	perm $mkvInfoExe = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvinfo.exe";
 	perm $mkvExtractExe = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvextract.exe";
 

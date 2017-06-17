@@ -3,11 +3,12 @@
 	//Moves new.txt to ds/info and backups .db files
 	function FILE_BACKUP_Db(void){
 		$now = now("yyyy-mm-dd-hh-nn");
-		$backup_folder = new("D:\Google Drive\Scriptstuff\MediaDb\bak\" . $now, "dir");
+		$backup_folder = new($PATH_SCRIPT_LOCATION ."MediaDb\bak\" . $now, "dir");
 		backupto $PATH_DS_INFO, $PATH_NEW_TXT;
 		backupto $PATH_DS_INFO, $PATH_MISSING_EPISODES_TXT;
 		backupto $backup_folder, $PATH_NEW_TXT;
 		backupto $backup_folder, $PATH_MISSING_EPISODES_TXT;
+        backupto $backup_folder, $PATH_LOG_TXT;
 		$db_files = listfolder($PATH_DB_LOCATION, "*.db", 1);
 		copyto $backup_folder , $db_files;
 	}
@@ -53,18 +54,19 @@
 	//Adds newly added tv-shows to textfile
 	function FILE_NEW_Episode($episode, $tv_show){
 		$today = now("yyyy-mm-dd");
-		$mazeID = DB_TV_Read($tv_show, "tvmaze");
+		$maze_id = DB_TV_Read($tv_show, "tvmaze");
 		//American Dad has other season ordering on TVMaze, than releases
 		if($tv_show == "American Dad"){
 			$episode = replace($episode, "S14E", "S13E");
 		}
 
-		$title = PYT_MAZE_ReadEpisode($mazeID, "name", $episode);
-		$airdate = PYT_MAZE_ReadEpisode($mazeID, "airdate", $episode);
+		$title = PYT_MAZE_ReadEpisode($maze_id, "name", $episode);
+		$airdate = PYT_MAZE_ReadEpisode($maze_id, "airdate", $episode);
 		$string = "[ " . $today . " ] [ TV ] [ " . $tv_show . " ] [ " .
             $episode . " : " . $title . " ] [ Airdate: " . $airdate . " ]";
 		writefile($PATH_NEW_TXT, $string . $LINE_BREAK,
             $WRITEFILE_ON_EXIST_APPEND);
+        LOG_NewTV($tv_show, $episode);
 		wait 100;
 		}
 	}
@@ -89,6 +91,7 @@
 		$string = replace($string, "  ", " ");
 		writefile($PATH_NEW_TXT, $string . $LINE_BREAK,
             $WRITEFILE_ON_EXIST_APPEND);
+        LOG_NewMovie($section);
 		wait 100;
 	}
 
