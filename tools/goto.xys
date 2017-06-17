@@ -1,54 +1,47 @@
- include_once "..\const\include.xys";
- 
-	$pointer = itematpos();
-	if ($pointer != "") {
-		if (exists($pointer) == 2){
-			$fzpos = "Filezilla to here";
-		}
-	}
-	else {
-		$fzpos = "";
-	}
-	$tv = "TV: Last Season folder";
-	$fztv = "TV: Last Season folder: FTP";
-	$allMov = "Movies: List in paper-folder";
-	$allTv = "TV: List in paper-folder";
+    include_once "..\const\include.xys";
+
+	$tv_last_season = "TV: Last Season folder";
 	$script = "Help on scripting command";
-	$choice = popupmenu($tv . "|" .  $fztv . "|-|" . $script . "|-|" . $allMov . "|". $allTv . "|" .  $fzpos);
-	if($choice == ""){
+	$choice = popupmenu(
+        $tv_last_season . "|" .
+        $script
+    );
+
+    /*  End if no choice is selected */
+	if(!$choice){
 		end 1;
 	}
+
 	switch($choice){
-		case $fztv:
-		case $tv:
-			$tvchoice = inputselect("TV-Shows", listTVfolders(), , 72, ,"500", "1000");
-			$season = getLastSeasonFolder($dsTV . $tvchoice);
-			$path = $dsTV . $tvchoice . "\"  . $season;
-			copytext $path;
-			gotoFolderP2($path);
-			if($choice == $fztv){
-				filezilla($path);
-			}
+		case $tv_last_season:
+			$tv_show = inputselect(
+                            "TV-Shows",
+                            FILE_ListTvFolders(),
+                            $NOT_USED,
+                            72,
+                            $NOT_USED,
+                            "500",
+                            "1000"
+                        );
+			$season = FILE_TV_GetLastSeason($PATH_DS_TV . $tv_show);
+			goto $PATH_DS_TV . $tv_show . "\"  . $season;;
 			break;
-		case $fzpos:
-			filezilla($pointer);
-			break;
+
 		case $script:
-			$scriptlist = readfile("D:\Google Drive\Scriptstuff\xyplorer\txt\scripthelp.txt");
-			$scriptlist = sortList($scriptlist);
-			$scriptchoice = inputselect("Commands", $scriptlist, , 72, ,"500", "1000");
-			rtfm "idh_scripting_comref.htm#idh_sc_" . $scriptchoice;
+			$script_list = readfile($PATH_XYPLORER_HELP_SCRIPTING_TXT);
+			$script_list = LIST_Sort($script_list);
+			$script_choice = inputselect(
+                                "Commands",
+                                $script_list,
+                                $NOT_USED,
+                                72,
+                                $NOT_USED,
+                                "500",
+                                "1000"
+                            );
+			rtfm "idh_scripting_comref.htm#idh_sc_" . $script_choice;
 			break;
-		case $allMov:
-			$list = listMovieFolders();
-			focus P2;
-			tab("new", "D:\");
-			paperfolder("paper", $list,  "|");
-		case $allTv:
-			$list = listfolder($dsTV, , , <crlf>);
-			focus P2;
-			tab("new", "D:\");
-			paperfolder("paper", $list,  "|");
+
 		default:
 			break;
-	} 
+	}
