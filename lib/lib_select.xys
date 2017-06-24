@@ -31,6 +31,6 @@
 	/* Returns name of folder, from full path */
 	function SELECT_FolderName(void){
 		$path = SELECT_FullPath();
-    $retval = $path == 0 ? 0 : gettoken($path, -1, "\");
-    return $retval;
+        $retval = $path == 0 ? 0 : gettoken($path, -1, "\");
+        return $retval;
 	}
