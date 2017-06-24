@@ -1,51 +1,40 @@
- include_once "..\const\include.xys";
- 
-	$selectedItemPath = getFullPath();
-	$selectedItemName = getFolderName();
-	
-	/*	 Selected folder is considered to be a tv season release	*/
-	if(isFolderTvRelease($selectedItemName)){
-		/*	 Fix moving of subs	*/
-		$destination = inputfolder($dsTV, "Select destination!");
-		unrar($selectedItemPath, $destination);
-		tag "Extracted: Delete Me!", $selectedItemPath, 2, 1;
-		tag "Red", $selectedItemPath, 0, 0;
-	}
-	/*	 Selected folder is probably a movie release	*/
-	else{
-		$firstLetter = getMovieLetter($selectedItemName);
-		//Full DS destination
-		$destination = $dsFilm . $firstLetter . "\" .  $selectedItemName;
-		//To show in confirm dialog
-		$ConfirmText = "Extract "  . <crlf> . $selectedItemName . " to "  . <crlf> . $destination;
-		
-		//confirm(text, [linebreaker="<br>"], [DefaultButton=1], [Buttons=1])
-		//Buttons = 4 = Yes/No, returns 1/0
-		$confirm = confirm($ConfirmText, , 2, 4);
-		if($confirm){
-			//Move Subs-folder to DS/Misc
-			if(exists($selectedItemPath . "\Subs")){
-				moveas $selectedItemName, $dsSUB, $selectedItemPath . "\Subs";
-			}
-			tag "Extracted: Delete Me!", $selectedItemPath, 2, 1;
-			tag "Red", $selectedItemPath, 0, 0;
-			$rarFile = quicksearch("*.rar", $selectedItemPath, "|");
-			while(gettoken($rarFile, "count", "|") != 1){
-				wait 100;
-				$rarFile = quicksearch("*.rar", $selectedItemPath, "|");
-				status "Waiting for subs move";
-			}
-			extract($rarFile, $destination);
-			wait 100;
-/* 			$confirm = confirm("Run script to check for new movies?", , 2, 4);
-			if($confirm){
-				load $scriptFolder . "\db\writeDataMovie.xys";
-			} */
-		}
-		else{
-			status "Cancelled", $hexOrange, stop;
-		}
-	}
+    include_once "..\const\include.xys";
 
-	releaseglobals 3;
-	end 1;
+    $path = SELECT_FullPath();
+    $name = SELECT_FolderName();
+
+    if(CHECK_IsTvRelease($name)){
+        $destination = inputfolder(
+            $PATH_DS_TV, "Select destination!");
+        APP_Unrar($path, $destination);
+        tag "Extracted: Delete Me!", $path, 2, 1;
+        tag "Red", $path, 0, 0;
+    }
+
+    else{
+        $letter = STRING_Moviefirst_letter($name);
+        $destination = $PATH_DS_MOVIE . $letter . "\" .  $name;
+        $confirmation = "Extract "  . $LINE_BREAK .
+            $name . " to "  . $LINE_BREAK . $destination;
+        if(confirm($confirmation, , 2, 4)){
+            if(exists($path . "\Subs")){
+                moveas $name, $PATH_DS_SUBTITLES, $path . "\Subs";
+            }
+            tag "Extracted: Delete Me!", $path, 2, 1;
+            tag "Red", $path, 0, 0;
+            $rar_file = quicksearch("*.rar", $path, "|");
+            while(gettoken($rar_file, "count", "|") != 1){
+                wait 100;
+                $rar_file = quicksearch("*.rar", $path, "|");
+                status "Waiting for subs move";
+            }
+            APP_Extract($rar_file, $destination);
+            wait 100;
+        }
+        else{
+            status "Cancelled", $STATUS_COLOR_ORANGE, stop;
+        }
+    }
+
+    releaseglobals 3;
+    end 1;
