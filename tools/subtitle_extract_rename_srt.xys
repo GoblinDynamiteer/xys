@@ -1,42 +1,75 @@
-  include_once "..\const\include.xys";
+    include_once "..\const\include.xys";
 
-  /* XYPlorer script
+    /* XYPlorer script
     Extract and rename SRT subtitles
-  */
+    */
 
-  /* Get active pane path */
-  $path = get("path", a);
-  /*  Get current SRT files, if any */
-  $currentSrtFiles = listFiles($path, ".srt");
-  /* List zip-files in path */
-  $zipFiles = listFiles($path, ".zip");
-  /* Extract all files */
-  foreach($zip, $zipFiles, /*separator="|"*/, /*flags*/) {
-    extract($zip, $path);
-    wait 200;
-  }
-  delete /*recycle=1*/, 0, $zipFiles;
-  wait 40;
-  /* Get movie file name, without path and extension  */
-  $movFile = listFiles($path, ".mkv");
-  $fileName = replace($movFile, ".mkv");
-  $fileName = replace($fileName, $path . "\");
-  $srtFiles = "";
+    /* Get active pane path */
+    $path = get("path", a);
 
-  /* Get new extracted SRT-files  */
-  while ($srtFiles == $currentSrtFiles) {
-    status "Getting SRT-files", ,"progress";
-    $srtFiles = listFiles($path, ".srt");
-    wait 50;
-  }
-  $srtFiles = replace($srtFiles, $currentSrtFiles);
+    /* Find compressed files */
+    $zipFiles = FILE_ListFilesWithExtension($path, "zip");
+    $rarFiles = FILE_ListFilesWithExtension($path, "rar");
+    $srtCurrentFiles = FILE_ListFilesWithExtension($path, "srt");
 
-  /* Rename extracted SRT-files with correnct language extension  */
-  foreach($srt, $srtFiles, /*separator="|"*/, /*flags*/) {
-    if(getSubLanguage($srt) == $ENGLISH){
-      renameitem($fileName . ".en.srt", $srt, /*flags=0*/, /*numsuffix*/)
+    /* Extract found archives */
+    if($zipFiles) // If zip-files were found
+    {
+        foreach($file, $zipFiles)
+        {
+            APP_UnrarWait($file, $path);
+            deletefile $file;
+        }
     }
-    else{
-      renameitem($fileName . ".sv.srt", $srt, /*flags=0*/, /*numsuffix*/)
+
+    if($rarFiles) // If rar-files were found
+    {
+        foreach($file, $rarFiles)
+        {
+            APP_UnrarWait($file, $path);
+            deletefile $file;
+        }
     }
-  }
+
+    $srtFiles = FILE_ListFilesWithExtension($path, "srt");
+    $movieFileName = FILE_ListFilesWithExtension($path, "mkv");
+    $movieFileName = getpathcomponent($movieFileName, "file");
+    $movieFileName = replace($movieFileName, ".mkv");
+
+    /* Determine new files */
+    foreach($file, $srtFiles)
+    {
+        replace($srtFiles, $file); // Removes $file string from $srtFiles
+    }
+
+    /* Sort list of new srt-files, removes empty elements */
+    $srtFiles = LIST_Sort($srtFiles);
+
+    foreach($file, $srtFiles)
+    {
+        step;
+        if(SUB_DetermineLanguage($file) == $SUBTITLE_LANGUAGE_SWEDISH)
+        {
+            if(SUB_PathHasSvSub($path)) // If path already has swe subtitle
+            {
+                deletefile $file; // Delete the srt-file
+            }
+
+            else {
+                renameitem($movieFileName . $STRING_SUB_SWE_SUFFIX , $file)
+            }
+        }
+
+        elseif(SUB_DetermineLanguage($file) == $SUBTITLE_LANGUAGE_ENGLISH)
+        {
+            if(SUB_PathHasEnSub($path)) // If path already has eng subtitle
+            {
+                deletefile $file; // Delete the srt-file
+            }
+
+            else {
+                renameitem($movieFileName . $STRING_SUB_ENG_SUFFIX , $file)
+            }
+        }
+
+    }

@@ -56,6 +56,10 @@
     perm $NOT_USED = "";
     perm $NULL = "";
 
+    /* Subtitles */
+    perm $SUBTITLE_LANGUAGE_SWEDISH = 0;
+    perm $SUBTITLE_LANGUAGE_ENGLISH = 1;
+
 	/* Standard function parameters	*/
 	perm $WRITEFILE_ON_EXIST_APPEND = "a";
 	perm $LISTFOLDER_PATTERN_ALL = "*";
@@ -96,4 +100,4 @@
 	perm $REGEX_RELEASE_RESOLUTION = "(720p|1080p|2160p)";
 	perm $REGEX_RELEASE_SPECIAL = "(remastered|directors.cut|extended|unrated|dircut|\.dc\.|uncut)";
 	perm $REGEX_RELEASE_SCENE_SPECIAL = "(proper|repack|rerip|remux)";
-	perm $REGEX_RELEASE_SOURCE = "(bluray|hddvd|web.dl|web.rip|blu.ray|hdtv|webrip|dvdscr)";
+	perm $REGEX_RELEASE_SOURCE = "(bluray|hddvd|web.dl|web.rip|blu.ray|hdtv|hdts|webrip|dvdscr)";

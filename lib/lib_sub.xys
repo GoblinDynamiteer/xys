@@ -69,8 +69,14 @@
 
   /* Determines language of srt subtitle  */
   function SUB_DetermineLanguage($file){
-    $eng_points = pointsSub($file, "en");
-    $swe_points = pointsSub($file, "sv");
+    $eng_points = SUB_Points($file, "en");
+    $swe_points = SUB_Points($file, "sv");
+
     /* Return 1 if english sub, 0 if swedish  */
-    return ($eng_points > $swe_points);
+    if($eng_points > $swe_points)
+    {
+        return $SUBTITLE_LANGUAGE_ENGLISH;
+    }
+
+    return $SUBTITLE_LANGUAGE_SWEDISH;
   }
