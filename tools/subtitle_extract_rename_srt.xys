@@ -11,13 +11,15 @@
     $zipFiles = FILE_ListFilesWithExtension($path, "zip");
     $rarFiles = FILE_ListFilesWithExtension($path, "rar");
     $srtCurrentFiles = FILE_ListFilesWithExtension($path, "srt");
+    $srtCurrentSv = SUB_PathHasSvSub($path);
+    $srtCurrentEn = SUB_PathHasEnSub($path);
 
     /* Extract found archives */
     if($zipFiles) // If zip-files were found
     {
         foreach($file, $zipFiles)
         {
-            APP_UnrarWait($file, $path);
+            APP_ExtractWait($file, $path);
             deletefile $file;
         }
     }
@@ -26,7 +28,7 @@
     {
         foreach($file, $rarFiles)
         {
-            APP_UnrarWait($file, $path);
+            APP_ExtractWait($file, $path);
             deletefile $file;
         }
     }
@@ -37,9 +39,9 @@
     $movieFileName = replace($movieFileName, ".mkv");
 
     /* Determine new files */
-    foreach($file, $srtFiles)
+    foreach($file, $srtCurrentFiles)
     {
-        replace($srtFiles, $file); // Removes $file string from $srtFiles
+        $srtFiles = replace($srtFiles, $file); // Removes $file string from $srtFiles
     }
 
     /* Sort list of new srt-files, removes empty elements */
@@ -47,10 +49,9 @@
 
     foreach($file, $srtFiles)
     {
-        step;
         if(SUB_DetermineLanguage($file) == $SUBTITLE_LANGUAGE_SWEDISH)
         {
-            if(SUB_PathHasSvSub($path)) // If path already has swe subtitle
+            if($srtCurrentSv) // If path already has swe subtitle
             {
                 deletefile $file; // Delete the srt-file
             }
@@ -62,7 +63,7 @@
 
         elseif(SUB_DetermineLanguage($file) == $SUBTITLE_LANGUAGE_ENGLISH)
         {
-            if(SUB_PathHasEnSub($path)) // If path already has eng subtitle
+            if($srtCurrentEn) // If path already has eng subtitle
             {
                 deletefile $file; // Delete the srt-file
             }

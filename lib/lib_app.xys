@@ -55,6 +55,17 @@
 		run '"' . $szeExe . '" x "' . $source . '" -o"' . $destination . '"', , 0, 2;
 	}
 
+    function APP_ExtractWait($source, $destination){
+        //Creates desitination directory if doesnt exist
+        if(!exists($destination)){
+            new($destination, "dir");
+            wait 100;
+        }
+        status "Extracting: ". $source, 000000, progress;
+        //run command, [directory], [wait=0], [show=1]
+        run '"' . $szeExe . '" x "' . $source . '" -o"' . $destination . '"', , 2, 2;
+    }
+
 	function APP_ExtractSubtitle($source, $track_numbers){
 		$path = getpathcomponent($source, "path");
 		$base = getpathcomponent($source, "base");

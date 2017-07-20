@@ -8,7 +8,7 @@
 
   /* Checks if folder contains an english subtitle (extension en.srt)  */
   function SUB_PathHasEnSub($path){
-    $files = listFiles($path, "en.srt");
+    $files = FILE_ListFilesWithExtension($path, "en.srt");
     if($files != ""){
       return 1;
     }
