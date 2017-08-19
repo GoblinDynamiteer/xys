@@ -11,34 +11,34 @@
 
     /*  Movie and TV database location */
     perm $PATH_DB_LOCATION = "C:\db\";
-	perm $PATH_DB_TV = $PATH_DB_LOCATION . "tv.db";
-	perm $PATH_DB_EPISODES = $PATH_DB_LOCATION . "tvep.db";
-	perm $PATH_DB_MOVIE = $PATH_DB_LOCATION . "film.db";
-	perm $PATH_DB_MOVIE_LIST = $PATH_DB_LOCATION . "filmlist.db";
-	perm $PATH_NEW_TXT = $PATH_DB_LOCATION . "new.txt";
+    perm $PATH_DB_TV = $PATH_DB_LOCATION . "tv.db";
+    perm $PATH_DB_EPISODES = $PATH_DB_LOCATION . "tvep.db";
+    perm $PATH_DB_MOVIE = $PATH_DB_LOCATION . "film.db";
+    perm $PATH_DB_MOVIE_LIST = $PATH_DB_LOCATION . "filmlist.db";
+    perm $PATH_NEW_TXT = $PATH_DB_LOCATION . "new.txt";
     perm $PATH_LOG_TXT = $PATH_DB_LOCATION . "log.txt";
-	perm $PATH_MISSING_EPISODES_TXT = $PATH_DB_LOCATION . "missing_eps.txt";
+    perm $PATH_MISSING_EPISODES_TXT = $PATH_DB_LOCATION . "missing_eps.txt";
 
     /*  Misc locations */
-	perm $PATH_NZB_IMPORT = "D:\NZB Import\";
-	perm $PATH_BACKUP_GOOGLE_DRIVE = "D:\Google Drive\Backups\";
-	perm $PATH_BACKUP_DROPBOX = "E:\Dropbox\Backups\";
+    perm $PATH_NZB_IMPORT = "D:\NZB Import\";
+    perm $PATH_BACKUP_GOOGLE_DRIVE = "D:\Google Drive\Backups\";
+    perm $PATH_BACKUP_DROPBOX = "E:\Dropbox\Backups\";
     perm $PATH_BACKUP_TEMP = "D:\Temp\temprar\";
 
     /*  Script locations */
     perm $PATH_SCRIPT_LOCATION = "D:\Google Drive\Scriptstuff\";
     perm $PATH_XYS_SCRIPTS = $PATH_SCRIPT_LOCATION . "xyplorer\";
-	perm $PATH_BACKUP_LOCATIONS = $PATH_SCRIPT_LOCATION . "backup_locs.db";
-	perm $PATH_PYTHON_SCRIPTS = $PATH_SCRIPT_LOCATION . "python\";
+    perm $PATH_BACKUP_LOCATIONS = $PATH_SCRIPT_LOCATION . "backup_locs.db";
+    perm $PATH_PYTHON_SCRIPTS = $PATH_SCRIPT_LOCATION . "python\";
 
     /*  Text files */
     perm $PATH_TXT_FILES = $PATH_XYS_SCRIPTS . "\txt\";
-	perm $PATH_UNC_API_KEY_TXT = $PATH_SCRIPT_LOCATION . "unc_apikey.txt";
-	perm $PATH_URL_TXT = $PATH_TXT_FILES . "url.txt";
-	perm $PATH_SUB_ENG_WORDLIST_TXT = $PATH_TXT_FILES . "engSub.txt";
-	perm $PATH_SUB_SWE_WORDLIST_TXT = $PATH_TXT_FILES . "sweSub.txt";
-	perm $PATH_SUB_HI_WORDLIST_TXT = $PATH_TXT_FILES . "hiSub.txt";
-	perm $PATH_TV_SKIPLIST_TXT = $PATH_TXT_FILES . "skiplist.txt";
+    perm $PATH_UNC_API_KEY_TXT = $PATH_SCRIPT_LOCATION . "unc_apikey.txt";
+    perm $PATH_URL_TXT = $PATH_TXT_FILES . "url.txt";
+    perm $PATH_SUB_ENG_WORDLIST_TXT = $PATH_TXT_FILES . "engSub.txt";
+    perm $PATH_SUB_SWE_WORDLIST_TXT = $PATH_TXT_FILES . "sweSub.txt";
+    perm $PATH_SUB_HI_WORDLIST_TXT = $PATH_TXT_FILES . "hiSub.txt";
+    perm $PATH_TV_SKIPLIST_TXT = $PATH_TXT_FILES . "skiplist.txt";
     perm $PATH_XYPLORER_HELP_SCRIPTING_TXT = $PATH_TXT_FILES . "scripthelp.txt";
 
     /*  Icons */
@@ -47,12 +47,12 @@
     perm $ICON_TV = $ICON_LOCATION . "tv_2.ico";
 
     /*  File extensions */
-	perm $VIDEO_FILE_EXTENSIONS = "mkv|avi|mp4|m4v";
-	perm $AUDIO_FILE_EXTENSIONS = "mp3|flac";
+    perm $VIDEO_FILE_EXTENSIONS = "mkv|avi|mp4|m4v";
+    perm $AUDIO_FILE_EXTENSIONS = "mp3|flac";
     perm $STRING_SUB_ENG_SUFFIX = ".en.srt";
     perm $STRING_SUB_SWE_SUFFIX = ".sv.srt";
 
-	perm $LINE_BREAK = <crlf>;
+    perm $LINE_BREAK = <crlf>;
     perm $NOT_USED = "";
     perm $NULL = "";
 
@@ -60,44 +60,48 @@
     perm $SUBTITLE_LANGUAGE_SWEDISH = 0;
     perm $SUBTITLE_LANGUAGE_ENGLISH = 1;
 
-	/* Standard function parameters	*/
-	perm $WRITEFILE_ON_EXIST_APPEND = "a";
-	perm $LISTFOLDER_PATTERN_ALL = "*";
-	perm $LISTFOLDER_NO_FILES = 2;
-	perm $LISTFOLDER_NO_PATHS = 4;
-	perm $STRPOS_NOT_FOUND = -1;
+    /* Standard function parameters	*/
+    perm $WRITEFILE_ON_EXIST_APPEND = "a";
+    perm $LISTFOLDER_PATTERN_ALL = "*";
+    perm $LISTFOLDER_NO_FILES = 2;
+    perm $LISTFOLDER_NO_PATHS = 4;
+    perm $STRPOS_NOT_FOUND = -1;
     perm $TAG_COMMENT = 2;
     perm $CONFIRM_YES_NO_BUTTONS = 4;
 
-	perm $ERROR_MESSAGE_PYTHON =  "Python script returned error!";
+    perm $ERROR_MESSAGE_PYTHON =  "Python script returned error!";
 
-	/* Status text colors	*/
-	perm $STATUS_COLOR_ORANGE = "FF4500";
-	perm $STATUS_COLOR_GREEN = "2E8B57";
-	perm $STATUS_COLOR_RED = "FF0000";
+    /* Status text colors	*/
+    perm $STATUS_COLOR_ORANGE = "FF4500";
+    perm $STATUS_COLOR_GREEN = "2E8B57";
+    perm $STATUS_COLOR_RED = "FF0000";
     perm $STATUS_COLOR_BLUE = "0000FF";
 
     /*  Regex */
     perm $REGEX_SUBTITLE_MKV_INFO_NUMBERS = "Track\snumber\:\s\d{1,2}";
     perm $REGEX_SUBTITLE_MKV_INFO_TYPES = "Track\stype\:\s.{1,10}";
 
-	perm $REGEX_SEASON_EPISODE = "s\d{2}e\d{2}";
-	perm $REGEX_TV_SEASON_RELEASE = "\.S\d{2}\.(720p|1080p)\.";
+    perm $REGEX_SEASON_EPISODE = "s\d{2}e\d{2}";
+    perm $REGEX_TV_SEASON_RELEASE = "\.S\d{2}\.(720p|1080p)\.";
 
-	perm $REGEX_MOVIE_PREFIX_THE = "^the\.";
-	perm $REGEX_MOVIE_PREFIX_A = "^a\.";
-	perm $REGEX_MOVIE_PREFIX_AN = "^an\.";
+    perm $REGEX_MOVIE_PREFIX_THE = "^the\.";
+    perm $REGEX_MOVIE_PREFIX_A = "^a\.";
+    perm $REGEX_MOVIE_PREFIX_AN = "^an\.";
     perm $REGEX_MOVIE_TITLE = ".+?(?=\d{4})";
 
-	perm $REGEX_DIGIT_1 = "\d{1}";
-	perm $REGEX_DIGIT_2 = "\d{2}";
-	perm $REGEX_DIGIT_4 = "\d{4}";
+    perm $REGEX_DIGIT_1 = "\d{1}";
+    perm $REGEX_DIGIT_2 = "\d{2}";
+    perm $REGEX_DIGIT_4 = "\d{4}";
 
-	perm $REGEX_STRING_IMDB_ID = "tt\d{1,}";
-	perm $REGEX_PATH_DS_TV = "^\\\\DS\\TV\\";
-	perm $REGEX_PATH_DS_MOVIE = "^\\\\DS\\FILM\\";
+    perm $REGEX_STRING_IMDB_ID = "tt\d{1,}";
+    perm $REGEX_STRING_URL = "http:\/\/";
+    perm $REGEX_STRING_URL_THETVDB = "http:\/\/thetvdb\.com\/";
+    perm $REGEX_STRING_URL_THETVDB_LANGUAGE_SUFFIX = "\&lid\=\d{1,3}";
+    perm $REGEX_PATH_DS_TV = "^\\\\DS\\TV\\";
+    perm $REGEX_PATH_DS_TV_MOUNTED = "T\:\\";
+    perm $REGEX_PATH_DS_MOVIE = "^\\\\DS\\FILM\\";
 
-	perm $REGEX_RELEASE_RESOLUTION = "(720p|1080p|2160p)";
-	perm $REGEX_RELEASE_SPECIAL = "(remastered|directors.cut|extended|unrated|dircut|\.dc\.|uncut)";
-	perm $REGEX_RELEASE_SCENE_SPECIAL = "(proper|repack|rerip|remux)";
-	perm $REGEX_RELEASE_SOURCE = "(bluray|hddvd|web.dl|web.rip|blu.ray|hdtv|hdts|webrip|dvdscr)";
+    perm $REGEX_RELEASE_RESOLUTION = "(720p|1080p|2160p)";
+    perm $REGEX_RELEASE_SPECIAL = "(remastered|directors.cut|extended|unrated|dircut|\.dc\.|uncut)";
+    perm $REGEX_RELEASE_SCENE_SPECIAL = "(proper|repack|rerip|remux)";
+    perm $REGEX_RELEASE_SOURCE = "(bluray|hddvd|web.dl|web.rip|blu.ray|hdtv|hdts|webrip|dvdscr)";

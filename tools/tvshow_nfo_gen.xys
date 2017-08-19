@@ -1,0 +1,4 @@
+    include_once "..\const\include.xys";
+    $path = SELECT_CurrentTabPath();
+
+    FILE_GenerateTvNfo($path, INPUT_TheTVDbUrl(gpc($path, "component", -1)));

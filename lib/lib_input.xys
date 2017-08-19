@@ -1,10 +1,18 @@
     include "..\const\include.xys";
 
-    function INPUT_Imdb($title) {
+    function INPUT_Imdb($title)
+    {
         $imdb = input("Enter IMDB-id / URL for: " . $title);
         return STRING_TrimImdb($imdb);
     }
 
-    function INPUT_YesNo($message){
+    function INPUT_TheTVDbUrl($tvShow)
+    {
+        $tvdburl = input("Enter TheTVDb URL for: " . $tvShow);
+        return $tvdburl; // Build check/fix/trim
+    }
+
+    function INPUT_YesNo($message)
+    {
         return confirm($message, $LINE_BREAK, 2, $CONFIRM_YES_NO_BUTTONS);
     }

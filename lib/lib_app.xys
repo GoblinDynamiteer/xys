@@ -1,63 +1,74 @@
-	perm $unrarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\unrar.exe";
-	perm $rarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\rar.exe";
-	perm $filezillaExe = "C:\Program Files (x86)\FileZilla FTP Client\filezilla.exe";
-	perm $szExe = "D:\Google Drive\Scriptstuff\xyplorer\app\7za.exe";
-	perm $szeExe = "C:\Program Files\7-Zip\7z.exe";
+    perm $unrarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\unrar.exe";
+    perm $rarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\rar.exe";
+    perm $filezillaExe = "C:\Program Files (x86)\FileZilla FTP Client\filezilla.exe";
+    perm $szExe = "D:\Google Drive\Scriptstuff\xyplorer\app\7za.exe";
+    perm $szeExe = "C:\Program Files\7-Zip\7z.exe";
     perm $subEditExe = "C:\Program Files\Subtitle Edit 3\SubtitleEdit.exe";
-	perm $mkvInfoExe = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvinfo.exe";
-	perm $mkvExtractExe = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvextract.exe";
+    perm $mkvInfoExe = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvinfo.exe";
+    perm $mkvExtractExe = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvextract.exe";
 
-	function APP_Unrar($source, $destination) {
-		//Creates desitination directory if doesnt exist
-		if(!exists($destination)){
-			new($destination, "dir");
-			wait 100;
-		}
-		status "Unraring: ". $source, 000000, progress;
-		//run command, [directory], [wait=0], [show=1]
-		run '"' . $unrarExe . '" x "' . $source . '" "' . $destination . '"', , 0, 2;
-	}
-
-	function APP_UnrarWait($source, $destination) {
-		//Creates desitination directory if doesnt exist
-		if(!exists($destination)){
-			new($destination, "dir");
-			wait 100;
-		}
-		status "Unraring: ". $source, 000000, progress;
-		//run command, [directory], [wait=0], [show=1]
-		run '"' . $unrarExe . '" x "' . $source . '" "' . $destination . '"', , 2, 2;
-	}
-
-	function APP_FileZilla($folder){
-		run '"' . $filezillaExe. '" --local="' . $folder . '" --site="0/whatbox/odyssey.whatbox.ca"';
-	}
-
-	/*	 Returns full path to created RAR	*/
-	function APP_Rar($filename, $source, $location, $switch){
-		run '"' . $rarExe . '" ' . $switch . ' "' . $location . $filename . '.rar" "' . $source . '"', , 1, 1;
-		return $location . $filename . ".rar";
-	}
-
-	function APP_SevenZip($filename, $source, $location, $switch){
-		run '"' . $szExe . '" ' . $switch . ' "' . $location . $filename . '.7z" "' . $source . '"', , 1, 1;
-		return $location . $filename . ".7z";
-	}
-
-	function APP_Extract($source, $destination){
-		//Creates desitination directory if doesnt exist
-		if(!exists($destination)){
-			new($destination, "dir");
-			wait 100;
-		}
-		status "Extracting: ". $source, 000000, progress;
-		//run command, [directory], [wait=0], [show=1]
-		run '"' . $szeExe . '" x "' . $source . '" -o"' . $destination . '"', , 0, 2;
-	}
-
-    function APP_ExtractWait($source, $destination){
+    function APP_Unrar($source, $destination)
+    {
         //Creates desitination directory if doesnt exist
-        if(!exists($destination)){
+        if(!exists($destination))
+        {
+            new($destination, "dir");
+            wait 100;
+        }
+        status "Unraring: ". $source, 000000, progress;
+        //run command, [directory], [wait=0], [show=1]
+        run '"' . $unrarExe . '" x "' . $source . '" "' . $destination . '"', , 0, 2;
+    }
+
+    function APP_UnrarWait($source, $destination)
+    {
+        //Creates desitination directory if doesnt exist
+        if(!exists($destination))
+        {
+            new($destination, "dir");
+            wait 100;
+        }
+        status "Unraring: ". $source, 000000, progress;
+        //run command, [directory], [wait=0], [show=1]
+        run '"' . $unrarExe . '" x "' . $source . '" "' . $destination . '"', , 2, 2;
+    }
+
+    function APP_FileZilla($folder)
+    {
+        run '"' . $filezillaExe. '" --local="' . $folder . '" --site="0/whatbox/odyssey.whatbox.ca"';
+    }
+
+    /*	 Returns full path to created RAR	*/
+    function APP_Rar($filename, $source, $location, $switch)
+    {
+        run '"' . $rarExe . '" ' . $switch . ' "' . $location . $filename . '.rar" "' . $source . '"', , 1, 1;
+        return $location . $filename . ".rar";
+    }
+
+    function APP_SevenZip($filename, $source, $location, $switch)
+    {
+        run '"' . $szExe . '" ' . $switch . ' "' . $location . $filename . '.7z" "' . $source . '"', , 1, 1;
+        return $location . $filename . ".7z";
+    }
+
+    function APP_Extract($source, $destination)
+    {
+        //Creates desitination directory if doesnt exist
+        if(!exists($destination))
+        {
+            new($destination, "dir");
+            wait 100;
+        }
+        status "Extracting: ". $source, 000000, progress;
+        //run command, [directory], [wait=0], [show=1]
+        run '"' . $szeExe . '" x "' . $source . '" -o"' . $destination . '"', , 0, 2;
+    }
+
+    function APP_ExtractWait($source, $destination)
+    {
+        //Creates desitination directory if doesnt exist
+        if(!exists($destination))
+        {
             new($destination, "dir");
             wait 100;
         }
@@ -66,22 +77,26 @@
         run '"' . $szeExe . '" x "' . $source . '" -o"' . $destination . '"', , 2, 2;
     }
 
-	function APP_ExtractSubtitle($source, $track_numbers){
-		$path = getpathcomponent($source, "path");
-		$base = getpathcomponent($source, "base");
-		$output_file = "";
-		foreach($track_number, $track_numbers){
-			$output_file = $track_number . ':"' . $path . '\' . $base . '_' . $track_number . '.srt" ' . $output_file;
-		}
+    function APP_ExtractSubtitle($source, $track_numbers)
+    {
+        $path = getpathcomponent($source, "path");
+        $base = getpathcomponent($source, "base");
+        $output_file = "";
+        foreach($track_number, $track_numbers)
+        {
+            $output_file = $track_number . ':"' . $path . '\' . $base . '_' . $track_number . '.srt" ' . $output_file;
+        }
 
-		status "Extracting SRT from ". $source, 000000, progress;
-		run '"' . $mkvExtractExe . '" tracks "' . $source . '" '. $output_file, , 1, 2;
-	}
+        status "Extracting SRT from ". $source, 000000, progress;
+        run '"' . $mkvExtractExe . '" tracks "' . $source . '" '. $output_file, , 1, 2;
+    }
 
-	function APP_MkvInfo($source){
-		return runret($mkvInfoExe . ' "' . $source . '"');
-	}
+    function APP_MkvInfo($source)
+    {
+        return runret($mkvInfoExe . ' "' . $source . '"');
+    }
 
-    function APP_Atom($path) {
+    function APP_Atom($path)
+    {
         run 'atom "' . $path . '"';
     }

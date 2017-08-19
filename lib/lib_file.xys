@@ -96,11 +96,36 @@
 	}
 
     /* Generates movie.nfo, used for Kodi / Plex  */
-    function FILE_GenerateMovieNfo($movie_path, $imdb){
-        if(!(CHECK_PathInMovie($movie_path))){
+    function FILE_GenerateMovieNfo($movie_path, $imdb)
+    {
+        if(!(CHECK_PathInMovie($movie_path)))
+        {
             return 0;
         }
         writefile($movie_path . "\movie.nfo", "http://www.imdb.com/title/" . $imdb);
+    }
+
+    /* Generates tvshow.nfo, used for Kodi / Plex  */
+    function FILE_GenerateTvNfo($tv_path, $thetvdburl)
+    {
+        if(!(CHECK_PathInTV($tv_path)))
+        {
+            msg "Path is not in TV!";
+            return 0;
+        }
+
+        $thetvdburl = STRING_FixTVDbURL($thetvdburl);
+
+        if($thetvdburl)
+        {
+            writefile($tv_path . "\tvshow.nfo", $thetvdburl);
+        }
+
+        else
+        {
+            msg "Could not write tvshow.nfo!";
+            return 0;
+        }
     }
 
     /*  List foldes in DS/TV */

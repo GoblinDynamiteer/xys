@@ -1,35 +1,47 @@
     include_once "..\const\include.xys";
 
     /*  Returns full path to selected folder */
-	function SELECT_FullPath(void){
+	function SELECT_FullPath(void)
+    {
 		$selection = get("SelectedItemsPathNames");
-		if(SELECT_CountItems($selection) == 1 && SELECT_IsFolder($selection)){
+		if(SELECT_CountItems($selection) == 1 && SELECT_IsFolder($selection))
+        {
 			return $selection;
 		}
 		return 0;
 	}
 
+    function SELECT_CurrentTabPath()
+    {
+        return get("path");
+    }
+
     /*  Returns full path to selected file */
-    function SELECT_FullPathFile(void){
+    function SELECT_FullPathFile(void)
+    {
         $selection = get("SelectedItemsPathNames");
-        if(SELECT_CountItems($selection) == 1 && !SELECT_IsFolder($selection)){
+        if(SELECT_CountItems($selection) == 1 && !SELECT_IsFolder($selection))
+        {
             return $selection;
         }
         return 0;
       }
 
     /*  Count selected items */
-	function SELECT_CountItems($items){
+	function SELECT_CountItems($items)
+    {
 	       return gettoken($items, "count", <crlf>);
 	}
 
 	/* Check if selection is a folder or file */
-	function SELECT_IsFolder($path){
+	function SELECT_IsFolder($path)
+    {
 		return (exists($path) == 2);
 	}
 
 	/* Returns name of folder, from full path */
-	function SELECT_FolderName(void){
+	function SELECT_FolderName(void)
+    {
 		$path = SELECT_FullPath();
         $retval = $path == 0 ? 0 : gettoken($path, -1, "\");
         return $retval;
