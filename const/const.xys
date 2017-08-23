@@ -83,6 +83,7 @@
 
     perm $REGEX_SEASON_EPISODE = "s\d{2}e\d{2}";
     perm $REGEX_TV_SEASON_RELEASE = "\.S\d{2}\.(720p|1080p)\.";
+    perm $REGEX_TV_NAME = ".+?(?=\.\S\d{2}\.)"; // Match until S##
 
     perm $REGEX_MOVIE_PREFIX_THE = "^the\.";
     perm $REGEX_MOVIE_PREFIX_A = "^a\.";

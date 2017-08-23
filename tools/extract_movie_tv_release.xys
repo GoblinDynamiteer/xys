@@ -6,11 +6,19 @@
     /* If selected folder is a tv-release */
     if(CHECK_IsTvRelease($folder_name))
     {
-        /* TODO: Determine extract tv-location */
+        /* Determine extract tv-location */
+        $tv_show_name_guess = STRING_TvNameFromRelease($folder_name);
+        $tv_show_season_guess = STRING_TvSeasonFromRelease($folder_name);
+        $extract_path_guess =
+            $PATH_DS_TV . $tv_show_name_guess . "\" . $tv_show_season_guess;
+
+        /* If path exists */
+        $extract_destination = exists($extract_path_guess) ? $extract_path_guess
+            : $PATH_DS_TV;
 
         /* Let user select destination */
         $destination = inputfolder(
-            $PATH_DS_TV, "Select destination!");
+            $extract_destination, "Select destination!");
 
         /* Move subs */
         /* Search for Subs, list only folders */
@@ -21,7 +29,6 @@
             moveas $folder_name, $PATH_DS_SUBTITLES, $folder;
         }
 
-        step;
         APP_Unrar($path, $destination);
         tag "Extracted: Delete Me!", $path, 2, 1;
         tag "Red", $path, 0, 0;

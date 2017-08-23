@@ -148,3 +148,17 @@
         $retval = $data ? $data : 0;
         return $retval;
     }
+
+    /* Tries to determine the TV-show name from release folder name */
+    function STRING_TvNameFromRelease($string)
+    {
+        $name = regexmatches($string, $REGEX_TV_NAME);
+        return replace($name, ".", " ");
+    }
+
+    /* Gest S## from release folder name */
+    function STRING_TvSeasonFromRelease($string)
+    {
+        $season = regexmatches($string, "S\d{2}");
+        return $season;
+    }
