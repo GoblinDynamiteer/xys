@@ -1,37 +1,71 @@
     include_once "..\const\include.xys";
 
     $path = SELECT_FullPath();
-    $name = SELECT_FolderName();
+    $folder_name = SELECT_FolderName();
 
-    if(CHECK_IsTvRelease($name)){
+    /* If selected folder is a tv-release */
+    if(CHECK_IsTvRelease($folder_name))
+    {
+        /* TODO: Determine extract tv-location */
+
+        /* Let user select destination */
         $destination = inputfolder(
             $PATH_DS_TV, "Select destination!");
+
+        /* Move subs */
+        /* Search for Subs, list only folders */
+        $sub_folders = quicksearch("Subs /d", $path);
+
+        foreach($folder, $sub_folders, $LINE_BREAK)
+        {
+            moveas $folder_name, $PATH_DS_SUBTITLES, $folder;
+        }
+
+        step;
         APP_Unrar($path, $destination);
         tag "Extracted: Delete Me!", $path, 2, 1;
         tag "Red", $path, 0, 0;
     }
 
-    else{
-        $letter = STRING_Moviefirst_letter($name);
-        $destination = $PATH_DS_MOVIE . $letter . "\" .  $name;
+    else // Movie release
+    {
+        /* Letter to extract release to */
+        $letter = STRING_Moviefirst_letter($folder_name);
+
+        /* Extract destination */
+        $destination = $PATH_DS_MOVIE . $letter . "\" .  $folder_name;
+
         $confirmation = "Extract "  . $LINE_BREAK .
-            $name . " to "  . $LINE_BREAK . $destination;
-        if(confirm($confirmation, , 2, 4)){
-            if(exists($path . "\Subs")){
-                moveas $name, $PATH_DS_SUBTITLES, $path . "\Subs";
+            $folder_name . " to "  . $LINE_BREAK . $destination;
+
+        /* If user confirms extract location */
+        if(confirm($confirmation, , 2, 4))
+        {
+            if(SUB_PathHasSubFolder($path))
+            {
+                moveas $folder_name, $PATH_DS_SUBTITLES, $path . "\Subs";
             }
+
+            /* Tag folder for deletion */
             tag "Extracted: Delete Me!", $path, 2, 1;
             tag "Red", $path, 0, 0;
+
+            /* Find rar-file */
             $rar_file = quicksearch("*.rar", $path, "|");
-            while(gettoken($rar_file, "count", "|") != 1){
+
+            while(gettoken($rar_file, "count", "|") != 1)
+            {
                 wait 100;
                 $rar_file = quicksearch("*.rar", $path, "|");
                 status "Waiting for subs move";
             }
+
             APP_Extract($rar_file, $destination);
             wait 100;
         }
-        else{
+
+        else // User cancels extraction
+        {
             status "Cancelled", $STATUS_COLOR_ORANGE, stop;
         }
     }

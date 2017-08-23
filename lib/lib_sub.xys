@@ -1,82 +1,90 @@
-  include_once "..\const\include.xys";
+    include_once "..\const\include.xys";
 
-  perm $ENGLISH = 1;
-  perm $SWEDISH = 0;
-  perm $SUB_WRONG_LANGUAGE = -1;
+    perm $ENGLISH = 1;
+    perm $SWEDISH = 0;
+    perm $SUB_WRONG_LANGUAGE = -1;
 
-  /* Subtitle functions for XYplorer-scripting  */
+    /* Subtitle functions for XYplorer-scripting  */
 
-  /* Checks if folder contains an english subtitle (extension en.srt)  */
-  function SUB_PathHasEnSub($path){
-    $files = FILE_ListFilesWithExtension($path, "en.srt");
-    if($files != ""){
-      return 1;
-    }
-    else{
-      return 0;
-    }
-  }
-
-  /* Checks if folder contains an english subtitle (extension sv.srt)  */
-  function SUB_PathHasSvSub($path){
-    $files = FILE_ListFilesWithExtension($path, "sv.srt");
-    if($files != ""){
-      return 1;
-    }
-    else {
-      return 0;
-    }
-  }
-
-  /*  Get "points" for subtitle, to determine if it is in english/swedish/HI */
-  function SUB_Points($srt_file, $language) {
-    $words = "";
-    $check_hi = 0;
-    $subtitle_text = readfile($srt_file);
-    $points = 0;
-
-    switch ($language) {
-      case "en":
-        $words = readfile($PATH_SUB_ENG_WORDLIST_TXT);
-        break;
-      case "sv":
-        $words = readfile($PATH_SUB_SWE_WORDLIST_TXT);
-        break;
-      case "hi": // Hearing impaired
-        $words = readfile($PATH_SUB_HI_WORDLIST_TXT);
-        $check_hi = 1;
-        break;
-      default:
-        echo "Wrong language!";
-        return $SUB_WRONG_LANGUAGE;
-    }
-
-    /*  Iterate trhough word in language text-files */
-    foreach($word, $words, <crlf>) {
-      /*  Check word matches in srt-file, with trailing and leading space */
-      if($check_hi){
-        $matches = regexmatches($subtitle_text, $word, "|");
-      }
-      else {
-        $matches = regexmatches($subtitle_text, "\s" . $word . "\s", "|");
-      }
-
-      /*  Points is equal to amount of word matches */
-      $points = $points + gettoken($matches, "count", "|");
-    }
-    return $points;
-  }
-
-  /* Determines language of srt subtitle  */
-  function SUB_DetermineLanguage($file){
-    $eng_points = SUB_Points($file, "en");
-    $swe_points = SUB_Points($file, "sv");
-
-    /* Return 1 if english sub, 0 if swedish  */
-    if($eng_points > $swe_points)
+    /* Checks if folder contains an english subtitle (extension en.srt)  */
+    function SUB_PathHasEnSub($path)
     {
-        return $SUBTITLE_LANGUAGE_ENGLISH;
+        $files = FILE_ListFilesWithExtension($path, "en.srt");
+        return ($files != "");
     }
 
-    return $SUBTITLE_LANGUAGE_SWEDISH;
-  }
+    /* Checks if folder contains subfolder 'Subs' */
+    function SUB_PathHasSubFolder($path)
+    {
+        return exists($path . "\Subs");
+    }
+
+    /* Checks if folder contains an english subtitle (extension sv.srt)  */
+    function SUB_PathHasSvSub($path)
+    {
+        $files = FILE_ListFilesWithExtension($path, "sv.srt");
+        return ($files != "");
+    }
+
+    /*  Get "points" for subtitle, to determine if it is in english/swedish/HI */
+    function SUB_Points($srt_file, $language) {
+        $words = "";
+        $check_hi = 0;
+        $subtitle_text = readfile($srt_file);
+        $points = 0;
+
+        switch ($language)
+        {
+            case "en":
+                $words = readfile($PATH_SUB_ENG_WORDLIST_TXT);
+                break;
+
+            case "sv":
+                $words = readfile($PATH_SUB_SWE_WORDLIST_TXT);
+                break;
+
+            case "hi": // Hearing impaired
+                $words = readfile($PATH_SUB_HI_WORDLIST_TXT);
+                $check_hi = 1;
+                break;
+
+            default:
+                echo "Wrong language!";
+                return $SUB_WRONG_LANGUAGE;
+        }
+
+        /*  Iterate trhough word in language text-files */
+        foreach($word, $words, <crlf>)
+        {
+            /*  Check word matches in srt-file, with trailing and leading space */
+            if($check_hi)
+            {
+                $matches = regexmatches($subtitle_text, $word, "|");
+            }
+
+            else
+            {
+                $matches = regexmatches(
+                    $subtitle_text, "\s" . $word . "\s", "|");
+            }
+
+            /*  Points is equal to amount of word matches */
+            $points = $points + gettoken($matches, "count", "|");
+        }
+        return $points;
+    }
+
+    /* Determines language of srt subtitle  */
+    function SUB_DetermineLanguage($file)
+    {
+        $eng_points = SUB_Points($file, "en");
+        $swe_points = SUB_Points($file, "sv");
+
+        /* Return 1 if english sub, 0 if swedish  */
+        if($eng_points > $swe_points)
+        {
+            return $SUBTITLE_LANGUAGE_ENGLISH;
+        }
+
+        return $SUBTITLE_LANGUAGE_SWEDISH;
+    }

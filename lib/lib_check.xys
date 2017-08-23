@@ -11,7 +11,7 @@
     function CHECK_PathInTV($path)
     {
         $retval = regexmatches($path, $REGEX_PATH_DS_TV) ||
-        regexmatches($path, $REGEX_PATH_DS_TV_MOUNTED) ? 1 : 0;
+            regexmatches($path, $REGEX_PATH_DS_TV_MOUNTED) ? 1 : 0;
         return $retval;
     }
 
