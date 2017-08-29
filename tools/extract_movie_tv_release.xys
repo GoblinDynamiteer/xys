@@ -52,6 +52,11 @@
         /* Letter to extract release to */
         $letter = STRING_Moviefirst_letter($folder_name);
 
+        /* Get IMDB-id from nfo-file, if available */
+        $nfo_file = FILE_ListFilesWithExtension($path, "nfo");
+        $nfo_content = readfile($nfo_file);
+        $imdb = STRING_TrimImdb($nfo_content);
+
         /* Extract destination */
         $destination = $PATH_DS_MOVIE . $letter . "\" .  $folder_name;
 
@@ -81,6 +86,12 @@
             }
 
             APP_Extract($rar_file, $destination);
+
+            /* Generate movie.nfo if imdb-id found */
+            if($imdb)
+            {
+                FILE_GenerateMovieNfo($destination, $imdb);
+            }
         }
 
         else // User cancels extraction
