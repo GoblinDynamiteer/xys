@@ -4,11 +4,18 @@
 	function SELECT_FullPath(void)
     {
 		$selection = get("SelectedItemsPathNames");
+
 		if(SELECT_CountItems($selection) == 1 && SELECT_IsFolder($selection))
         {
 			return $selection;
 		}
-		return 0;
+
+        elseif (SELECT_CountItems($selection) > 1)
+        {
+            msg $ERROR_SELECT_MORE_THAN_ONE;
+        }
+
+		return 0; // Error
 	}
 
     function SELECT_CurrentTabPath()
@@ -20,11 +27,18 @@
     function SELECT_FullPathFile(void)
     {
         $selection = get("SelectedItemsPathNames");
+
         if(SELECT_CountItems($selection) == 1 && !SELECT_IsFolder($selection))
         {
             return $selection;
         }
-        return 0;
+
+        elseif (SELECT_CountItems($selection) > 1)
+        {
+            msg $ERROR_SELECT_MORE_THAN_ONE;
+        }
+
+        return 0; // Error
       }
 
     /*  Count selected items */

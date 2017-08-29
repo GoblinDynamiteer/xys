@@ -70,6 +70,7 @@
     perm $CONFIRM_YES_NO_BUTTONS = 4;
 
     perm $ERROR_MESSAGE_PYTHON =  "Python script returned error!";
+    perm $ERROR_SELECT_MORE_THAN_ONE = "More than one item selected!";
 
     /* Status text colors	*/
     perm $STATUS_COLOR_ORANGE = "FF4500";

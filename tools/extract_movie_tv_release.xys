@@ -1,9 +1,15 @@
     include_once "..\const\include.xys";
 
     $path = SELECT_FullPath();
+
+    if(!$path) // Error
+    {
+        end 1;
+    }
+
     $folder_name = SELECT_FolderName();
 
-    /* If selected folder is a tv-release */
+    /* If selected folder is a tv-release (full season or single episode) */
     if(CHECK_IsTvRelease($folder_name) ||
         CHECK_IsTvEpisodeRelease($folder_name))
     {
@@ -14,23 +20,29 @@
             $PATH_DS_TV . $tv_show_name_guess . "\" . $tv_show_season_guess;
 
         /* If path exists */
-        $extract_destination = exists($extract_path_guess) ? $extract_path_guess
-            : $PATH_DS_TV;
+        $extract_destination = exists($extract_path_guess) ?
+            $extract_path_guess : $PATH_DS_TV;
 
         /* Let user select destination */
         $destination = inputfolder(
             $extract_destination, "Select destination!");
 
         /* Move subs */
-        /* Search for Subs, list only folders */
+        /* Search for Subs, list only folders ( /d )*/
         $sub_folders = quicksearch("Subs /d", $path);
 
-        foreach($folder, $sub_folders, $LINE_BREAK)
+        /* Subs are found */
+        if($sub_folders)
         {
-            moveas $folder_name, $PATH_DS_SUBTITLES, $folder;
+            foreach($folder, $sub_folders, $LINE_BREAK)
+            {
+                moveas $folder_name, $PATH_DS_SUBTITLES, $folder;
+            }
         }
 
         APP_Unrar($path, $destination);
+
+        /* Comment and color tag folder */
         tag "Extracted: Delete Me!", $path, 2, 1;
         tag "Red", $path, 0, 0;
     }
@@ -54,7 +66,7 @@
                 moveas $folder_name, $PATH_DS_SUBTITLES, $path . "\Subs";
             }
 
-            /* Tag folder for deletion */
+            /* Comment and color tag folder */
             tag "Extracted: Delete Me!", $path, 2, 1;
             tag "Red", $path, 0, 0;
 
@@ -69,7 +81,6 @@
             }
 
             APP_Extract($rar_file, $destination);
-            wait 100;
         }
 
         else // User cancels extraction
