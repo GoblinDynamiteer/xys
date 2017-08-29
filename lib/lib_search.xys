@@ -1,8 +1,18 @@
     include_once "..\const\include.xys";
 
+    /* Searches OMDB movie name and year. Python script */
     function SEARCH_OmdbMovie($title, $year)
     {
         $data = runret('python omdb_search.py "' . $title . '" "'. $year .'"',
+            $PATH_PYTHON_SCRIPTS);
+
+        $retval = PYT_CheckError($data) ? 0 : STRING_RemoveCrlf($data);
+        return $retval;
+    }
+
+    /* Searches OMDB using IMDB-id. Python script */
+    function SEARCH_OmdbMovieIMDB($imdb) {
+        $data = runret('python omdb_search_imdbid.py "' . $imdb . '"',
             $PATH_PYTHON_SCRIPTS);
 
         $retval = PYT_CheckError($data) ? 0 : STRING_RemoveCrlf($data);

@@ -1,50 +1,97 @@
     include_once "..\const\include.xys";
 
-	$movie_letters = listfolder($PATH_DS_MOVIE, $LISTFOLDER_PATTERN_ALL,
+    /* Get movie letters/subfolders */
+    $movie_letters = listfolder($PATH_DS_MOVIE, $LISTFOLDER_PATTERN_ALL,
         $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS);
-	$flag_backup_db = 0;
 
-	foreach($letter, $movie_letters){
-		$movies = listfolder($PATH_DS_MOVIE . $letter, $LISTFOLDER_PATTERN_ALL,
-            $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS);
-		$movies_database = DB_MOVIE_LIST_Read($letter);
-		status "Checking for new movies in: " . $letter;
-		if($movies != $movies_database){
-			$flag_backup_db = 1;
-			wait 1;
-			foreach($movie, $movies){
-				if(strpos($movies_database , $movie) == $STRPOS_NOT_FOUND){
-					status "Found new movie: " . $movie;
+    $flag_backup_db = 0; // Backup datase files flag
+    $flag_generate_nfo = 1;
 
-                    /*  Search OMDb for movie */
-                    $search_data = SEARCH_OmdbMovie(
+    /* Iterate trough movie letters/subfolders */
+    foreach($letter, $movie_letters)
+    {
+        /* List movie folders in letter/subfolder */
+        $movies_in_folder = listfolder(
+            $PATH_DS_MOVIE . $letter,
+            $LISTFOLDER_PATTERN_ALL,
+            $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS
+        );
+
+        /* Current movies in database for letter/subfolder */
+        $movies_in_database = DB_MOVIE_LIST_Read($letter);
+
+        status "Checking for new movies in: " . $letter;
+
+        /*  New movie folders exist */
+        if($movies_in_folder != $movies_in_database)
+        {
+            $flag_backup_db = 1;
+            wait 1;
+
+            /* Iterate through found movie folders */
+            foreach($movie, $movies_in_folder)
+            {
+                if(strpos($movies_in_database, $movie) == $STRPOS_NOT_FOUND)
+                {
+                    status "Found new movie: " . $movie;
+
+                    /* Path to movie folder */
+                    $full_path = $PATH_DS_MOVIE . $letter . "\" . $movie;
+
+                    /* movie.nfo exists, contains imdb-id */
+                    if(exists($full_path .  "\movie.nfo"))
+                    {
+                        $imdb_from_nfo = STRING_TrimImdb(
+                            readfile($full_path . "\movie.nfo")
+                        );
+
+                        /* Use IMDB-id for OMDB-search */
+                        $search_data = SEARCH_OmdbMovieIMDB($imdb_from_nfo);
+                        $flag_generate_nfo = 0;
+                    }
+
+                    /* movie.nfo doesn't exist */
+                    else
+                    {
+                        /* Use title and year for OMDB-search */
+                        $search_data = SEARCH_OmdbMovie(
                             STRING_MovieTitle($movie),
                             STRING_MovieYear($movie)
                         );
 
+                        FILE_GenerateMovieNfo($full_path, $imdb_id);
+                    }
+
+                    /* Ask user if movie found on OMDB is correct */
                     $imdb_id = INPUT_YesNo(
                         "Correct data for: " . $movie . "?" . $LINE_BREAK .
                         replace($search_data, "|", $LINE_BREAK)) ?
                             LIST_GetLastItem($search_data) :
                             INPUT_Imdb($movie);
 
-                    FILE_GenerateMovieNfo($PATH_DS_MOVIE . $letter . "\" .
-                        $movie, $imdb_id);
-					DB_MOVIE_Write($movie, "imdb", $imdb_id);
-					status "Data set for: " . $movie;
+                    /* Add new movie to database */
+                    DB_MOVIE_Write($movie, "imdb", $imdb_id);
+
+                    status "Data set for: " . $movie;
+
                     DB_MOVIE_UpdateMovieInfo($movie);
-					FILE_NEW_Movie($movie);
-				}
-			}
-			DB_MOVIE_LIST_Update($letter);
-		}
-		wait 1;
-	}
+                    FILE_NEW_Movie($movie);
+                }
+            }
 
-	if($flag_backup_db){
-		FILE_BACKUP_Db();
-	}
+            DB_MOVIE_LIST_Update($letter);
 
-	status "Done!";
-	releaseglobals 3;
-	end 1;
+        }
+
+        wait 1;
+    }
+
+    if($flag_backup_db)
+    {
+        FILE_BACKUP_Db();
+    }
+
+    status "Done!";
+
+    releaseglobals 3;
+    end 1;
