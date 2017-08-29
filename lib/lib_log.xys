@@ -1,6 +1,7 @@
     include_once "..\const\include.xys";
 
-    function LOG_NewTV($show, $episode){
+    function LOG_NewTV($show, $episode)
+    {
         writefile(
             $PATH_LOG_TXT,
             now("yyyy-mm-dd hh:nn") . " New Episode: " .
@@ -9,7 +10,8 @@
         );
     }
 
-    function LOG_NewMovie($movie){
+    function LOG_NewMovie($movie)
+    {
         writefile(
             $PATH_LOG_TXT,
             now("yyyy-mm-dd hh:nn") . " New Movie: " . $movie . $LINE_BREAK,
@@ -17,7 +19,8 @@
         );
     }
 
-    function LOG_Backup($item){
+    function LOG_Backup($item)
+    {
         writefile(
             $PATH_LOG_TXT,
             now("yyyy-mm-dd hh:nn") . " Backup: " . $item . $LINE_BREAK,

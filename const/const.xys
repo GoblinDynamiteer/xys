@@ -69,8 +69,11 @@
     perm $TAG_COMMENT = 2;
     perm $CONFIRM_YES_NO_BUTTONS = 4;
 
+    perm $FUNCTION_RETURN_ERROR = 0;
     perm $ERROR_MESSAGE_PYTHON =  "Python script returned error!";
     perm $ERROR_SELECT_MORE_THAN_ONE = "More than one item selected!";
+    perm $ERROR_PATH_NOT_DS_TV = "Path is not in DS/TV!";
+    perm $ERROR_FILE_WRITE_TVSHOW_NFO = "Could not write tvshow.nfo!";
 
     /* Status text colors	*/
     perm $STATUS_COLOR_ORANGE = "FF4500";

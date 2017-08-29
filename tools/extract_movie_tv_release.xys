@@ -2,7 +2,7 @@
 
     $path = SELECT_FullPath();
 
-    if(!$path) // Error
+    if($path == $FUNCTION_RETURN_ERROR)
     {
         end 1;
     }

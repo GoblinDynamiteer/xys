@@ -1,106 +1,136 @@
     include_once "..\const\include.xys";
 
-	//Moves new.txt to ds/info and backups .db files
-	function FILE_BACKUP_Db(void){
-		$now = now("yyyy-mm-dd-hh-nn");
-		$backup_folder = new($PATH_SCRIPT_LOCATION ."MediaDb\bak\" . $now, "dir");
-		backupto $PATH_DS_INFO, $PATH_NEW_TXT;
-		backupto $PATH_DS_INFO, $PATH_MISSING_EPISODES_TXT;
-		backupto $backup_folder, $PATH_NEW_TXT;
-		backupto $backup_folder, $PATH_MISSING_EPISODES_TXT;
-        backupto $backup_folder, $PATH_LOG_TXT;
-		$db_files = listfolder($PATH_DB_LOCATION, "*.db", 1);
-		copyto $backup_folder , $db_files;
-	}
+    //Moves new.txt to ds/info and backups .db files
+    function FILE_BACKUP_Db(void)
+    {
+        $now = now("yyyy-mm-dd-hh-nn");
+        $backup_folder = new($PATH_SCRIPT_LOCATION ."MediaDb\bak\" . $now, "dir");
 
-    function FILE_ListFilesWithExtension($folder, $extension){
+        backupto $PATH_DS_INFO, $PATH_NEW_TXT;
+        backupto $PATH_DS_INFO, $PATH_MISSING_EPISODES_TXT;
+        backupto $backup_folder, $PATH_NEW_TXT;
+        backupto $backup_folder, $PATH_MISSING_EPISODES_TXT;
+        backupto $backup_folder, $PATH_LOG_TXT;
+
+        $db_files = listfolder($PATH_DB_LOCATION, "*.db", 1);
+
+        copyto $backup_folder , $db_files;
+    }
+
+    function FILE_ListFilesWithExtension($folder, $extension)
+    {
         return quicksearch("*" . $extension, $folder, |);
     }
 
-	//Returns list of video files in path, in subfolders
-	function FILE_ListVideoFiles($path){
-		$list =  "";
-		foreach($ext, $VIDEO_FILE_EXTENSIONS, "|"){
-			$list = $list . FILE_ListFilesWithExtension($path, $ext);
-		}
-		$data = replace($list, $path . "\");
-		return $data;
-	}
+    //Returns list of video files in path, in subfolders
+    function FILE_ListVideoFiles($path)
+    {
+        $list =  "";
 
-	function FILE_TV_ListSeasons($path){
+        foreach($ext, $VIDEO_FILE_EXTENSIONS, "|")
+        {
+            $list = $list . FILE_ListFilesWithExtension($path, $ext);
+        }
+
+        $data = replace($list, $path . "\");
+        return $data;
+    }
+
+    function FILE_TV_ListSeasons($path)
+    {
         $data = listfolder($path, $LISTFOLDER_PATTERN_ALL,
             $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS);
-	    return $data;
-	}
 
-	function FILE_TV_GetLastSeason($path){
-		$data = FILE_TV_ListSeasons($path);
-		$data = LIST_GetLastItem($data);
-		return $data;
-	}
+        return $data;
+    }
 
-	//Finds and returns the last episode
-	function FILE_TV_LastLocalEpisode($path){
-		status "Getting episode file list", "0000FF", "progress";
-		$seasonFolders = FILE_TV_ListSeasons($path);
-		$seasonFolders = LIST_Sort($seasonFolders);
-		$lastSeason = LIST_GetLastItem($seasonFolders);
-		$files = FILE_ListVideoFiles($path . "\" . $lastSeason);
-		$episodes = STRING_FilterSE($files);
-		$episodes = LIST_Sort($episodes);
-		return recase(LIST_GetLastItem($episodes), "upper");
-	}
+    function FILE_TV_GetLastSeason($path)
+    {
+        $data = FILE_TV_ListSeasons($path);
+        $data = LIST_GetLastItem($data);
+        return $data;
+    }
 
-	//Adds newly added tv-shows to textfile
-	function FILE_NEW_Episode($episode, $tv_show){
-		$today = now("yyyy-mm-dd");
-		$maze_id = DB_TV_Read($tv_show, "tvmaze");
-		//American Dad has other season ordering on TVMaze, than releases
-		if($tv_show == "American Dad"){
-			$episode = replace($episode, "S14E", "S13E");
-		}
+    //Finds and returns the last episode
+    function FILE_TV_LastLocalEpisode($path)
+    {
+        status "Getting episode file list", "0000FF", "progress";
 
-		$title = PYT_MAZE_ReadEpisode($maze_id, "name", $episode);
-		$airdate = PYT_MAZE_ReadEpisode($maze_id, "airdate", $episode);
-		$string = "[ " . $today . " ] [ TV ] [ " . $tv_show . " ] [ " .
-            $episode . " : " . $title . " ] [ Airdate: " . $airdate . " ]";
-		writefile($PATH_NEW_TXT, $string . $LINE_BREAK,
+        $seasonFolders = FILE_TV_ListSeasons($path);
+        $seasonFolders = LIST_Sort($seasonFolders);
+        $lastSeason = LIST_GetLastItem($seasonFolders);
+        $files = FILE_ListVideoFiles($path . "\" . $lastSeason);
+        $episodes = STRING_FilterSE($files);
+        $episodes = LIST_Sort($episodes);
+
+        return recase(LIST_GetLastItem($episodes), "upper");
+    }
+
+    //Adds newly added tv-shows to textfile
+    function FILE_NEW_Episode($episode, $tv_show)
+    {
+        $today = now("yyyy-mm-dd");
+        $maze_id = DB_TV_Read($tv_show, "tvmaze");
+
+        //American Dad has other season ordering on TVMaze, than releases
+        if($tv_show == "American Dad")
+        {
+            $episode = replace($episode, "S14E", "S13E");
+        }
+
+        $title = PYT_MAZE_ReadEpisode($maze_id, "name", $episode);
+        $airdate = PYT_MAZE_ReadEpisode($maze_id, "airdate", $episode);
+        $string = "[ " . $today . " ] [ TV ] [ " . $tv_show . " ] [ " .
+        $episode . " : " . $title . " ] [ Airdate: " . $airdate . " ]";
+
+        writefile($PATH_NEW_TXT, $string . $LINE_BREAK,
             $WRITEFILE_ON_EXIST_APPEND);
+
         LOG_NewTV($tv_show, $episode);
-		wait 100;
-		}
-	}
 
-	//Adds newly added movies to textfile
-	function FILE_NEW_Movie($section){
-		$today = now("yyyy-mm-dd");
-		$title = PYT_Title($section);
-		$year = PYT_Year($section);
-		$res = STRING_MovieResolution($section);
-		$spec = STRING_MovieSpecial($section);
-		$sc = STRING_MovieSceneSpecial($section);
-		$source = STRING_MovieSource($section);
-		$string = "[ " . $today . " ] [ MOVIE ] [ " . $title . " ] [ " .
-            $year  . " ] [ " . $source . " " . $res . " ] ";
-		if($spec){
-			$string = $string . " [ " . $spec . " ] ";
-		}
-		if($sc){
-			$string = $string . " [ " . $sc . " ] ";
-		}
-		$string = replace($string, "  ", " ");
-		writefile($PATH_NEW_TXT, $string . $LINE_BREAK,
+        wait 100;
+    }
+
+    //Adds newly added movies to textfile
+    function FILE_NEW_Movie($section)
+    {
+        $today = now("yyyy-mm-dd");
+        $title = PYT_Title($section);
+        $year = PYT_Year($section);
+        $res = STRING_MovieResolution($section);
+        $spec = STRING_MovieSpecial($section);
+        $sc = STRING_MovieSceneSpecial($section);
+        $source = STRING_MovieSource($section);
+
+        $string = "[ " . $today . " ] [ MOVIE ] [ " . $title . " ] [ " .
+        $year  . " ] [ " . $source . " " . $res . " ] ";
+
+        if($spec)
+        {
+            $string = $string . " [ " . $spec . " ] ";
+        }
+
+        if($sc)
+        {
+            $string = $string . " [ " . $sc . " ] ";
+        }
+
+        $string = replace($string, "  ", " ");
+
+        writefile($PATH_NEW_TXT, $string . $LINE_BREAK,
             $WRITEFILE_ON_EXIST_APPEND);
+
         LOG_NewMovie($section);
-		wait 100;
-	}
+
+        wait 100;
+    }
 
     /* Generates movie.nfo, used for Kodi / Plex  */
     function FILE_GenerateMovieNfo($movie_path, $imdb)
     {
         if(!(CHECK_PathInMovie($movie_path)))
         {
-            return 0;
+            return $FUNCTION_RETURN_ERROR;
         }
         writefile($movie_path . "\movie.nfo", "http://www.imdb.com/title/" . $imdb);
     }
@@ -110,8 +140,8 @@
     {
         if(!(CHECK_PathInTV($tv_path)))
         {
-            msg "Path is not in TV!";
-            return 0;
+            msg $ERROR_PATH_NOT_DS_TV;
+            return $FUNCTION_RETURN_ERROR;
         }
 
         $thetvdburl = STRING_FixTVDbURL($thetvdburl);
@@ -123,53 +153,65 @@
 
         else
         {
-            msg "Could not write tvshow.nfo!";
-            return 0;
+            msg $ERROR_FILE_WRITE_TVSHOW_NFO;
+            return $FUNCTION_RETURN_ERROR;
         }
     }
 
     /*  List foldes in DS/TV */
-    function FILE_ListTvFolders(void){
+    function FILE_ListTvFolders(void)
+    {
         $data = listfolder($PATH_DS_TV, $LISTFOLDER_PATTERN_ALL,
             $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS);
+
         return $data;
     }
 
     /*  List folders and subfolders in DS/Movie */
-    function FILE_ListMovieFolders(void){
+    function FILE_ListMovieFolders(void)
+    {
         $letters = listfolder($PATH_DS_MOVIE, $LISTFOLDER_PATTERN_ALL,
-        $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS);
+            $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS);
+
         $list = "";
-        foreach($letter, $letters, "|"){
+
+        foreach($letter, $letters, "|")
+        {
             $list = $list . "|" . listfolder($PATH_DS_MOVIE . $letter);
         }
+
         return $list;
     }
 
     /*  Checks if TV-show is new (not in database) */
-    function FILE_TV_IsNew($tv_show){
+    function FILE_TV_IsNew($tv_show)
+    {
         $retval = getsectionlist($tv_show, $PATH_DB_TV) ? 0 : 1;
         return $retval;
     }
 
     /*  Returns list of new (not in database) episodes in TV-show folder
-        return 0 no new. */
+    return 0 no new. */
     function FILE_TV_NewEps($tv_show){
+
         $retval = 0;
 
-    	$episodes_in_database = DB_EPISODE_Read($tv_show, "files");
-    	$episodes_local = FILE_ListVideoFiles($PATH_DS_TV . $tv_show);
-    	$episodes_local = LIST_FilterEpisodes($episodes_local);
+        $episodes_in_database = DB_EPISODE_Read($tv_show, "files");
+        $episodes_local = FILE_ListVideoFiles($PATH_DS_TV . $tv_show);
+        $episodes_local = LIST_FilterEpisodes($episodes_local);
 
-        if($episodes_local != $episodes_in_database){
+        if($episodes_local != $episodes_in_database)
+        {
             $retval = "";
-    		foreach($episode, $episodes_local, "|"){
-    			if(strpos($episodes_in_database, $episode) == $STRPOS_NOT_FOUND){
-    				$retval = $retval . $episode . "|";
-    			}
-    		}
+            foreach($episode, $episodes_local, "|")
+            {
+                if(strpos($episodes_in_database, $episode) == $STRPOS_NOT_FOUND)
+                {
+                    $retval = $retval . $episode . "|";
+                }
+            }
             $retval = LIST_Sort($retval);
-    	}
+        }
 
         return $retval;
     }
