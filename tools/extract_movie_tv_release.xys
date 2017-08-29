@@ -4,7 +4,8 @@
     $folder_name = SELECT_FolderName();
 
     /* If selected folder is a tv-release */
-    if(CHECK_IsTvRelease($folder_name))
+    if(CHECK_IsTvRelease($folder_name) ||
+        CHECK_IsTvEpisodeRelease($folder_name))
     {
         /* Determine extract tv-location */
         $tv_show_name_guess = STRING_TvNameFromRelease($folder_name);

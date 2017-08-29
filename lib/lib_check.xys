@@ -7,6 +7,13 @@
         return $retval;
     }
 
+    /*	 Check if folder is a TV Episode release */
+    function CHECK_IsTvEpisodeRelease($folder)
+    {
+        $retval = regexmatches($folder, $REGEX_TV_EPISODE_RELEASE) ? 1 : 0;
+        return $retval;
+    }
+
     /*  Check if folder path is in DS/TV directory */
     function CHECK_PathInTV($path)
     {

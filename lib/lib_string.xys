@@ -153,6 +153,12 @@
     function STRING_TvNameFromRelease($string)
     {
         $name = regexmatches($string, $REGEX_TV_NAME);
+
+        if(!$name)
+        {
+            $name = regexmatches($string, $REGEX_TV_NAME_EPISODE);
+        }
+
         return replace($name, ".", " ");
     }
 
