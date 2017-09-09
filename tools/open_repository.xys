@@ -1,0 +1,4 @@
+    include_once "..\const\include.xys";
+    $path = SELECT_CurrentTabPath();
+
+    APP_GitKraken($path);

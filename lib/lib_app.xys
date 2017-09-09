@@ -1,11 +1,12 @@
-    perm $unrarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\unrar.exe";
-    perm $rarExe = "D:\Google Drive\Scriptstuff\xyplorer\app\rar.exe";
-    perm $filezillaExe = "C:\Program Files (x86)\FileZilla FTP Client\filezilla.exe";
-    perm $szExe = "D:\Google Drive\Scriptstuff\xyplorer\app\7za.exe";
-    perm $szeExe = "C:\Program Files\7-Zip\7z.exe";
-    perm $subEditExe = "C:\Program Files\Subtitle Edit 3\SubtitleEdit.exe";
-    perm $mkvInfoExe = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvinfo.exe";
-    perm $mkvExtractExe = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvextract.exe";
+    perm $exe_path_unrar = "D:\Google Drive\Scriptstuff\xyplorer\app\unrar.exe";
+    perm $exe_path_rar = "D:\Google Drive\Scriptstuff\xyplorer\app\rar.exe";
+    perm $exe_path_filezilla = "C:\Program Files (x86)\FileZilla FTP Client\filezilla.exe";
+    perm $exe_path_7zipa = "D:\Google Drive\Scriptstuff\xyplorer\app\7za.exe";
+    perm $exe_path_7zip = "C:\Program Files\7-Zip\7z.exe";
+    perm $exe_path_subtitleedit = "C:\Program Files\Subtitle Edit 3\SubtitleEdit.exe";
+    perm $exe_path_mkvinfo = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvinfo.exe";
+    perm $exe_path_mkvextract = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvextract.exe";
+    perm $exe_path_gitkraken = "C:\Users\kampe_000\AppData\Local\gitkraken\app-3.0.0\gitkraken.exe";
 
     function APP_Unrar($source, $destination)
     {
@@ -17,7 +18,7 @@
         }
         status "Unraring: ". $source, 000000, progress;
         //run command, [directory], [wait=0], [show=1]
-        run '"' . $unrarExe . '" x "' . $source . '" "' . $destination . '"', , 0, 2;
+        run '"' . $exe_path_unrar . '" x "' . $source . '" "' . $destination . '"', , 0, 2;
     }
 
     function APP_UnrarWait($source, $destination)
@@ -30,24 +31,24 @@
         }
         status "Unraring: ". $source, 000000, progress;
         //run command, [directory], [wait=0], [show=1]
-        run '"' . $unrarExe . '" x "' . $source . '" "' . $destination . '"', , 2, 2;
+        run '"' . $exe_path_unrar . '" x "' . $source . '" "' . $destination . '"', , 2, 2;
     }
 
     function APP_FileZilla($folder)
     {
-        run '"' . $filezillaExe. '" --local="' . $folder . '" --site="0/whatbox/odyssey.whatbox.ca"';
+        run '"' . $exe_path_filezilla. '" --local="' . $folder . '" --site="0/whatbox/odyssey.whatbox.ca"';
     }
 
     /*	 Returns full path to created RAR	*/
     function APP_Rar($filename, $source, $location, $switch)
     {
-        run '"' . $rarExe . '" ' . $switch . ' "' . $location . $filename . '.rar" "' . $source . '"', , 1, 1;
+        run '"' . $exe_path_rar . '" ' . $switch . ' "' . $location . $filename . '.rar" "' . $source . '"', , 1, 1;
         return $location . $filename . ".rar";
     }
 
     function APP_SevenZip($filename, $source, $location, $switch)
     {
-        run '"' . $szExe . '" ' . $switch . ' "' . $location . $filename . '.7z" "' . $source . '"', , 1, 1;
+        run '"' . $exe_path_7zipa . '" ' . $switch . ' "' . $location . $filename . '.7z" "' . $source . '"', , 1, 1;
         return $location . $filename . ".7z";
     }
 
@@ -61,22 +62,22 @@
         }
         status "Extracting: ". $source, 000000, progress;
         //run command, [directory], [wait=0], [show=1]
-        run '"' . $szeExe . '" x "' . $source . '" -o"' . $destination . '"', , 0, 2;
+        run '"' . $exe_path_7zip . '" x "' . $source . '" -o"' . $destination . '"', , 0, 2;
     }
 
     function APP_ExtractWait($source, $destination)
     {
-        //Creates desitination directory if doesnt exist
+        /* Create directory if does not exist */
         if(!exists($destination))
         {
             new($destination, "dir");
             wait 100;
         }
         status "Extracting: ". $source, 000000, progress;
-        //run command, [directory], [wait=0], [show=1]
-        run '"' . $szeExe . '" x "' . $source . '" -o"' . $destination . '"', , 2, 2;
+        run '"' . $exe_path_7zip . '" x "' . $source . '" -o"' . $destination . '"', , 2, 2;
     }
 
+    /* Extract subtitles with MKVExtract */
     function APP_ExtractSubtitle($source, $track_numbers)
     {
         $path = getpathcomponent($source, "path");
@@ -88,15 +89,23 @@
         }
 
         status "Extracting SRT from ". $source, 000000, progress;
-        run '"' . $mkvExtractExe . '" tracks "' . $source . '" '. $output_file, , 1, 2;
+        run '"' . $exe_path_mkvextract . '" tracks "' . $source . '" '. $output_file, , 1, 2;
     }
 
+    /* Open file in MKVinfo */
     function APP_MkvInfo($source)
     {
-        return runret($mkvInfoExe . ' "' . $source . '"');
+        return runret($exe_path_mkvinfo . ' "' . $source . '"');
     }
 
+    /* Open file or folder in Atom */
     function APP_Atom($path)
     {
         run 'atom "' . $path . '"';
+    }
+
+    /* Open repository path in GitKraken */
+    function APP_GitKraken($repository_path)
+    {
+        run '"'. $exe_path_gitkraken .'" -p "' . $repository_path . '"';
     }
