@@ -47,6 +47,13 @@
     function CHECK_IsTheTVDbURL($string)
     {
         $retval = regexmatches($string, $REGEX_STRING_URL_THETVDB) ? 1 : 0;
+
+        if(!$retval)
+        {
+            $retval = regexmatches($string, $REGEX_STRING_URL_THETVDB_WWW) ?
+                1 : 0;
+        }
+
         return $retval;
     }
 

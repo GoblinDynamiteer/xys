@@ -103,6 +103,7 @@
     perm $REGEX_STRING_IMDB_ID = "tt\d{1,}";
     perm $REGEX_STRING_URL = "http:\/\/";
     perm $REGEX_STRING_URL_THETVDB = "http:\/\/thetvdb\.com\/";
+    perm $REGEX_STRING_URL_THETVDB_WWW = "https:\/\/www.thetvdb\.com\/";
     perm $REGEX_STRING_URL_THETVDB_LANGUAGE_SUFFIX = "\&lid\=\d{1,3}";
     perm $REGEX_PATH_DS_TV = "^\\\\DS\\TV\\";
     perm $REGEX_PATH_DS_TV_MOUNTED = "T\:\\";
