@@ -1,0 +1,5 @@
+
+    $arduino_ide_exe = "C:\Program Files (x86)\Arduino\arduino_debug.exe";
+    $ino_file =  get("SelectedItemsPathNames");
+
+    run '"' . $arduino_ide_exe . '" "' . $ino_file . '" --upload -v', , 0, 2;
