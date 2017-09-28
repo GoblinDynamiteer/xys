@@ -45,6 +45,7 @@
     perm $ICON_LOCATION = "D:\Google Drive\Misc\icons\";
     perm $ICON_ATOM = $ICON_LOCATION . "atom.ico";
     perm $ICON_TV = $ICON_LOCATION . "tv_2.ico";
+    perm $ICON_KRAKEN = $ICON_LOCATION . "git.ico";
 
     /*  File extensions */
     perm $VIDEO_FILE_EXTENSIONS = "mkv|avi|mp4|m4v";
