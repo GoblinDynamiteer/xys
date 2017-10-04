@@ -1,0 +1,37 @@
+    /* Puts episodes into season subfolders */
+
+    $old_copier = copier("");
+    copier("");
+
+    $qs_query = "*.mkv OR *.mp4 OR *.srt";
+
+    include_once "..\const\include.xys";
+    $path = SELECT_CurrentTabPath();
+
+    $files = quicksearch($qs_query . " /n", $path);
+
+    $matched_sesons = "";
+
+    /* Create season S## subfolders if needed */
+    foreach($file, $files, $LINE_BREAK)
+    {
+        $season_episode = regexmatches($file, $REGEX_SEASON_EPISODE);
+        $season = recase(substr($season_episode, 0, 3), "upper");
+
+        $matched_sesons = $matched_sesons . "|" . $season;
+
+        if(!exists($path . "\" . $season))
+        {
+            new($path . "\" . $season, "dir");
+        }
+    }
+
+    /* Move files */
+    foreach($s, LIST_Sort($matched_sesons), "|")
+    {
+        $file_list = quicksearch(
+            $s . " AND (" . $qs_query . ") /n", $path, "|");
+        moveto $path . "\" . $s, $file_list;
+    }
+
+    copier($old_copier);
