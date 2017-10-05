@@ -34,6 +34,7 @@
     /*  Text files */
     perm $PATH_TXT_FILES = $PATH_XYS_SCRIPTS . "\txt\";
     perm $PATH_UNC_API_KEY_TXT = $PATH_SCRIPT_LOCATION . "unc_apikey.txt";
+    perm $PATH_UNC_GD_DNS_NAME = $PATH_SCRIPT_LOCATION . "gd-dns.txt";
     perm $PATH_URL_TXT = $PATH_TXT_FILES . "url.txt";
     perm $PATH_SUB_ENG_WORDLIST_TXT = $PATH_TXT_FILES . "engSub.txt";
     perm $PATH_SUB_SWE_WORDLIST_TXT = $PATH_TXT_FILES . "sweSub.txt";
@@ -44,7 +45,10 @@
     /*  Icons */
     perm $ICON_LOCATION = "D:\Google Drive\Misc\icons\";
     perm $ICON_ATOM = $ICON_LOCATION . "atom.ico";
+    perm $ICON_TERMINAL = $ICON_LOCATION . "kitty.ico";
+    perm $ICON_APPLICATION = $ICON_LOCATION . "app.ico";
     perm $ICON_TV = $ICON_LOCATION . "tv_2.ico";
+    perm $ICON_TV_ALT = $ICON_LOCATION . "tv_3.ico";
     perm $ICON_KRAKEN = $ICON_LOCATION . "git.ico";
 
     /*  File extensions */

@@ -2,8 +2,11 @@
 
     $mouse_pointer_item = itematpos();
 
-	$tv_last_season_popup = "TV: Last Season folder;tv_last;" . $ICON_TV . "|";
-	$script_popup = "Help on scripting command;script_help";
+	$tv_last_season_popup = "TV: Last Season folder;tv_last;" . $ICON_TV_ALT . "|";
+	$script_popup = "Help on scripting command;script_help|";
+    $open_app = "App;run_app;" . $ICON_APPLICATION . "|";
+    $open_app_putty = " Putty;open_app_putty;" . $ICON_TERMINAL . "|";
+    $open_app_putty_ssh = " SSH: Pi3;open_app_putty_ssh_pi;" . $ICON_TERMINAL . "|";
     $atom_popup = exists($mouse_pointer_item) == 2 ?
         "Open [ ". $mouse_pointer_item ." ] in Atom;open_in_atom;" .
         $ICON_ATOM . "|-|" : $NULL;
@@ -12,8 +15,9 @@
         $ICON_KRAKEN . "|-|" : $NULL;
 
 
-	$choice = popupmenu(
+	$choice = popupnested(
         $atom_popup .
+        $open_app . $open_app_putty . $open_app_putty_ssh .
         $gitkraken_popup .
         $tv_last_season_popup .
         $script_popup
@@ -61,6 +65,14 @@
                             );
 			rtfm "idh_scripting_comref.htm#idh_sc_" . $script_choice;
 			break;
+
+        case "open_app_putty":
+            open $exe_path_putty;
+            break;
+
+        case "open_app_putty_ssh_pi":
+            APP_Putty(readfile($PATH_UNC_GD_DNS_NAME), "pi", "1122");
+            break;
 
 		default:
 			break;

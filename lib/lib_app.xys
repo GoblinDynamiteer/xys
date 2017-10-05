@@ -1,12 +1,13 @@
-    perm $exe_path_unrar = "D:\Google Drive\Scriptstuff\xyplorer\app\unrar.exe";
-    perm $exe_path_rar = "D:\Google Drive\Scriptstuff\xyplorer\app\rar.exe";
+    perm $exe_path_unrar = $PATH_SCRIPT_LOCATION . "\xyplorer\app\unrar.exe";
+    perm $exe_path_rar = $PATH_SCRIPT_LOCATION . "\xyplorer\app\rar.exe";
     perm $exe_path_filezilla = "C:\Program Files (x86)\FileZilla FTP Client\filezilla.exe";
-    perm $exe_path_7zipa = "D:\Google Drive\Scriptstuff\xyplorer\app\7za.exe";
+    perm $exe_path_7zipa = $PATH_SCRIPT_LOCATION . "\xyplorer\app\7za.exe";
     perm $exe_path_7zip = "C:\Program Files\7-Zip\7z.exe";
     perm $exe_path_subtitleedit = "C:\Program Files\Subtitle Edit 3\SubtitleEdit.exe";
-    perm $exe_path_mkvinfo = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvinfo.exe";
-    perm $exe_path_mkvextract = "D:\Google Drive\Scriptstuff\xyplorer\app\mkvtoolnix\mkvextract.exe";
-    perm $exe_path_gitkraken = "C:\Users\kampe_000\AppData\Local\gitkraken\app-3.0.0\gitkraken.exe";
+    perm $exe_path_mkvinfo = $PATH_SCRIPT_LOCATION . "\xyplorer\app\mkvtoolnix\mkvinfo.exe";
+    perm $exe_path_mkvextract = $PATH_SCRIPT_LOCATION . "\xyplorer\app\mkvtoolnix\mkvextract.exe";
+    perm $exe_path_gitkraken = %USERPROFILE% . "\AppData\Local\gitkraken\app-3.0.0\gitkraken.exe";
+    perm $exe_path_putty = $PATH_SCRIPT_LOCATION . "\xyplorer\app\putty.exe";
 
     function APP_Unrar($source, $destination)
     {
@@ -108,4 +109,11 @@
     function APP_GitKraken($repository_path)
     {
         run '"'. $exe_path_gitkraken .'" -p "' . $repository_path . '"';
+    }
+
+    /* SHH Connection with putty */
+    function APP_Putty($address, $user, $port)
+    {
+        run '"'. $exe_path_putty .'"' .
+            " -ssh " . $user . "@" . $address . " " . $port;
     }
