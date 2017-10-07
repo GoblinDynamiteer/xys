@@ -1,5 +1,10 @@
 
     /* File and folder locations	*/
+    perm $GOOGLE_DRIVE_LOCATION_DEFAULT = "D:\Google Drive\";
+    perm $GOOGLE_DRIVE_LOCATION_ALT = "C:\gdrive\";
+
+    perm $GOOGLE_DRIVE_LOCATION = exists($GOOGLE_DRIVE_LOCATION_DEFAULT) ?
+        $GOOGLE_DRIVE_LOCATION_DEFAULT : $GOOGLE_DRIVE_LOCATION_ALT;
 
     /*  DS Locations */
     perm $DS_SERVER_NAME = "\\DS\";
@@ -21,12 +26,12 @@
 
     /*  Misc locations */
     perm $PATH_NZB_IMPORT = "D:\NZB Import\";
-    perm $PATH_BACKUP_GOOGLE_DRIVE = "D:\Google Drive\Backups\";
+    perm $PATH_BACKUP_GOOGLE_DRIVE = $GOOGLE_DRIVE_LOCATION . "Backups\";
     perm $PATH_BACKUP_DROPBOX = "E:\Dropbox\Backups\";
     perm $PATH_BACKUP_TEMP = "D:\Temp\temprar\";
 
     /*  Script locations */
-    perm $PATH_SCRIPT_LOCATION = "D:\Google Drive\Scriptstuff\";
+    perm $PATH_SCRIPT_LOCATION = $GOOGLE_DRIVE_LOCATION . "Scriptstuff\";
     perm $PATH_XYS_SCRIPTS = $PATH_SCRIPT_LOCATION . "xyplorer\";
     perm $PATH_BACKUP_LOCATIONS = $PATH_SCRIPT_LOCATION . "backup_locs.db";
     perm $PATH_PYTHON_SCRIPTS = $PATH_SCRIPT_LOCATION . "python\";
@@ -43,7 +48,7 @@
     perm $PATH_XYPLORER_HELP_SCRIPTING_TXT = $PATH_TXT_FILES . "scripthelp.txt";
 
     /*  Icons */
-    perm $ICON_LOCATION = "D:\Google Drive\Misc\icons\";
+    perm $ICON_LOCATION = $GOOGLE_DRIVE_LOCATION . "Misc\icons\";
     perm $ICON_ATOM = $ICON_LOCATION . "atom.ico";
     perm $ICON_TERMINAL = $ICON_LOCATION . "kitty.ico";
     perm $ICON_APPLICATION = $ICON_LOCATION . "app.ico";
