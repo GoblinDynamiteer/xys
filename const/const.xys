@@ -37,7 +37,7 @@
     perm $PATH_PYTHON_SCRIPTS = $PATH_SCRIPT_LOCATION . "python\";
 
     /*  Text files */
-    perm $PATH_TXT_FILES = $PATH_XYS_SCRIPTS . "\txt\";
+    perm $PATH_TXT_FILES = $PATH_XYS_SCRIPTS . "txt\";
     perm $PATH_UNC_API_KEY_TXT = $PATH_SCRIPT_LOCATION . "unc_apikey.txt";
     perm $PATH_UNC_GD_DNS_NAME = $PATH_SCRIPT_LOCATION . "gd-dns.txt";
     perm $PATH_URL_TXT = $PATH_TXT_FILES . "url.txt";
@@ -49,6 +49,7 @@
 
     /*  Icons */
     perm $ICON_LOCATION = $GOOGLE_DRIVE_LOCATION . "Misc\icons\";
+
     perm $ICON_ATOM = $ICON_LOCATION . "atom.ico";
     perm $ICON_TERMINAL = $ICON_LOCATION . "kitty.ico";
     perm $ICON_APPLICATION = $ICON_LOCATION . "app.ico";

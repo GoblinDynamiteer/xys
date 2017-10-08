@@ -14,7 +14,6 @@
         "Open [ ". $mouse_pointer_item ." ] in GitKraken;open_in_kraken;" .
         $ICON_KRAKEN . "|-|" : $NULL;
 
-
 	$choice = popupnested(
         $atom_popup .
         $open_app . $open_app_putty . $open_app_putty_ssh .
