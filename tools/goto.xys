@@ -2,7 +2,8 @@
 
     $mouse_pointer_item = itematpos();
 
-	$tv_last_season_popup = "TV: Last Season folder;tv_last;" . $ICON_TV_ALT . "|";
+	$tv_last_season_popup = exists($PATH_DS_TV) ?
+        "TV: Last Season folder;tv_last;" . $ICON_TV_ALT . "|" : "";
 	$script_popup = "Help on scripting command;script_help|";
     $open_app = "App;run_app;" . $ICON_APPLICATION . "|";
     $open_app_putty = " Putty;open_app_putty;" . $ICON_TERMINAL . "|";
