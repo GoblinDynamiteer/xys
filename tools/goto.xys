@@ -2,33 +2,68 @@
 
     $mouse_pointer_item = itematpos();
 
-	$tv_last_season_popup = exists($PATH_DS_TV) ?
-        "TV: Last Season folder;tv_last;" . $ICON_TV_ALT . "|" : "";
-	$script_popup = "Help on scripting command;script_help|";
-    $open_app = "App;run_app;" . $ICON_APPLICATION . "|";
-    $open_app_putty = " Putty;open_app_putty;" . $ICON_TERMINAL . "|";
-    $open_app_putty_ssh = " SSH: Pi3;open_app_putty_ssh_pi;" . $ICON_TERMINAL . "|";
-    $atom_popup = exists($mouse_pointer_item) == 2 ?
-        "Open [ ". $mouse_pointer_item ." ] in Atom;open_in_atom;" .
-        $ICON_ATOM . "|-|" : $NULL;
-    $gitkraken_popup = exists($mouse_pointer_item . "\.git") == 2 ?
-        "Open [ ". $mouse_pointer_item ." ] in GitKraken;open_in_kraken;" .
-        $ICON_KRAKEN . "|-|" : $NULL;
+    $menu_tv = exists($PATH_DS_TV) ?
+        STRING_GeneratePopupMenuItem(
+            "TV: Last Season folder",
+            "tv_last",
+            $ICON_TV_ALT,
+            0) : $NULL;
 
-	$choice = popupnested(
-        $atom_popup .
-        $open_app . $open_app_putty . $open_app_putty_ssh .
-        $gitkraken_popup .
-        $tv_last_season_popup .
-        $script_popup
+    $menu_script = STRING_GeneratePopupMenuItem(
+                "Help on scripting command",
+                "script_help",
+                $ICON_NO_ICON,
+                0);
+
+    $menu_app = STRING_GeneratePopupMenuItem(
+                "App",
+                "run_app",
+                $ICON_APPLICATION,
+                0);
+
+    $menu_app_sub_putty = STRING_GeneratePopupMenuItem(
+                "Putty",
+                "open_app_putty",
+                $ICON_TERMINAL,
+                1);
+
+    $menu_app_sub_ssh_pi = STRING_GeneratePopupMenuItem(
+                "SSH: Pi3",
+                "open_app_putty_ssh_pi",
+                $ICON_TERMINAL,
+                1);
+
+    $menu_atom = exists($mouse_pointer_item) == 2 ?
+        STRING_GeneratePopupMenuItem(
+            "Open [ ". $mouse_pointer_item ." ] in Atom",
+            "open_in_atom",
+            $ICON_ATOM,
+            0) . "|-|" : $NULL;
+
+    $menu_gitkraken = exists($mouse_pointer_item . "\.git") == 2 ?
+        STRING_GeneratePopupMenuItem(
+            "Open [ ". $mouse_pointer_item ." ] in GitKraken",
+            "open_in_kraken",
+            $ICON_KRAKEN,
+            0) . "|-|" : $NULL;
+
+    /* Generate menu */
+    $choice = popupnested(
+        $menu_atom .             // Conditional
+        $menu_gitkraken .        // Conditional
+        $menu_app .
+            $menu_app_sub_putty .
+            $menu_app_sub_ssh_pi .
+        $menu_tv .
+        $menu_script
     );
 
     /*  End if no choice is selected */
-	if(!$choice){
-		end 1;
-	}
+    if(!$choice){
+        end 1;
+    }
 
-	switch($choice){
+    switch($choice){
         case "open_in_atom":
             APP_Atom($mouse_pointer_item);
             break;
@@ -37,8 +72,8 @@
             APP_GitKraken($mouse_pointer_item);
             break;
 
-		case "tv_last":
-			$tv_show = inputselect(
+        case "tv_last":
+            $tv_show = inputselect(
                             "TV-Shows",
                             FILE_ListTvFolders(),
                             $NOT_USED,
@@ -47,14 +82,14 @@
                             "500",
                             "1000"
                         );
-			$season = FILE_TV_GetLastSeason($PATH_DS_TV . $tv_show);
-			goto $PATH_DS_TV . $tv_show . "\"  . $season;;
-			break;
+            $season = FILE_TV_GetLastSeason($PATH_DS_TV . $tv_show);
+            goto $PATH_DS_TV . $tv_show . "\"  . $season;;
+            break;
 
-		case "script_help":
-			$script_list = readfile($PATH_XYPLORER_HELP_SCRIPTING_TXT);
-			$script_list = LIST_Sort($script_list);
-			$script_choice = inputselect(
+        case "script_help":
+            $script_list = readfile($PATH_XYPLORER_HELP_SCRIPTING_TXT);
+            $script_list = LIST_Sort($script_list);
+            $script_choice = inputselect(
                                 "Commands",
                                 $script_list,
                                 $NOT_USED,
@@ -63,8 +98,8 @@
                                 "500",
                                 "1000"
                             );
-			rtfm "idh_scripting_comref.htm#idh_sc_" . $script_choice;
-			break;
+            rtfm "idh_scripting_comref.htm#idh_sc_" . $script_choice;
+            break;
 
         case "open_app_putty":
             open $exe_path_putty;
@@ -74,6 +109,6 @@
             APP_Putty(readfile($PATH_UNC_GD_DNS_NAME), "pi", "1122");
             break;
 
-		default:
-			break;
-	}
+        default:
+            break;
+    }

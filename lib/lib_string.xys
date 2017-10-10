@@ -168,3 +168,19 @@
         $season = regexmatches($string, "S\d{2}");
         return $season;
     }
+
+    /* Generate item for pupupmenu */
+    function STRING_GeneratePopupMenuItem(
+        $display_name, $return_string, $icon_location, $menu_level)
+    {
+        $indentation = "";
+
+        while ($menu_level--)
+        {
+            $indentation = $indentation . " ";
+        }
+
+        return  $indentation . $display_name . ";" .
+                $return_string . ";" . $icon_location . "|";
+
+    }
