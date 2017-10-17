@@ -1,0 +1,8 @@
+    $i = input("How many seasons?");
+
+    $s = 1;
+
+    while($i--)
+    {
+        new("S" . format($s++, "00"), "dir");
+    }
