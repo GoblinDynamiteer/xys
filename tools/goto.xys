@@ -40,6 +40,13 @@
             $ICON_ATOM,
             0) . "|-|" : $NULL;
 
+    $menu_filezilla = exists($mouse_pointer_item) == 2 ?
+        STRING_GeneratePopupMenuItem(
+            "FileZilla to [ ". $mouse_pointer_item ." ]",
+            "open_in_filezilla",
+            $NULL, // Fix Icon
+            0) . "|-|" : $NULL;
+
     $menu_gitkraken = exists($mouse_pointer_item . "\.git") == 2 ?
         STRING_GeneratePopupMenuItem(
             "Open [ ". $mouse_pointer_item ." ] in GitKraken",
@@ -49,6 +56,7 @@
 
     /* Generate menu */
     $choice = popupnested(
+        $menu_filezilla .        // Conditional
         $menu_atom .             // Conditional
         $menu_gitkraken .        // Conditional
         $menu_app .
@@ -66,6 +74,10 @@
     switch($choice){
         case "open_in_atom":
             APP_Atom($mouse_pointer_item);
+            break;
+
+        case "open_in_filezilla":
+            APP_FileZilla($mouse_pointer_item);
             break;
 
         case "open_in_kraken":

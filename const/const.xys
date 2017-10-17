@@ -38,6 +38,7 @@
 
     /*  Text files */
     perm $PATH_TXT_FILES = $PATH_XYS_SCRIPTS . "txt\";
+    perm $PATH_FILEZILLA_W_SITE = $PATH_SCRIPT_LOCATION . "fz-wsite.txt";
     perm $PATH_UNC_API_KEY_TXT = $PATH_SCRIPT_LOCATION . "unc_apikey.txt";
     perm $PATH_UNC_GD_DNS_NAME = $PATH_SCRIPT_LOCATION . "gd-dns.txt";
     perm $PATH_URL_TXT = $PATH_TXT_FILES . "url.txt";

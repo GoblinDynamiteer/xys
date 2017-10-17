@@ -1,6 +1,6 @@
     perm $exe_path_unrar = $PATH_SCRIPT_LOCATION . "\xyplorer\app\unrar.exe";
     perm $exe_path_rar = $PATH_SCRIPT_LOCATION . "\xyplorer\app\rar.exe";
-    perm $exe_path_filezilla = "C:\Program Files (x86)\FileZilla FTP Client\filezilla.exe";
+    perm $exe_path_filezilla = "C:\Program Files\FileZilla\filezilla.exe";
     perm $exe_path_7zipa = $PATH_SCRIPT_LOCATION . "\xyplorer\app\7za.exe";
     perm $exe_path_7zip = "C:\Program Files\7-Zip\7z.exe";
     perm $exe_path_subtitleedit = "C:\Program Files\Subtitle Edit 3\SubtitleEdit.exe";
@@ -37,7 +37,8 @@
 
     function APP_FileZilla($folder)
     {
-        run '"' . $exe_path_filezilla. '" --local="' . $folder . '" --site="0/whatbox/odyssey.whatbox.ca"';
+        run '"' . $exe_path_filezilla . '" -c "' . readfile($PATH_FILEZILLA_W_SITE) . '"
+            --local="' . $folder . '"';
     }
 
     /*	 Returns full path to created RAR	*/
