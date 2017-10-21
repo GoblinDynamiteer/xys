@@ -59,18 +59,27 @@
                             STRING_MovieYear($movie)
                         );
 
-                        FILE_GenerateMovieNfo($full_path, $imdb_id);
                     }
 
-                    /* Ask user if movie found on OMDB is correct */
-                    $imdb_id = INPUT_YesNo(
-                        "Correct data for: " . $movie . "?" . $LINE_BREAK .
-                        replace($search_data, "|", $LINE_BREAK)) ?
-                            LIST_GetLastItem($search_data) :
-                            INPUT_Imdb($movie);
+                    if($search_data)
+                    {
+                        /* Ask user if movie found on OMDB is correct */
+                        $imdb_id = INPUT_YesNo(
+                            "Correct data for: " . $movie . "?" . $LINE_BREAK .
+                            replace($search_data, "|", $LINE_BREAK)) ?
+                                LIST_GetLastItem($search_data) :
+                                INPUT_Imdb($movie);
+                    }
+
+                    else
+                    {
+                        $imdb_id = INPUT_Imdb($movie);
+                    }
+
 
                     /* Add new movie to database */
                     DB_MOVIE_Write($movie, "imdb", $imdb_id);
+                    FILE_GenerateMovieNfo($full_path, $imdb_id);
 
                     status "Data set for: " . $movie;
 
