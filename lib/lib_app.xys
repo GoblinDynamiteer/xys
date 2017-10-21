@@ -16,7 +16,6 @@
             wait 100;
         }
         status "Unraring: ". $source, 000000, progress;
-        //run command, [directory], [wait=0], [show=1]
         run '"' . $exe_path_unrar . '" x "' . $source . '" "' . $destination . '"', , 0, 2;
     }
 
@@ -29,13 +28,15 @@
             wait 100;
         }
         status "Unraring: ". $source, 000000, progress;
-        //run command, [directory], [wait=0], [show=1]
         run '"' . $exe_path_unrar . '" x "' . $source . '" "' . $destination . '"', , 2, 2;
     }
 
+    /* Run filezilla and open local folder */
     function APP_FileZilla($folder)
     {
-        if(!isset($exe_path_filezilla) || !CHECK_isPathToExe($exe_path_filezilla))
+        if( !isset($exe_path_filezilla) ||
+            !CHECK_isPathToExe($exe_path_filezilla) ||
+            !exists($exe_path_filezilla))
         {
             $search_dir = "C:\Program Files\";
             $executables = quicksearch("filezilla.exe", $search_dir, "|", s);
@@ -44,8 +45,19 @@
             writepv($PATH_PERM_PV_DIR);
         }
 
-        run '"' . $exe_path_filezilla . '" -c "' . readfile($PATH_FILEZILLA_W_SITE) . '"
-            --local="' . $folder . '"';
+        if(exists($exe_path_filezilla))
+        {step;
+            run '"' . $exe_path_filezilla . '" -c "' .
+                readfile($PATH_FILEZILLA_W_SITE) . '" --local="' .
+                    $folder . '"';
+        }
+
+        else
+        {
+            msg $ERROR_EXE_NOT_FOUND_FILEZILLA;
+
+            //Set manually?
+        }
     }
 
     /*	 Returns full path to created RAR	*/
@@ -116,7 +128,9 @@
     /* Open repository path in GitKraken */
     function APP_GitKraken($repository_path)
     {
-        if(!isset($exe_path_gitkraken) || !CHECK_isPathToExe($exe_path_gitkraken))
+        if( !isset($exe_path_gitkraken) ||
+            !CHECK_isPathToExe($exe_path_gitkraken) ||
+            !exists($exe_path_gitkraken))
         {
             $search_dir = %USERPROFILE% . "\AppData\Local\gitkraken\";
             $executables = quicksearch("gitkraken.exe", $search_dir, "|", s);
@@ -125,7 +139,16 @@
             writepv($PATH_PERM_PV_DIR);
         }
 
-        run '"'. $exe_path_gitkraken .'" -p "' . $repository_path . '"';
+        if(exists($exe_path_gitkraken))
+        {
+            run '"'. $exe_path_gitkraken .'" -p "' . $repository_path . '"';
+        }
+
+        else
+        {
+            msg $ERROR_EXE_NOT_FOUND_GITKRAKEN;
+        }
+
     }
 
     /* SHH Connection with putty */

@@ -90,6 +90,8 @@
     perm $ERROR_SELECT_MORE_THAN_ONE = "More than one item selected!";
     perm $ERROR_PATH_NOT_DS_TV = "Path is not in DS/TV!";
     perm $ERROR_FILE_WRITE_TVSHOW_NFO = "Could not write tvshow.nfo!";
+    perm $ERROR_EXE_NOT_FOUND_FILEZILLA = "filezilla.exe not found!";
+    perm $ERROR_EXE_NOT_FOUND_GITKRAKEN = "gitkraken.exe not found!";
 
     /* Status text colors	*/
     perm $STATUS_COLOR_ORANGE = "FF4500";
