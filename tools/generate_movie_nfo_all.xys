@@ -1,0 +1,29 @@
+    /* Generates movie.nfo for all movies folders, overwrites */
+
+    include_once "..\const\include.xys";
+
+    if(INPUT_YesNo("Really update movie.nfo for all movie folders?"))
+    {
+        $movie_folder_list = FILE_ListMovieFolders();
+
+        foreach($movie_folder, $movie_folder_list)
+        {
+            if(!$movie_folder)
+            {
+                continue;
+            }
+
+            $movie = gpc($movie_folder, "component", -1);
+            $id = DB_GetImdb($movie);
+
+            if($id)
+            {
+                FILE_GenerateMovieNfo($movie_folder, $id);
+                status "Writing movie.nfo: " . $movie;
+            }
+
+            wait 1;
+        }
+
+        status "Done!";
+    }
