@@ -53,13 +53,15 @@
 
     /*  Icons */
     perm $ICON_LOCATION = $GOOGLE_DRIVE_LOCATION . "Misc\icons\";
-
     perm $ICON_ATOM = $ICON_LOCATION . "atom.ico";
     perm $ICON_TERMINAL = $ICON_LOCATION . "kitty.ico";
     perm $ICON_APPLICATION = $ICON_LOCATION . "app.ico";
     perm $ICON_TV = $ICON_LOCATION . "tv_2.ico";
     perm $ICON_TV_ALT = $ICON_LOCATION . "tv_3.ico";
-    perm $ICON_KRAKEN = $ICON_LOCATION . "git.ico";
+    perm $ICON_GIT = $ICON_LOCATION . "git.ico";
+    perm $ICON_HELP = $ICON_LOCATION . "help.ico";
+    perm $ICON_KRAKEN = $ICON_LOCATION . "tentacle.ico";
+    perm $ICON_FILEZILLA = $ICON_LOCATION . "filezilla.ico";
     perm $ICON_NO_ICON = "";
 
     /*  File extensions */
@@ -85,6 +87,7 @@
     perm $TAG_COMMENT = 2;
     perm $CONFIRM_YES_NO_BUTTONS = 4;
 
+    /* Errors */
     perm $FUNCTION_RETURN_ERROR = 0;
     perm $ERROR_MESSAGE_PYTHON =  "Python script returned error!";
     perm $ERROR_SELECT_MORE_THAN_ONE = "More than one item selected!";
@@ -92,6 +95,7 @@
     perm $ERROR_FILE_WRITE_TVSHOW_NFO = "Could not write tvshow.nfo!";
     perm $ERROR_EXE_NOT_FOUND_FILEZILLA = "filezilla.exe not found!";
     perm $ERROR_EXE_NOT_FOUND_GITKRAKEN = "gitkraken.exe not found!";
+    perm $ERROR_EXE_NOT_FOUND_GITBASH = "git-bash.exe not found!";
 
     /* Status text colors	*/
     perm $STATUS_COLOR_ORANGE = "FF4500";
@@ -132,6 +136,7 @@
     perm $REGEX_RELEASE_SCENE_SPECIAL = "(proper|repack|rerip|remux)";
     perm $REGEX_RELEASE_SOURCE = "(bluray|hddvd|web.dl|web.rip|blu.ray|hdtv|hdts|webrip|dvdscr)";
 
+    /* Load (and overwrite) perm variables*/
     if(exists($PATH_PERM_PV_DIR))
     {
         readpv($PATH_PERM_PV_DIR);

@@ -12,7 +12,7 @@
     $menu_script = STRING_GeneratePopupMenuItem(
                 "Help on scripting command",
                 "script_help",
-                $ICON_NO_ICON,
+                $ICON_HELP,
                 0);
 
     $menu_app = STRING_GeneratePopupMenuItem(
@@ -28,43 +28,57 @@
                 1);
 
     $menu_app_sub_ssh_pi = STRING_GeneratePopupMenuItem(
-                "SSH: Pi3",
+                "Putty SSH: Pi3",
                 "open_app_putty_ssh_pi",
                 $ICON_TERMINAL,
                 1);
 
     $menu_atom = exists($mouse_pointer_item) == 2 ?
         STRING_GeneratePopupMenuItem(
-            "Open [ ". $mouse_pointer_item ." ] in Atom",
+            "#Atom [ ". $mouse_pointer_item ." ]",
             "open_in_atom",
             $ICON_ATOM,
-            0) . "|-|" : $NULL;
+            0) : $NULL;
+
+    $menu_git_bash = exists($mouse_pointer_item) == 2 ?
+        STRING_GeneratePopupMenuItem(
+            "#GitBash [ ". $mouse_pointer_item . " ] ",
+            "open_in_gitbash",
+            $ICON_GIT,
+            0) : $NULL;
 
     $menu_filezilla = exists($mouse_pointer_item) == 2 ?
         STRING_GeneratePopupMenuItem(
-            "FileZilla to [ ". $mouse_pointer_item ." ]",
+            "#FileZilla [ ". $mouse_pointer_item ." ]",
             "open_in_filezilla",
-            $NULL, // Fix Icon
-            0) . "|-|" : $NULL;
+            $ICON_FILEZILLA,
+            0) : $NULL;
 
     $menu_gitkraken = exists($mouse_pointer_item . "\.git") == 2 ?
         STRING_GeneratePopupMenuItem(
-            "Open [ ". $mouse_pointer_item ." ] in GitKraken",
+            "#GitKraken [ ". $mouse_pointer_item ." ]",
             "open_in_kraken",
             $ICON_KRAKEN,
-            0) . "|-|" : $NULL;
+            0) : $NULL;
 
     /* Generate menu */
-    $choice = popupnested(
-        $menu_filezilla .        // Conditional
-        $menu_atom .             // Conditional
-        $menu_gitkraken .        // Conditional
-        $menu_app .
-            $menu_app_sub_putty .
-            $menu_app_sub_ssh_pi .
-        $menu_tv .
-        $menu_script
-    );
+    $menu =
+    $menu_filezilla .   // Conditional: folder under cursor position
+    $menu_git_bash .    // Conditional: folder under cursor position
+    $menu_gitkraken .   // Conditional: folder under cursor position
+    $menu_atom .        // Conditional: folder under cursor position
+        ((  $menu_filezilla != $NULL ||
+            $menu_atom != $NULL ||
+            $menu_gitkraken != $NULL ||
+            $menu_git_bash != $NULL) ?
+                "-|" : "") .
+    $menu_app .
+        $menu_app_sub_putty .
+        $menu_app_sub_ssh_pi .
+    $menu_tv .
+    $menu_script;
+
+    $choice = popupnested($menu);
 
     /*  End if no choice is selected */
     if(!$choice){
@@ -82,6 +96,10 @@
 
         case "open_in_kraken":
             APP_GitKraken($mouse_pointer_item);
+            break;
+
+        case "open_in_gitbash":
+            APP_GitBash($mouse_pointer_item);
             break;
 
         case "tv_last":

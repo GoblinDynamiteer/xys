@@ -46,7 +46,7 @@
         }
 
         if(exists($exe_path_filezilla))
-        {step;
+        {
             run '"' . $exe_path_filezilla . '" -c "' .
                 readfile($PATH_FILEZILLA_W_SITE) . '" --local="' .
                     $folder . '"';
@@ -156,4 +156,35 @@
     {
         run '"'. $exe_path_putty .'"' .
             " -ssh " . $user . "@" . $address . " " . $port;
+    }
+
+    /* Open Git-Bash to and navigate to path */
+    function APP_GitBash($path)
+    {
+        if( !isset($exe_path_gitbash) ||
+            !CHECK_isPathToExe($exe_path_gitbash) ||
+            !exists($exe_path_gitbash))
+        {
+            $search_dir = "C:\Program Files\";
+            $executables = quicksearch("git-bash.exe", $search_dir, "|", s);
+            perm $exe_path_gitbash = LIST_GetLastItem($executables);
+
+            writepv($PATH_PERM_PV_DIR);
+        }
+
+        if(exists($exe_path_gitbash))
+        {
+            /* Convert 'C:\Path\Path Path' ==> 'C/Path/Path\ Path' */
+            $path = replacelist($path, ":|\| ", "|/|\ ", "|");
+
+            /* Workaround for opening path (could not find CLI command to
+                open path): edit .bashrc */
+            writefile(%USERPROFILE% . "\.bashrc", "cd /" . $path);
+            open $exe_path_gitbash;
+        }
+
+        else
+        {
+            msg $ERROR_EXE_NOT_FOUND_GITBASH;
+        }
     }
