@@ -19,16 +19,21 @@
         $extract_path_guess =
             $PATH_DS_TV . $tv_show_name_guess . "\" . $tv_show_season_guess;
 
-        if( !exists($extract_path_guess) &&
-            INPUT_YesNo("Create folder: " . $extract_path_guess . "?"))
+        $extract_destination = $PATH_DS_TV;
+
+        if(!exists($extract_path_guess))
         {
-            $extract_destination = new($extract_path_guess, "dir");
+            if(INPUT_YesNo("Create folder: " . $extract_path_guess . "?"))
+            {
+                $extract_destination = new($extract_path_guess, "dir");
+            }
         }
 
         else
         {
-            $extract_destination = $DS_TV;
+            $extract_destination = $extract_path_guess;
         }
+
 
         /* Let user select destination */
         $destination = inputfolder(
