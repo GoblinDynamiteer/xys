@@ -48,6 +48,9 @@
     perm $PATH_TV_SKIPLIST_TXT = $PATH_TXT_FILES . "skiplist.txt";
     perm $PATH_XYPLORER_HELP_SCRIPTING_TXT = $PATH_TXT_FILES . "scripthelp.txt";
 
+    /* Perm variables file */
+    perm $PATH_PERM_PV_DIR = $PATH_SCRIPT_LOCATION . "perm_variables.dat";
+
     /*  Icons */
     perm $ICON_LOCATION = $GOOGLE_DRIVE_LOCATION . "Misc\icons\";
 
@@ -126,3 +129,8 @@
     perm $REGEX_RELEASE_SPECIAL = "(remastered|directors.cut|extended|unrated|dircut|\.dc\.|uncut)";
     perm $REGEX_RELEASE_SCENE_SPECIAL = "(proper|repack|rerip|remux)";
     perm $REGEX_RELEASE_SOURCE = "(bluray|hddvd|web.dl|web.rip|blu.ray|hdtv|hdts|webrip|dvdscr)";
+
+    if(exists($PATH_PERM_PV_DIR))
+    {
+        readpv($PATH_PERM_PV_DIR);
+    }

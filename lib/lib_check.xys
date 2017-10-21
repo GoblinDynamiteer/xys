@@ -25,22 +25,19 @@
     /*  Check if folder path is in DS/Movie directory */
     function CHECK_PathInMovie($path)
     {
-        $retval = regexmatches($path, $REGEX_PATH_DS_MOVIE) ? 1 : 0;
-        return $retval;
+        return (regexmatches($path, $REGEX_PATH_DS_MOVIE) != "");
     }
 
     /* Check if string contains an IMDb-id */
     function CHECK_IsImdb($string)
     {
-        $retval = regexmatches($string, $REGEX_STRING_IMDB_ID) ? 1 : 0;
-        return $retval;
+        return (regexmatches($string, $REGEX_STRING_IMDB_ID) != "");
     }
 
     /* Check if string starts with 'http:// */
     function CHECK_IsURL($string)
     {
-        $retval = regexmatches($string, $REGEX_STRING_URL) ? 1 : 0;
-        return $retval;
+        return (regexmatches($string, $REGEX_STRING_URL) != "");
     }
 
     /* Check if string contains TheTVDb Url */
@@ -60,6 +57,12 @@
     /* Return state of CTRL button  */
     function CHECK_CtrlDown(void)
     {
-        $retval = get("Shift") == 2 ? 1 : 0;
-        return $retval;
+        return (get("Shift") == 2);
+    }
+
+    /* Check if path string is to an executable file */
+    function CHECK_isPathToExe($path)
+    {
+        return  ((substr($path, -4) == ".exe") &&
+                (gettoken($path, "count", "|") == 1));
     }
