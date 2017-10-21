@@ -116,7 +116,7 @@
     perm $REGEX_MOVIE_PREFIX_THE = "^the\.";
     perm $REGEX_MOVIE_PREFIX_A = "^a\.";
     perm $REGEX_MOVIE_PREFIX_AN = "^an\.";
-    perm $REGEX_MOVIE_TITLE = ".+?(?=\d{4})";
+    perm $REGEX_MOVIE_TITLE = ".+?(?=\.\d{4})";
 
     perm $REGEX_DIGIT_1 = "\d{1}";
     perm $REGEX_DIGIT_2 = "\d{2}";

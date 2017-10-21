@@ -138,14 +138,28 @@
     function STRING_MovieYear($string)
     {
         $data = regexmatches($string, $REGEX_DIGIT_4);
-        $retval = $data ? $data : 0;
+        $retval = 0;
+
+        if($data)
+        {
+            $retval = gettoken($data, 1, "|");
+        }
+
         return $retval;
     }
 
     function STRING_MovieTitle($string)
     {
         $data = regexmatches($string, $REGEX_MOVIE_TITLE);
-        $retval = $data ? $data : 0;
+        $retval = 0;
+
+        if($data)
+        {
+            $retval = gettoken($data, 1, "|");
+            $retval = replace($retval, ".", " ");
+            $retval = trim($retval);
+        }
+
         return $retval;
     }
 
