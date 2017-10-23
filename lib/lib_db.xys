@@ -71,17 +71,16 @@
     }
 
     /*  Update TV database with new TV-show info from TVMaze */
-    function db_tv_update_data($tv_show){
-        step;
-        echo "fix";
-        $genre = PYT_Genre($tv_show);
-        $year = PYT_Year($tv_show);
-        $last_local_episode = FILE_TV_LastLocalEpisode($PATH_DS_TV . $tv_show);
-        $show_status = PYT_ShowStatus($tv_show);
-        $episode_next = PYT_EpisodeNext($tv_show);
-        $episode_next_date = PYT_DateEpisodeNext($tv_show);
-        $episode_last = PYT_EpisodeLast($tv_show);
-        $episode_last_date = PYT_DateEpisodeLast($tv_show);
+    function db_tv_update_data($tv_show)
+    {
+        $tvmaze_id = db_tv_read_data($tv_show, "tvmaze");
+        $genre = python_tvmaze($tvmaze_id, "genre");
+        $year = python_tvmaze($tvmaze_id, "year");
+        $last_local_episode = file_tv_get_last_episode_in_path(
+            $PATH_DS_TV . $tv_show);
+        $show_status = python_tvmaze($tvmaze_id, "status");
+        $episode_last = python_tvmaze($tvmaze_id, "last_aired");
+        $episode_last_date = python_tvmaze($tvmaze_id, "last_aired_date");
 
         db_tv_write_data($tv_show, "genre", $genre);
         db_tv_write_data($tv_show, "year", $year);
@@ -89,8 +88,6 @@
         db_tv_write_data($tv_show, "status", $show_status);
         db_tv_write_data($tv_show, "lastaired", $episode_last);
         db_tv_write_data($tv_show, "lastaireddate", $episode_last_date);
-        db_tv_write_data($tv_show, "nextaired", $episode_next);
-        db_tv_write_data($tv_show, "nextaireddate", $episode_next_date);
     }
 
     function db_movie_update_data($movie)

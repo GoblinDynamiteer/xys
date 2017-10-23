@@ -1,9 +1,12 @@
     include_once "..\const\include.xys";
-    perm $omdb_script = $PATH_PYTHON_SCRIPTS . "omdb-searcher.py";
 
-    function python_omdb($title, $output, $imdb, $year, $type)
+    perm $omdb_script = $PATH_PYTHON_SCRIPTS . "omdb-searcher.py";
+    perm $maze_script = $PATH_PYTHON_SCRIPTS . "tvmaze-searcher.py";
+
+    /* Uses OMDb web API to search for tv-show and movie data */
+    function python_omdb($query, $output, $year, $type)
     {
-        $query = $imdb ? $imdb : $title;
+        /* Set extra arguments for script, if needed */
         $year = $year ? " -year " . $year : "";
         $type = $type ? " -type " . $type : "";
 
@@ -15,5 +18,25 @@
             ' -o ' . $output);
 
         status "Done!";
+
+        /* return data, remove crlf */
+        return substr($data, 0, -2);
+    }
+
+    /* Uses TVmaze web API to search for tv-show and episode data */
+    function python_tvmaze($query, $output, $season, $episode)
+    {
+        /* Set extra arguments for script, if needed */
+        $season = $season ? " -season " . $season : "";
+        $episode = $episode && $season ? " -episode " . $episode : "";
+
+        status "Running tvmaze-seacher.py: " . $query . ' -o ' . $output;
+
+        $data = runret('python "' . $maze_script . '" "' . $query .
+            '" -output ' . $output . $season . $episode);
+
+        status "Done!";
+
+        /* return data, remove crlf */
         return substr($data, 0, -2);
     }

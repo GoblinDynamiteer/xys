@@ -46,7 +46,8 @@
                         );
 
                         /* Use IMDB-id for OMDB-search */
-                        $search_data = python_omdb($NULL, "full", $imdb_from_nfo);
+                        $search_data = python_omdb(
+                            $imdb_from_nfo, "full");
                         $flag_generate_nfo = 0;
                     }
 
@@ -57,7 +58,6 @@
                         $search_data = python_omdb(
                             string_regex_movie_title_from_release($movie),
                             "full",
-                            $NULL,
                             string_regex_year($movie)
                         );
 

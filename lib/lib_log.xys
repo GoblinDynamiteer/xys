@@ -1,6 +1,6 @@
     include_once "..\const\include.xys";
 
-    function LOG_NewTV($show, $episode)
+    function log_new_tv($show, $episode)
     {
         writefile(
             $PATH_LOG_TXT,
@@ -10,7 +10,7 @@
         );
     }
 
-    function LOG_NewMovie($movie)
+    function log_new_movie($movie)
     {
         writefile(
             $PATH_LOG_TXT,
@@ -19,7 +19,7 @@
         );
     }
 
-    function LOG_Backup($item)
+    function log_backup($item)
     {
         writefile(
             $PATH_LOG_TXT,

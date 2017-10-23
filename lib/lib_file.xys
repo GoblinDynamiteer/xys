@@ -69,9 +69,6 @@
     function file_add_new_episode($episode, $tv_show)
     {
         $today = now("yyyy-mm-dd");
-
-        step;
-        echo "fix -- build tvmaze script"
         $maze_id = db_tv_read_data($tv_show, "tvmaze");
 
         //American Dad has other season ordering on TVMaze, than releases
@@ -80,15 +77,21 @@
             $episode = replace($episode, "S14E", "S13E");
         }
 
-        $title = PYT_MAZE_ReadEpisode($maze_id, "name", $episode);
-        $airdate = PYT_MAZE_ReadEpisode($maze_id, "airdate", $episode);
+        $season_number = string_regex_season_from_season_episode($episode);
+        $episode_number = string_regex_episode_from_season_episode($episode);
+
+        $title = python_tvmaze(
+            $maze_id, "title", $season_number, $episode_number);
+        $airdate = python_tvmaze(
+            $maze_id, "release_date", $season_number, $episode_number);
+
         $string = "[ " . $today . " ] [ TV ] [ " . $tv_show . " ] [ " .
-        $episode . " : " . $title . " ] [ Airdate: " . $airdate . " ]";
+            $episode . " : " . $title . " ] [ Airdate: " . $airdate . " ]";
 
         writefile($PATH_NEW_TXT, $string . $LINE_BREAK,
             $WRITEFILE_ON_EXIST_APPEND);
 
-        LOG_NewTV($tv_show, $episode);
+        log_new_tv($tv_show, $episode);
 
         wait 100;
     }

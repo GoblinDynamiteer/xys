@@ -135,6 +135,18 @@
         return $retval;
     }
 
+    function string_regex_season_from_season_episode($string)
+    {
+        $data = regexmatches($string, $REGEX_TWO_DIGIT);
+        return format(gettoken($data, 1, "|"));
+    }
+
+    function string_regex_episode_from_season_episode($string)
+    {
+        $data = regexmatches($string, $REGEX_TWO_DIGIT);
+        return format(gettoken($data, 2, "|"));
+    }
+
     function string_regex_year($string)
     {
         $data = regexmatches($string, $REGEX_DIGIT_4); // Fix regex 2/1xxx

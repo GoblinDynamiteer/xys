@@ -42,19 +42,14 @@
             $imdb_id = python_omdb(
                 $tv_show,
                 "imdb",
-                $NULL,
-                $NULL,
                 "series"
                 );
 
             wait 100;
 
             $search_hit_data = python_omdb(
-                $NULL,
-                "full_noep",
                 $imdb_id,
-                $NULL,
-                "series"
+                "full_noep"
             );
 
             if(!input_ask_yes_no(
@@ -66,6 +61,15 @@
                 $imdb_id = input_ask_for_imdb($tv_show);
             }
 
+            /* Get TVmaze-id by searing API with IMDb-id */
+            $tv_maze_id = python_tvmaze(
+                $imdb_id,
+                "tvmaze_id",
+            );
+
+            /* Todo: Build check for TVmaze-id retrieval */
+
+            db_tv_write_data($tv_show, "tvmaze", $tv_maze_id);
             db_tv_write_data($tv_show, "imdb", $imdb_id);
             $flag_update_database = 1;
         }
