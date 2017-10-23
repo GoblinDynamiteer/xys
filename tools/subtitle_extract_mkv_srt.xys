@@ -19,7 +19,7 @@
         $mkv_file_path = gpc($mkv_file, "path"); //path without filename
         $mkv_file_name = gpc($mkv_file, "base"); //only filename, without extension
 
-        $mkv_info = APP_MkvInfo($mkv_file);
+        $mkv_info = app_video_mkv_info($mkv_file);
 
         $track_numbers = regexmatches($mkv_info, $REGEX_SUBTITLE_MKV_INFO_NUMBERS, "|");
         $track_types = regexmatches($mkv_info, $REGEX_SUBTITLE_MKV_INFO_TYPES, "|");
@@ -37,7 +37,7 @@
             $track_id++;
         }
 
-        $track_extraction = LIST_Sort($track_extraction);
+        $track_extraction = list_sort($track_extraction);
 
         /*  If mkv did not contain any subtitle tracks */
         if(!$track_extraction)
@@ -46,7 +46,7 @@
             continue;
         }
 
-        APP_ExtractSubtitle($mkv_file, $track_extraction);
+        app_subtitle_mkvextract($mkv_file, $track_extraction);
 
         /*  List extracted srt-files, excluding already existing */
         $srt_files = listfolder(
@@ -66,10 +66,10 @@
             }
 
             /*  Rename or delete files */
-            if(SUB_Points($srt_file, "en") > $srt_word_treshold &&
+            if(subtitle_calculate_points($srt_file, "en") > $srt_word_treshold &&
                 !exists($mkv_file_path . "\" . $mkv_file_name . $STRING_SUB_ENG_SUFFIX))
             {
-                if(SUB_Points($srt_file, "hi") > $srt_word_hi_treshold)
+                if(subtitle_calculate_points($srt_file, "hi") > $srt_word_hi_treshold)
                 {
                     /*  Todo: Remove HI */
                     tag "HEARING IMPAIRED", $srt_file, $TAG_COMMENT;
@@ -81,7 +81,7 @@
                 );
             }
 
-            elseif(SUB_Points($srt_file, "sv") > $srt_word_treshold &&
+            elseif(subtitle_calculate_points($srt_file, "sv") > $srt_word_treshold &&
                 !exists($mkv_file_path . "\" . $mkv_file_name . $STRING_SUB_SWE_SUFFIX))
             {
                 renameitem(

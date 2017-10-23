@@ -1,21 +1,21 @@
     include_once "..\const\include.xys";
 
     /*	 Check if folder is a TV Season release */
-    function CHECK_IsTvRelease($folder)
+    function check_is_folder_tv_season_release($folder)
     {
         $retval = regexmatches($folder, $REGEX_TV_SEASON_RELEASE) ? 1 : 0;
         return $retval;
     }
 
     /*	 Check if folder is a TV Episode release */
-    function CHECK_IsTvEpisodeRelease($folder)
+    function check_is_folder_tv_episode_release($folder)
     {
         $retval = regexmatches($folder, $REGEX_TV_EPISODE_RELEASE) ? 1 : 0;
         return $retval;
     }
 
     /*  Check if folder path is in DS/TV directory */
-    function CHECK_PathInTV($path)
+    function check_is_path_in_dstv($path)
     {
         $retval = regexmatches($path, $REGEX_PATH_DS_TV) ||
             regexmatches($path, $REGEX_PATH_DS_TV_MOUNTED) ? 1 : 0;
@@ -23,25 +23,25 @@
     }
 
     /*  Check if folder path is in DS/Movie directory */
-    function CHECK_PathInMovie($path)
+    function check_is_path_in_dsmovie($path)
     {
         return (regexmatches($path, $REGEX_PATH_DS_MOVIE) != "");
     }
 
     /* Check if string contains an IMDb-id */
-    function CHECK_IsImdb($string)
+    function check_imdb_in_string($string)
     {
         return (regexmatches($string, $REGEX_STRING_IMDB_ID) != "");
     }
 
     /* Check if string starts with 'http:// */
-    function CHECK_IsURL($string)
+    function check_http_in_string($string)
     {
         return (regexmatches($string, $REGEX_STRING_URL) != "");
     }
 
     /* Check if string contains TheTVDb Url */
-    function CHECK_IsTheTVDbURL($string)
+    function check_thetvdb_url_in_string($string)
     {
         $retval = regexmatches($string, $REGEX_STRING_URL_THETVDB) ? 1 : 0;
 
@@ -55,13 +55,13 @@
     }
 
     /* Return state of CTRL button  */
-    function CHECK_CtrlDown(void)
+    function check_ctrl_button_held(void)
     {
         return (get("Shift") == 2);
     }
 
     /* Check if path string is to an executable file */
-    function CHECK_isPathToExe($path)
+    function check_is_path_to_exe($path)
     {
         return  ((substr($path, -4) == ".exe") &&
                 (gettoken($path, "count", "|") == 1));

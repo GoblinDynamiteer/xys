@@ -3,59 +3,59 @@
     $mouse_pointer_item = itematpos();
 
     $menu_tv = exists($PATH_DS_TV) ?
-        STRING_GeneratePopupMenuItem(
+        string_generate_popup_menu_item(
             "TV: Last Season folder",
             "tv_last",
             $ICON_TV_ALT,
             0) : $NULL;
 
-    $menu_script = STRING_GeneratePopupMenuItem(
+    $menu_script = string_generate_popup_menu_item(
                 "Help on scripting command",
                 "script_help",
                 $ICON_HELP,
                 0);
 
-    $menu_app = STRING_GeneratePopupMenuItem(
+    $menu_app = string_generate_popup_menu_item(
                 "App",
                 "run_app",
                 $ICON_APPLICATION,
                 0);
 
-    $menu_app_sub_putty = STRING_GeneratePopupMenuItem(
+    $menu_app_sub_putty = string_generate_popup_menu_item(
                 "Putty",
                 "open_app_putty",
                 $ICON_TERMINAL,
                 1);
 
-    $menu_app_sub_ssh_pi = STRING_GeneratePopupMenuItem(
+    $menu_app_sub_ssh_pi = string_generate_popup_menu_item(
                 "Putty SSH: Pi3",
                 "open_app_putty_ssh_pi",
                 $ICON_TERMINAL,
                 1);
 
     $menu_atom = exists($mouse_pointer_item) == 2 ?
-        STRING_GeneratePopupMenuItem(
+        string_generate_popup_menu_item(
             "#Atom [ ". $mouse_pointer_item ." ]",
             "open_in_atom",
             $ICON_ATOM,
             0) : $NULL;
 
     $menu_git_bash = exists($mouse_pointer_item) == 2 ?
-        STRING_GeneratePopupMenuItem(
+        string_generate_popup_menu_item(
             "#GitBash [ ". $mouse_pointer_item . " ] ",
             "open_in_gitbash",
             $ICON_GIT,
             0) : $NULL;
 
     $menu_filezilla = exists($mouse_pointer_item) == 2 ?
-        STRING_GeneratePopupMenuItem(
+        string_generate_popup_menu_item(
             "#FileZilla [ ". $mouse_pointer_item ." ]",
             "open_in_filezilla",
             $ICON_FILEZILLA,
             0) : $NULL;
 
     $menu_gitkraken = exists($mouse_pointer_item . "\.git") == 2 ?
-        STRING_GeneratePopupMenuItem(
+        string_generate_popup_menu_item(
             "#GitKraken [ ". $mouse_pointer_item ." ]",
             "open_in_kraken",
             $ICON_KRAKEN,
@@ -87,38 +87,38 @@
 
     switch($choice){
         case "open_in_atom":
-            APP_Atom($mouse_pointer_item);
+            app_text_open_in_atom($mouse_pointer_item);
             break;
 
         case "open_in_filezilla":
-            APP_FileZilla($mouse_pointer_item);
+            app_ftp_open_in_filezilla($mouse_pointer_item);
             break;
 
         case "open_in_kraken":
-            APP_GitKraken($mouse_pointer_item);
+            app_git_openrepo_kraken($mouse_pointer_item);
             break;
 
         case "open_in_gitbash":
-            APP_GitBash($mouse_pointer_item);
+            app_git_openrepo_bash($mouse_pointer_item);
             break;
 
         case "tv_last":
             $tv_show = inputselect(
                             "TV-Shows",
-                            FILE_ListTvFolders(),
+                            file_list_all_tv_show_folders(),
                             $NOT_USED,
                             72,
                             $NOT_USED,
                             "500",
                             "1000"
                         );
-            $season = FILE_TV_GetLastSeason($PATH_DS_TV . $tv_show);
+            $season = file_tv_get_last_season_in_path($PATH_DS_TV . $tv_show);
             goto $PATH_DS_TV . $tv_show . "\"  . $season;;
             break;
 
         case "script_help":
             $script_list = readfile($PATH_XYPLORER_HELP_SCRIPTING_TXT);
-            $script_list = LIST_Sort($script_list);
+            $script_list = list_sort($script_list);
             $script_choice = inputselect(
                                 "Commands",
                                 $script_list,
@@ -136,7 +136,7 @@
             break;
 
         case "open_app_putty_ssh_pi":
-            APP_Putty(readfile($PATH_UNC_GD_DNS_NAME), "pi", "1122");
+            app_ssh_putty(readfile($PATH_UNC_GD_DNS_NAME), "pi", "1122");
             break;
 
         default:

@@ -7,40 +7,32 @@
     perm $exe_path_mkvextract = $PATH_SCRIPT_LOCATION . "\xyplorer\app\mkvtoolnix\mkvextract.exe";
     perm $exe_path_putty = $PATH_SCRIPT_LOCATION . "\xyplorer\app\putty.exe";
 
-    function APP_Unrar($source, $destination)
+    function app_extraction_unrar($source, $destination, $wait)
     {
-        //Creates desitination directory if doesnt exist
-        if(!exists($destination))
-        {
-            new($destination, "dir");
-            wait 100;
-        }
-        status "Unraring: ". $source, 000000, progress;
-        run '"' . $exe_path_unrar . '" x "' . $source . '" "' . $destination . '"', , 0, 2;
-    }
+        $wait = $wait ? 2 : 0;
 
-    function APP_UnrarWait($source, $destination)
-    {
-        //Creates desitination directory if doesnt exist
         if(!exists($destination))
         {
             new($destination, "dir");
             wait 100;
         }
+
         status "Unraring: ". $source, 000000, progress;
-        run '"' . $exe_path_unrar . '" x "' . $source . '" "' . $destination . '"', , 2, 2;
+
+        run '"' . $exe_path_unrar . '" x "' . $source . '" "' .
+            $destination . '"', , $wait, 2;
     }
 
     /* Run filezilla and open local folder */
-    function APP_FileZilla($folder)
+    function app_ftp_open_in_filezilla($folder)
     {
         if( !isset($exe_path_filezilla) ||
-            !CHECK_isPathToExe($exe_path_filezilla) ||
+            !check_is_path_to_exe($exe_path_filezilla) ||
             !exists($exe_path_filezilla))
         {
             $search_dir = "C:\Program Files\";
             $executables = quicksearch("filezilla.exe", $search_dir, "|", s);
-            perm $exe_path_filezilla = LIST_GetLastItem($executables);
+            perm $exe_path_filezilla = list_get_last_item($executables);
 
             writepv($PATH_PERM_PV_DIR);
         }
@@ -61,45 +53,37 @@
     }
 
     /*	 Returns full path to created RAR	*/
-    function APP_Rar($filename, $source, $location, $switch)
+    function app_compress_rar($filename, $source, $location, $switch)
     {
-        run '"' . $exe_path_rar . '" ' . $switch . ' "' . $location . $filename . '.rar" "' . $source . '"', , 1, 1;
+        run '"' . $exe_path_rar . '" ' . $switch . ' "' . $location .
+            $filename . '.rar" "' . $source . '"', , 1, 1;
         return $location . $filename . ".rar";
     }
 
-    function APP_SevenZip($filename, $source, $location, $switch)
+    function app_compress_sevenzip($filename, $source, $location, $switch)
     {
-        run '"' . $exe_path_7zipa . '" ' . $switch . ' "' . $location . $filename . '.7z" "' . $source . '"', , 1, 1;
+        run '"' . $exe_path_7zipa . '" ' . $switch . ' "' . $location .
+            $filename . '.7z" "' . $source . '"', , 1, 1;
         return $location . $filename . ".7z";
     }
 
-    function APP_Extract($source, $destination)
+    function app_extract_sevenzip($source, $destination, $wait)
     {
-        //Creates desitination directory if doesnt exist
-        if(!exists($destination))
-        {
-            new($destination, "dir");
-            wait 100;
-        }
-        status "Extracting: ". $source, 000000, progress;
-        //run command, [directory], [wait=0], [show=1]
-        run '"' . $exe_path_7zip . '" x "' . $source . '" -o"' . $destination . '"', , 0, 2;
-    }
+        $wait = $wait ? 2 : 0;
 
-    function APP_ExtractWait($source, $destination)
-    {
-        /* Create directory if does not exist */
         if(!exists($destination))
         {
             new($destination, "dir");
             wait 100;
         }
         status "Extracting: ". $source, 000000, progress;
-        run '"' . $exe_path_7zip . '" x "' . $source . '" -o"' . $destination . '"', , 2, 2;
+
+        run '"' . $exe_path_7zip . '" x "' . $source . '" -o"' .
+            $destination . '"', , $wait, 2;
     }
 
     /* Extract subtitles with MKVExtract */
-    function APP_ExtractSubtitle($source, $track_numbers)
+    function app_subtitle_mkvextract($source, $track_numbers)
     {
         $path = getpathcomponent($source, "path");
         $base = getpathcomponent($source, "base");
@@ -114,27 +98,27 @@
     }
 
     /* Open file in MKVinfo */
-    function APP_MkvInfo($source)
+    function app_video_mkv_info($source)
     {
         return runret($exe_path_mkvinfo . ' "' . $source . '"');
     }
 
     /* Open file or folder in Atom */
-    function APP_Atom($path)
+    function app_text_open_in_atom($path)
     {
         run 'atom "' . $path . '"';
     }
 
     /* Open repository path in GitKraken */
-    function APP_GitKraken($repository_path)
+    function app_git_openrepo_kraken($repository_path)
     {
         if( !isset($exe_path_gitkraken) ||
-            !CHECK_isPathToExe($exe_path_gitkraken) ||
+            !check_is_path_to_exe($exe_path_gitkraken) ||
             !exists($exe_path_gitkraken))
         {
             $search_dir = %USERPROFILE% . "\AppData\Local\gitkraken\";
             $executables = quicksearch("gitkraken.exe", $search_dir, "|", s);
-            perm $exe_path_gitkraken = LIST_GetLastItem($executables);
+            perm $exe_path_gitkraken = list_get_last_item($executables);
 
             writepv($PATH_PERM_PV_DIR);
         }
@@ -152,22 +136,22 @@
     }
 
     /* SHH Connection with putty */
-    function APP_Putty($address, $user, $port)
+    function app_ssh_putty($address, $user, $port)
     {
         run '"'. $exe_path_putty .'"' .
             " -ssh " . $user . "@" . $address . " " . $port;
     }
 
     /* Open Git-Bash to and navigate to path */
-    function APP_GitBash($path)
+    function app_git_openrepo_bash($path)
     {
         if( !isset($exe_path_gitbash) ||
-            !CHECK_isPathToExe($exe_path_gitbash) ||
+            !check_is_path_to_exe($exe_path_gitbash) ||
             !exists($exe_path_gitbash))
         {
             $search_dir = "C:\Program Files\";
             $executables = quicksearch("git-bash.exe", $search_dir, "|", s);
-            perm $exe_path_gitbash = LIST_GetLastItem($executables);
+            perm $exe_path_gitbash = list_get_last_item($executables);
 
             writepv($PATH_PERM_PV_DIR);
         }

@@ -1,21 +1,23 @@
     include_once "..\const\include.xys";
 
-    $path = SELECT_FullPath();
+    $path = select_get_selected_folder_full_path();
 
     if($path == $FUNCTION_RETURN_ERROR)
     {
         end 1;
     }
 
-    $folder_name = SELECT_FolderName();
+    $folder_name = select_get_selected_folder_name();
 
     /* If selected folder is a tv-release (full season or single episode) */
-    if(CHECK_IsTvRelease($folder_name) ||
-        CHECK_IsTvEpisodeRelease($folder_name))
+    if( check_is_folder_tv_season_release($folder_name) ||
+        check_is_folder_tv_episode_release($folder_name))
     {
         /* Determine extract tv-location */
-        $tv_show_name_guess = STRING_TvNameFromRelease($folder_name);
-        $tv_show_season_guess = STRING_TvSeasonFromRelease($folder_name);
+        $tv_show_name_guess =
+            string_regex_tv_title_from_release($folder_name);
+        $tv_show_season_guess =
+            string_regex_tv_season_from_release($folder_name);
         $extract_path_guess =
             $PATH_DS_TV . $tv_show_name_guess . "\" . $tv_show_season_guess;
 
@@ -23,7 +25,7 @@
 
         if(!exists($extract_path_guess))
         {
-            if(INPUT_YesNo("Create folder: " . $extract_path_guess . "?"))
+            if(input_ask_yes_no("Create folder: " . $extract_path_guess . "?"))
             {
                 $extract_destination = new($extract_path_guess, "dir");
             }
@@ -52,7 +54,7 @@
             }
         }
 
-        APP_Unrar($path, $destination);
+        app_extraction_unrar($path, $destination);
 
         /* Comment and color tag folder */
         tag "Extracted: Delete Me!", $path, 2, 1;
@@ -62,12 +64,12 @@
     else // Movie release
     {
         /* Letter to extract release to */
-        $letter = STRING_Moviefirst_letter($folder_name);
+        $letter = string_movie_first_letter($folder_name);
 
         /* Get IMDB-id from nfo-file, if available */
-        $nfo_file = FILE_ListFilesWithExtension($path, "nfo");
+        $nfo_file = file_list_files_with_extension($path, "nfo");
         $nfo_content = readfile($nfo_file);
-        $imdb = STRING_TrimImdb($nfo_content);
+        $imdb = string_extract_imdb($nfo_content);
 
         /* Extract destination */
         $destination = $PATH_DS_MOVIE . $letter . "\" .  $folder_name;
@@ -78,7 +80,7 @@
         /* If user confirms extract location */
         if(confirm($confirmation, , 2, 4))
         {
-            if(SUB_PathHasSubFolder($path))
+            if(sub_path_has_subs_subfolder($path))
             {
                 moveas $folder_name, $PATH_DS_SUBTITLES, $path . "\Subs";
             }
@@ -97,12 +99,12 @@
                 status "Waiting for subs move";
             }
 
-            APP_Extract($rar_file, $destination);
+            app_extraction_unrar($rar_file, $destination);
 
             /* Generate movie.nfo if imdb-id found */
             if($imdb)
             {
-                FILE_GenerateMovieNfo($destination, $imdb);
+                file_generate_movie_nfo($destination, $imdb);
             }
         }
 

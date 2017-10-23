@@ -1,16 +1,17 @@
     include_once "..\const\include.xys";
     perm $omdb_script = $PATH_PYTHON_SCRIPTS . "omdb-searcher.py";
 
-    function PYT_OMDb($title, $output, $imdb, $year)
+    function python_omdb($title, $output, $imdb, $year, $type)
     {
         $query = $imdb ? $imdb : $title;
-        $year = $year ? " -y " . $year : "";
+        $year = $year ? " -year " . $year : "";
+        $type = $type ? " -type " . $type : "";
 
         status "Running omdb-seacher.py: " . $query . $year . ' -o ' . $output;
 
         $data = runret('python "' . $omdb_script . '" "' . $query .
             '" -api ' . readfile($PATH_OMDB_API_KEY) .
-            $year .
+            $year . $type .
             ' -o ' . $output);
 
         status "Done!";

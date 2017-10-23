@@ -5,16 +5,16 @@
     $flag_update_database = 0;
 
     /* CTRL-key is held */
-    if(CHECK_CtrlDown())
+    if(check_ctrl_button_held())
     {
         $flag_update_all = 1;
         msg "CTRL held, will update all shows that needs updating!";
     }
 
-    $selection_full_path = SELECT_FullPath();
-    $selection_name = SELECT_FolderName();
+    $selection_full_path = select_get_selected_folder_full_path();
+    $selection_name = select_get_selected_folder_name();
 
-    if(CHECK_PathInTV($selection_full_path) && $selection_full_path)
+    if(check_is_path_in_dstv($selection_full_path) && $selection_full_path)
     {
         $tv_shows_to_update = $selection_name;
         $flag_update_single_show = 1;
@@ -24,7 +24,7 @@
 
     else
     {
-        $tv_shows_to_update = FILE_ListTvFolders();
+        $tv_shows_to_update = file_list_all_tv_show_folders();
     }
 
     foreach($tv_show, $tv_shows_to_update)
@@ -35,25 +35,43 @@
         wait 2;
 
         /*  Check if TV-show is new (not in database) */
-        if(FILE_TV_IsNew($tv_show))
+        if(db_tv_is_show_in_db($tv_show))
         {
             status "Found new Show: " . $tv_show;
-            $imdb_id = INPUT_Imdb($tv_show);
-            DB_TV_Write($tv_show, "imdb", $imdb_id);
-            $tv_maze_id = PYT_GetMazeIdFromImdbId($tv_show);
 
-            if(!$tv_maze_id)
+            $imdb_id = python_omdb(
+                $tv_show,
+                "imdb",
+                $NULL,
+                $NULL,
+                "series"
+                );
+
+            wait 100;
+
+            $search_hit_data = python_omdb(
+                $NULL,
+                "full_noep",
+                $imdb_id,
+                $NULL,
+                "series"
+            );
+
+            if(!input_ask_yes_no(
+                "Found new Show: " . $tv_show . "!" . $NEW_LINE .
+                "Correct info?" . $NEW_LINE . $NEW_LINE .
+                $search_hit_data)
+                )
             {
-                $tv_maze_id = input("TVMaze Id could not be set!",
-                "Enter manually for: " . $tv_show);
+                $imdb_id = input_ask_for_imdb($tv_show);
             }
 
-            DB_TV_Write($tv_show, "tvmaze", $tv_maze_id);
+            db_tv_write_data($tv_show, "imdb", $imdb_id);
             $flag_update_database = 1;
         }
 
         /*  Check if show has new episodes (not in database) */
-        $new_episodes = FILE_TV_NewEps($tv_show);
+        $new_episodes = db_tv_list_episodes_not_in_db($tv_show);
 
         if($new_episodes)
         {
@@ -64,7 +82,7 @@
                 $STATUS_COLOR_GREEN, "ready";
 
                 /*  Add episode to new.txt */
-                FILE_NEW_Episode($episode, $tv_show);
+                file_add_new_episode($episode, $tv_show);
             }
 
             $flag_update_database = 1;
@@ -72,7 +90,7 @@
 
         if(!$flag_update_database && $flag_update_all)
         {
-            $episode_air_date = DB_TV_Read($tv_show, "lastaireddate");
+            $episode_air_date = db_tv_read_data($tv_show, "lastaireddate");
 
             if($episode_air_date == "No data for next episode!")
             {
@@ -84,7 +102,7 @@
                 $date_diff = datediff($episode_air_date);
             }
 
-            $tv_status = DB_TV_Read($tv_show, "status");
+            $tv_status = db_tv_read_data($tv_show, "status");
 
             if($tv_status == "Running" && $v >= 0)
             {
@@ -98,12 +116,12 @@
             status "Updating databases with new Show-info.",
             $STATUS_COLOR_GREEN, "ready";
 
-            DB_EPISODE_UpdateEpisodes($tv_show);
-            DB_TV_UpdateShowInfo($tv_show);
+            db_tv_update_episode_list($tv_show);
+            db_tv_update_data($tv_show);
         }
     }
 
-    FILE_BACKUP_Db(); // Backup database files
+    file_backup_database(); // Backup database files
 
     status "Done!";
 

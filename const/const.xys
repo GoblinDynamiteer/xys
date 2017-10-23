@@ -72,6 +72,7 @@
     perm $STRING_SUB_SWE_SUFFIX = ".sv.srt";
 
     perm $LINE_BREAK = <crlf>;
+    perm $NEW_LINE = <crlf>;
     perm $NOT_USED = "";
     perm $NULL = "";
 
@@ -87,6 +88,9 @@
     perm $STRPOS_NOT_FOUND = -1;
     perm $TAG_COMMENT = 2;
     perm $CONFIRM_YES_NO_BUTTONS = 4;
+
+    perm $APP_UNRAR_WAIT = 1;
+    perm $APP_UNRAR_NO_WAIT = 0;
 
     /* Errors */
     perm $FUNCTION_RETURN_ERROR = 0;

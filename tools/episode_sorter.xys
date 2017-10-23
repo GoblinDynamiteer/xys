@@ -6,7 +6,7 @@
     $qs_query = "*.mkv OR *.mp4 OR *.srt";
 
     include_once "..\const\include.xys";
-    $path = SELECT_CurrentTabPath();
+    $path = select_get_current_tab_path();
 
     $files = quicksearch($qs_query . " /n", $path);
 
@@ -27,7 +27,7 @@
     }
 
     /* Move files */
-    foreach($s, LIST_Sort($matched_sesons), "|")
+    foreach($s, list_sort($matched_sesons), "|")
     {
         $file_list = quicksearch(
             $s . " AND (" . $qs_query . ") /n", $path, "|");

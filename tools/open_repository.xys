@@ -1,4 +1,16 @@
     include_once "..\const\include.xys";
-    $path = SELECT_CurrentTabPath();
+    $path = select_get_current_tab_path();
 
-    APP_GitKraken($path);
+    $popup_menu =   "GitKraken [ " . $path . " ];kraken|" .
+                    "GitBash   [ " . $path . " ];bash";
+
+    switch(popupmenu($popup_menu))
+    {
+        case "kraken":
+            app_git_openrepo_kraken($path);
+            break;
+
+        case "bash":
+            app_git_openrepo_bash($path);
+            break;
+    }

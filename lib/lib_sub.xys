@@ -7,27 +7,27 @@
     /* Subtitle functions for XYplorer-scripting  */
 
     /* Checks if folder contains an english subtitle (extension en.srt)  */
-    function SUB_PathHasEnSub($path)
+    function subtitle_path_has_en_sub($path)
     {
-        $files = FILE_ListFilesWithExtension($path, "en.srt");
+        $files = file_list_files_with_extension($path, "en.srt");
         return ($files != "");
     }
 
     /* Checks if folder contains subfolder 'Subs' */
-    function SUB_PathHasSubFolder($path)
+    function sub_path_has_subs_subfolder($path)
     {
         return exists($path . "\Subs");
     }
 
     /* Checks if folder contains an english subtitle (extension sv.srt)  */
-    function SUB_PathHasSvSub($path)
+    function subtitle_path_has_sv_sub($path)
     {
-        $files = FILE_ListFilesWithExtension($path, "sv.srt");
+        $files = file_list_files_with_extension($path, "sv.srt");
         return ($files != "");
     }
 
     /*  Get "points" for subtitle, to determine if it is in english/swedish/HI */
-    function SUB_Points($srt_file, $language) {
+    function subtitle_calculate_points($srt_file, $language) {
         $words = "";
         $check_hi = 0;
         $subtitle_text = readfile($srt_file);
@@ -75,10 +75,10 @@
     }
 
     /* Determines language of srt subtitle  */
-    function SUB_DetermineLanguage($file)
+    function subtitle_get_language($file)
     {
-        $eng_points = SUB_Points($file, "en");
-        $swe_points = SUB_Points($file, "sv");
+        $eng_points = subtitle_calculate_points($file, "en");
+        $swe_points = subtitle_calculate_points($file, "sv");
 
         /* Return 1 if english sub, 0 if swedish  */
         if($eng_points > $swe_points)

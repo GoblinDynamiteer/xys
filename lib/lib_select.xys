@@ -1,16 +1,17 @@
     include_once "..\const\include.xys";
 
     /*  Returns full path to selected folder */
-	function SELECT_FullPath(void)
+	function select_get_selected_folder_full_path(void)
     {
 		$selection = get("SelectedItemsPathNames");
 
-		if(SELECT_CountItems($selection) == 1 && SELECT_IsFolder($selection))
+		if(select_count_selected_items($selection) == 1 &&
+            select_is_selected_file_or_folder($selection))
         {
 			return $selection;
 		}
 
-        elseif (SELECT_CountItems($selection) > 1)
+        elseif (select_count_selected_items($selection) > 1)
         {
             msg $ERROR_SELECT_MORE_THAN_ONE;
         }
@@ -18,22 +19,23 @@
 		return 0; // Error
 	}
 
-    function SELECT_CurrentTabPath()
+    function select_get_current_tab_path()
     {
         return get("path");
     }
 
     /*  Returns full path to selected file */
-    function SELECT_FullPathFile(void)
+    function select_get_full_path_to_selected_file(void)
     {
         $selection = get("SelectedItemsPathNames");
 
-        if(SELECT_CountItems($selection) == 1 && !SELECT_IsFolder($selection))
+        if(select_count_selected_items($selection) == 1 &&
+            !select_is_selected_file_or_folder($selection))
         {
             return $selection;
         }
 
-        elseif (SELECT_CountItems($selection) > 1)
+        elseif (select_count_selected_items($selection) > 1)
         {
             msg $ERROR_SELECT_MORE_THAN_ONE;
         }
@@ -42,21 +44,21 @@
       }
 
     /*  Count selected items */
-	function SELECT_CountItems($items)
+	function select_count_selected_items($items)
     {
 	       return gettoken($items, "count", <crlf>);
 	}
 
 	/* Check if selection is a folder or file */
-	function SELECT_IsFolder($path)
+	function select_is_selected_file_or_folder($path)
     {
 		return (exists($path) == 2);
 	}
 
 	/* Returns name of folder, from full path */
-	function SELECT_FolderName(void)
+	function select_get_selected_folder_name(void)
     {
-		$path = SELECT_FullPath();
+		$path = select_get_selected_folder_full_path();
         $retval = $path == 0 ? 0 : gettoken($path, -1, "\");
         return $retval;
 	}

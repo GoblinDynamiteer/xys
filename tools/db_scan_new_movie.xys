@@ -18,7 +18,7 @@
         );
 
         /* Current movies in database for letter/subfolder */
-        $movies_in_database = DB_MOVIE_LIST_Read($letter);
+        $movies_in_database = db_movie_get_movies_for_letter($letter);
 
         status "Checking for new movies in: " . $letter;
 
@@ -41,12 +41,12 @@
                     /* movie.nfo exists, contains imdb-id */
                     if(exists($full_path .  "\movie.nfo"))
                     {
-                        $imdb_from_nfo = STRING_TrimImdb(
+                        $imdb_from_nfo = string_extract_imdb(
                             readfile($full_path . "\movie.nfo")
                         );
 
                         /* Use IMDB-id for OMDB-search */
-                        $search_data = SEARCH_OmdbMovieIMDB($imdb_from_nfo);
+                        $search_data = python_omdb($NULL, "full", $imdb_from_nfo);
                         $flag_generate_nfo = 0;
                     }
 
@@ -54,9 +54,11 @@
                     else
                     {
                         /* Use title and year for OMDB-search */
-                        $search_data = SEARCH_OmdbMovie(
-                            STRING_MovieTitle($movie),
-                            STRING_MovieYear($movie)
+                        $search_data = python_omdb(
+                            string_regex_movie_title_from_release($movie),
+                            "full",
+                            $NULL,
+                            string_regex_year($movie)
                         );
 
                     }
@@ -64,31 +66,31 @@
                     if($search_data)
                     {
                         /* Ask user if movie found on OMDB is correct */
-                        $imdb_id = INPUT_YesNo(
+                        $imdb_id = input_ask_yes_no(
                             "Correct data for: " . $movie . "?" . $LINE_BREAK .
                             replace($search_data, "|", $LINE_BREAK)) ?
-                                LIST_GetLastItem($search_data) :
-                                INPUT_Imdb($movie);
+                                list_get_last_item($search_data) :
+                                input_ask_for_imdb($movie);
                     }
 
                     else
                     {
-                        $imdb_id = INPUT_Imdb($movie);
+                        $imdb_id = input_ask_for_imdb($movie);
                     }
 
 
                     /* Add new movie to database */
-                    DB_MOVIE_Write($movie, "imdb", $imdb_id);
-                    FILE_GenerateMovieNfo($full_path, $imdb_id);
+                    db_movie_write_data($movie, "imdb", $imdb_id);
+                    file_generate_movie_nfo($full_path, $imdb_id);
 
                     status "Data set for: " . $movie;
 
-                    DB_MOVIE_UpdateMovieInfo($movie);
-                    FILE_NEW_Movie($movie);
+                    db_movie_update_data($movie);
+                    file_add_new_movie($movie);
                 }
             }
 
-            DB_MOVIE_LIST_Update($letter);
+            db_movie_listing_update($letter);
 
         }
 

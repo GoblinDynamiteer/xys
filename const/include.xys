@@ -9,6 +9,5 @@ include_once "..\lib\lib_select.xys";
 include_once "..\lib\lib_list.xys";
 include_once "..\lib\lib_string.xys";
 include_once "..\lib\lib_input.xys";
-include_once "..\lib\lib_search.xys";
 include_once "..\lib\lib_log.xys";
 include_once "..\lib\lib_property.xys";

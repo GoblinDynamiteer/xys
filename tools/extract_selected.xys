@@ -1,9 +1,10 @@
- include_once "..\const\include.xys";
+    include_once "..\const\include.xys";
 
-	$selectedItems = get("SelectedItemsPathNames");
-  $itemCount = gettoken($selectedItems, "count", <crlf>);
-  $count = 1;
-  $desitination = inputfolder("C:\", "Destination");
-  foreach($folder, $selectedItems, <crlf>, /*flags*/) {
-    unrarWait(quicksearch('*.rar', $folder), $desitination);
-  }
+    $selectedItems = get("SelectedItemsPathNames");
+    $desitination = inputfolder("C:\", "Destination");
+
+    foreach($folder, $selectedItems, $NEW_LINE)
+    {
+        app_extraction_unrar(quicksearch('*.rar', $folder),
+            $desitination, $APP_UNRAR_WAIT);
+    }

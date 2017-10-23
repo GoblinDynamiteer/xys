@@ -2,9 +2,9 @@
 
     include_once "..\const\include.xys";
 
-    if(INPUT_YesNo("Really update movie.nfo for all movie folders?"))
+    if(input_ask_yes_no("Really update movie.nfo for all movie folders?"))
     {
-        $movie_folder_list = FILE_ListMovieFolders();
+        $movie_folder_list = file_list_all_movie_folders();
 
         foreach($movie_folder, $movie_folder_list)
         {
@@ -14,11 +14,11 @@
             }
 
             $movie = gpc($movie_folder, "component", -1);
-            $id = DB_GetImdb($movie);
+            $id = db_get_imdb($movie);
 
             if($id)
             {
-                FILE_GenerateMovieNfo($movie_folder, $id);
+                file_generate_movie_nfo($movie_folder, $id);
                 status "Writing movie.nfo: " . $movie;
             }
 

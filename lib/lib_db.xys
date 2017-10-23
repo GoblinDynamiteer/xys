@@ -3,12 +3,12 @@
     /* Write data do TV database
         Valid keys: imdb, tvmaze, genre, localep,
         year, status, lastaired, lastaireddate, nextaired, nextaireddate   */
-	function DB_TV_Write($tv_show, $key, $data){
+	function db_tv_write_data($tv_show, $key, $data){
 		setkey $data, $key, $tv_show, $PATH_DB_TV;
 	}
 
     /*  Read data from TV database */
-    function DB_TV_Read($tv_show, $key){
+    function db_tv_read_data($tv_show, $key){
         return getkey(
             $key,
             $tv_show,
@@ -17,7 +17,7 @@
     }
 
     /*  Read data from TV episode database */
-    function DB_EPISODE_Read($tv_show, $key){
+    function db_episode_read_data($tv_show, $key){
         return getkey(
             $key,
             $tv_show,
@@ -26,9 +26,9 @@
     }
 
     /*  Update TV episode database with current local episodes */
-	function DB_EPISODE_UpdateEpisodes($tv_show){
-		$current_episodes = FILE_ListVideoFiles($PATH_DS_TV . $tv_show);
-		$current_episodes = STRING_FilterSE($current_episodes);
+	function db_tv_update_episode_list($tv_show){
+		$current_episodes = file_list_video_files($PATH_DS_TV . $tv_show);
+		$current_episodes = string_regex_season_episode($current_episodes);
 		$old_episodes = getkey("files", $tv_show, $PATH_DB_EPISODES);
 		setkey $current_episodes, "files", $tv_show, $PATH_DB_EPISODES;
 		setkey $old_episodes, "files_pre", $tv_show, $PATH_DB_EPISODES;
@@ -36,7 +36,7 @@
 
     /*  Read data from movie database
         Valid keys: year, genre, title, imdb    */
-	function DB_MOVIE_Read($movie, $key){
+	function db_movie_read_data($movie, $key){
 		$data = getkey(
             $key,
             $movie,
@@ -47,11 +47,11 @@
 	}
 
     /*  Write data to movie database */
-    function DB_MOVIE_Write($movie, $key, $data){
+    function db_movie_write_data($movie, $key, $data){
 		setkey $data, $key, $movie, $PATH_DB_MOVIE;
 	}
 
-    function DB_MOVIE_LIST_Read($letter){
+    function db_movie_get_movies_for_letter($letter){
         $data = getkey(
             "files",
             $letter,
@@ -61,7 +61,7 @@
         return $retval;
     }
 
-    function DB_MOVIE_LIST_Update($letter){
+    function db_movie_listing_update($letter){
         $data = listfolder(
             $PATH_DS_MOVIE . $letter,
             $LISTFOLDER_PATTERN_ALL,
@@ -71,7 +71,9 @@
     }
 
     /*  Update TV database with new TV-show info from TVMaze */
-    function DB_TV_UpdateShowInfo($tv_show){
+    function db_tv_update_data($tv_show){
+        step;
+        echo "fix";
         $genre = PYT_Genre($tv_show);
         $year = PYT_Year($tv_show);
         $last_local_episode = FILE_TV_LastLocalEpisode($PATH_DS_TV . $tv_show);
@@ -81,30 +83,66 @@
         $episode_last = PYT_EpisodeLast($tv_show);
         $episode_last_date = PYT_DateEpisodeLast($tv_show);
 
-        DB_TV_Write($tv_show, "genre", $genre);
-        DB_TV_Write($tv_show, "year", $year);
-        DB_TV_Write($tv_show, "localep", $last_local_episode);
-        DB_TV_Write($tv_show, "status", $show_status);
-        DB_TV_Write($tv_show, "lastaired", $episode_last);
-        DB_TV_Write($tv_show, "lastaireddate", $episode_last_date);
-        DB_TV_Write($tv_show, "nextaired", $episode_next);
-        DB_TV_Write($tv_show, "nextaireddate", $episode_next_date);
+        db_tv_write_data($tv_show, "genre", $genre);
+        db_tv_write_data($tv_show, "year", $year);
+        db_tv_write_data($tv_show, "localep", $last_local_episode);
+        db_tv_write_data($tv_show, "status", $show_status);
+        db_tv_write_data($tv_show, "lastaired", $episode_last);
+        db_tv_write_data($tv_show, "lastaireddate", $episode_last_date);
+        db_tv_write_data($tv_show, "nextaired", $episode_next);
+        db_tv_write_data($tv_show, "nextaireddate", $episode_next_date);
     }
 
-    /*  Update TV database with new TV-show info from TVMaze */
-    function DB_MOVIE_UpdateMovieInfo($movie){
+    function db_movie_update_data($movie)
+    {
+        step;
+        echo "fix";
         $genre = PYT_Genre($movie);
         $year = PYT_Year($movie);
         $title = PYT_Title($movie);
 
-        DB_MOVIE_Write($movie, "genre", $genre);
-        DB_MOVIE_Write($movie, "year", $year);
-        DB_MOVIE_Write($movie, "title", $title);
+        db_movie_write_data($movie, "genre", $genre);
+        db_movie_write_data($movie, "year", $year);
+        db_movie_write_data($movie, "title", $title);
     }
 
     /*  Get IMDb from database, works for both TV-show and Movie */
-    function DB_GetImdb($item){
-        $imdb = DB_MOVIE_Read($item, "imdb");
-        $retval = $imdb ? $imdb : DB_TV_Read($item, "imdb");
+    function db_get_imdb($item)
+    {
+        $imdb = db_movie_read_data($item, "imdb");
+        $retval = $imdb ? $imdb : db_tv_read_data($item, "imdb");
+        return $retval;
+    }
+
+    /*  Checks if TV-show is new (not in database) */
+    function db_tv_is_show_in_db($tv_show)
+    {
+        $retval = getsectionlist($tv_show, $PATH_DB_TV) ? 0 : 1;
+        return $retval;
+    }
+
+    /*  Returns list of new (not in database) episodes in TV-show folder
+    return 0 no new. */
+    function db_tv_list_episodes_not_in_db($tv_show)
+    {
+        $retval = 0;
+
+        $episodes_in_database = db_episode_read_data($tv_show, "files");
+        $episodes_local = file_list_video_files($PATH_DS_TV . $tv_show);
+        $episodes_local = list_get_episodes_s__e__($episodes_local);
+
+        if($episodes_local != $episodes_in_database)
+        {
+            $retval = "";
+            foreach($episode, $episodes_local, "|")
+            {
+                if(strpos($episodes_in_database, $episode) == $STRPOS_NOT_FOUND)
+                {
+                    $retval = $retval . $episode . "|";
+                }
+            }
+            $retval = list_sort($retval);
+        }
+
         return $retval;
     }
