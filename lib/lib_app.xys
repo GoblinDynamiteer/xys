@@ -23,6 +23,39 @@
             $destination . '"', , $wait, 2;
     }
 
+    function app_code_arduino_open_upload($file, $upload_only)
+    {
+        if( !isset($arduino_debug_exe) ||
+            !check_is_path_to_exe($arduino_debug_exe) ||
+            !exists($arduino_debug_exe))
+        {
+            $search_dir = "C:\Program Files (x86)\";
+            $executables = quicksearch("arduino_debug.exe", $search_dir, "|", "s");
+            perm $arduino_debug_exe = list_get_last_item($executables);
+
+            writepv($PATH_PERM_PV_DIR);
+        }
+
+        if( !isset($arduino_ide_exe) ||
+            !check_is_path_to_exe($arduino_ide_exe) ||
+            !exists($arduino_ide_exe)) || 1
+        {
+            $search_dir = "C:\Program Files (x86)\";
+            $executables = quicksearch("arduino.exe", $search_dir, "|", "s");
+            perm $arduino_ide_exe = list_get_last_item($executables);
+
+            writepv($PATH_PERM_PV_DIR);
+        }
+
+        $upload = (isset($upload_only) && $upload_only) ?
+            "--upload -v" : "";
+        $exe = (isset($upload_only) && $upload_only) ?
+            $arduino_debug_exe : $arduino_ide_exe;
+
+        run '"' . $exe . '" "' . $file . '"' .
+            $upload, , 0, 2;
+    }
+
     /* Run filezilla and open local folder */
     function app_ftp_open_in_filezilla($folder)
     {
@@ -31,7 +64,7 @@
             !exists($exe_path_filezilla))
         {
             $search_dir = "C:\Program Files\";
-            $executables = quicksearch("filezilla.exe", $search_dir, "|", s);
+            $executables = quicksearch("filezilla.exe", $search_dir, "|", "s");
             perm $exe_path_filezilla = list_get_last_item($executables);
 
             writepv($PATH_PERM_PV_DIR);

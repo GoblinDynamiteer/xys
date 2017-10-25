@@ -1,5 +1,16 @@
+    include_once "..\const\include.xys";
 
-    $arduino_ide_exe = "C:\Program Files (x86)\Arduino\arduino_debug.exe";
     $ino_file =  get("SelectedItemsPathNames");
+    $popup_menu =   "Open     [ " . $ino_file . " ];open|" .
+                    "Upload   [ " . $ino_file . " ];upload";
 
-    run '"' . $arduino_ide_exe . '" "' . $ino_file . '" --upload -v', , 0, 2;
+    switch(popupmenu($popup_menu))
+    {
+        case "open":
+            app_code_arduino_open_upload($ino_file, 0);
+            break;
+
+        case "upload":
+            app_code_arduino_open_upload($ino_file, 1);
+            break;
+    }
