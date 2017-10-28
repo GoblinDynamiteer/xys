@@ -26,6 +26,24 @@
         return ($files != "");
     }
 
+    /* Checks if episode has sv sub  */
+    function subtitle_episode_has_sv_sub($file_with_full_path)
+    {
+        $name_without_ext = gpc($file_with_full_path, "base");
+        $path = gpc($file_with_full_path, "path") . "\";
+
+        return (exists($path . $name_without_ext . ".sv.srt"));
+    }
+
+    /* Checks if episode has en sub  */
+    function subtitle_episode_has_en_sub($file_with_full_path)
+    {
+        $name_without_ext = gpc($file_with_full_path, "base");
+        $path = gpc($file_with_full_path, "path") . "\";
+
+        return (exists($path . $name_without_ext . ".en.srt"));
+    }
+
     /*  Get "points" for subtitle, to determine if it is in english/swedish/HI */
     function subtitle_calculate_points($srt_file, $language) {
         $words = "";

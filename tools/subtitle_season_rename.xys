@@ -1,0 +1,57 @@
+
+    /* XYPlorer script
+    Extract srt from selected mkv-file(s) and rename according to language.
+    Uses MKVToolnix
+    */
+
+    include_once "..\const\include.xys";
+
+    /* Get active pane path */
+    $path = get("path", a);
+
+    /* Find relevant files in folder files */
+    $video_files = list_sort(file_list_files_with_extension($path, "mkv"));
+
+    foreach($vid_file, $video_files)
+    {
+        $season_episode = string_regex_season_episode($vid_file);
+        $name_without_ext = gpc($vid_file, "base");
+
+        $srt_files = quicksearch("*.srt AND " . $season_episode, $path, "|");
+
+        foreach($srt_file, $srt_files)
+        {
+            if( gpc($srt_file, "file") == $name_without_ext . ".sv.srt" ||
+                gpc($srt_file, "file") == $name_without_ext . ".en.srt")
+                {
+                    continue;
+                }
+
+            if(subtitle_get_language($srt_file) == $SUBTITLE_LANGUAGE_SWEDISH)
+            {
+                if(subtitle_episode_has_sv_sub($vid_file))
+                {
+                    deletefile $srt_file, 0, 0;
+                }
+
+                else
+                {
+                    renameitem($name_without_ext . ".sv.srt", $srt_file);
+                }
+            }
+
+            if(subtitle_get_language($srt_file) == $SUBTITLE_LANGUAGE_ENGLISH)
+            {
+                if(subtitle_episode_has_en_sub($vid_file))
+                {
+                    deletefile $srt_file, 0, 0;
+                }
+
+                else
+                {
+                    $name_without_ext = gpc($vid_file, "base");
+                    renameitem($name_without_ext . ".en.srt", $srt_file);
+                }
+            }
+        }
+    }
