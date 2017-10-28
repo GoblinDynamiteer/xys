@@ -21,6 +21,18 @@
                 $ICON_APPLICATION,
                 0);
 
+    $menu_locs = string_generate_popup_menu_item(
+                "Locations",
+                "goto_loc",
+                $ICON_FOLDER,
+                0);
+
+    $menu_locs_sub_code = string_generate_popup_menu_item(
+                "Code",
+                "list_code_folders",
+                $ICON_FOLDER,
+                1);
+
     $menu_app_sub_putty = string_generate_popup_menu_item(
                 "Putty",
                 "open_app_putty",
@@ -75,6 +87,8 @@
     $menu_app .
         $menu_app_sub_putty .
         $menu_app_sub_ssh_pi .
+    $menu_locs .
+        $menu_locs_sub_code .
     $menu_tv .
     $menu_script;
 
@@ -139,6 +153,31 @@
             app_ssh_putty(readfile($PATH_UNC_GD_DNS_NAME), "pi", "1122");
             break;
 
-        default:
+        case "list_code_folders":
+            $item_arduino_builds = "List Arduino builds";
+            $item_code_folder = "Kod";
+
+            $choice = list_generate_user_selection_list(
+                "Goto code folder",
+                $item_arduino_builds ."|" .
+                $item_code_folder);
+
+            switch ($choice)
+            {
+                case $item_arduino_builds:
+                    focus "P1";
+                    goto $PATH_AND_FILTER_ARDUINO_BUILDS;
+                    break;
+
+                case $item_code_folder:
+                    focus "P1";
+                    goto "d:\kod";
+                    break;
+
+                default:
+                    break;
+            }
+
             break;
+
     }

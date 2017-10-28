@@ -29,6 +29,8 @@
     perm $PATH_BACKUP_GOOGLE_DRIVE = $GOOGLE_DRIVE_LOCATION . "Backups\";
     perm $PATH_BACKUP_DROPBOX = "E:\Dropbox\Backups\";
     perm $PATH_BACKUP_TEMP = "D:\Temp\temprar\";
+    perm $PATH_AND_FILTER_ARDUINO_BUILDS =
+        "%user%\AppData\Local\Temp\|arduino_build";
 
     /*  Script locations */
     perm $PATH_SCRIPT_LOCATION = $GOOGLE_DRIVE_LOCATION . "Scriptstuff\";
@@ -63,6 +65,7 @@
     perm $ICON_HELP = $ICON_LOCATION . "help.ico";
     perm $ICON_KRAKEN = $ICON_LOCATION . "tentacle.ico";
     perm $ICON_FILEZILLA = $ICON_LOCATION . "filezilla.ico";
+    perm $ICON_FOLDER = $ICON_LOCATION . "folder_blue.ico";
     perm $ICON_NO_ICON = "";
 
     /*  File extensions */
