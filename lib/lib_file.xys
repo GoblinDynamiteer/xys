@@ -99,7 +99,6 @@
     /* Add movie to new.txt */
     function file_add_new_movie($movie_folder_name, $imdb)
     {
-        step;
         $today =    now("yyyy-mm-dd");
         $year =     python_omdb($imdb, "year");
         $title =    python_omdb($imdb, "title");
