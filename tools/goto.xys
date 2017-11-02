@@ -91,16 +91,25 @@
             $ICON_KRAKEN,
             0) : $NULL;
 
+    $menu_mkv_extract_subs = gpc($mouse_pointer_item, "ext") == "mkv" ?
+        string_generate_popup_menu_item(
+            "*Extract SRTs from [ ". gpc($mouse_pointer_item, "file") ." ]",
+            "mkv_extract_subs",
+            $ICON_KRAKEN,
+            0) : $NULL;
+
     /* Generate menu */
     $menu =
     $menu_filezilla .   // Conditional: folder under cursor position
     $menu_git_bash .    // Conditional: folder under cursor position
     $menu_gitkraken .   // Conditional: folder under cursor position
     $menu_atom .        // Conditional: folder under cursor position
+    $menu_mkv_extract_subs . // Conditional: mkv-file under cursor position
         ((  $menu_filezilla != $NULL ||
             $menu_atom != $NULL ||
             $menu_gitkraken != $NULL ||
-            $menu_git_bash != $NULL) ?
+            $menu_git_bash != $NULL) ||
+            $menu_mkv_extract_subs != $NULL ?
                 "-|" : "") .
     $menu_app .
         $menu_app_sub_putty .
@@ -135,6 +144,11 @@
 
         case "open_in_gitbash":
             app_git_openrepo_bash($mouse_pointer_item);
+            break;
+
+        case "mkv_extract_subs":
+            selectitems($mouse_pointer_item);
+            load "subtitle_extract_mkv_srt.xys";
             break;
 
         case "tv_last":
@@ -176,6 +190,7 @@
 
         case "clipboard_api_omdb":
             copytext readfile($PATH_OMDB_API_KEY);
+            status "Copied OMDb API-key to clipboard!"
             break;
 
         case "list_code_folders":

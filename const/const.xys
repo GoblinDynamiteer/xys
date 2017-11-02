@@ -24,6 +24,15 @@
     perm $PATH_LOG_TXT = $PATH_DB_LOCATION . "log.txt";
     perm $PATH_MISSING_EPISODES_TXT = $PATH_DB_LOCATION . "missing_eps.txt";
 
+    /* Applications used by XYPlorer scripts */
+    perm $APP_LOCATION = $GOOGLE_DRIVE_LOCATION_DEFAULT . "Apps\";
+    perm $EXE_LOCATION_MKVINFO = $APP_LOCATION . "mkvinfo.exe";
+    perm $EXE_LOCATION_MKVEXTRACT = $APP_LOCATION . "mkvextract.exe";
+    perm $EXE_LOCATION_PUTTY = $APP_LOCATION . "putty.exe";
+    perm $EXE_LOCATION_UNRAR = $APP_LOCATION . "unrar.exe";
+    perm $EXE_LOCATION_RAR = $APP_LOCATION . "rar.exe";
+    perm $EXE_LOCATION_7ZA = $APP_LOCATION . "7za.exe";
+
     /*  Misc locations */
     perm $PATH_NZB_IMPORT = "D:\NZB Import\";
     perm $PATH_BACKUP_GOOGLE_DRIVE = $GOOGLE_DRIVE_LOCATION . "Backups\";

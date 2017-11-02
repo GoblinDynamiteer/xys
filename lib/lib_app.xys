@@ -1,10 +1,6 @@
-    perm $exe_path_unrar = $PATH_SCRIPT_LOCATION . "\xyplorer\app\unrar.exe";
-    perm $exe_path_rar = $PATH_SCRIPT_LOCATION . "\xyplorer\app\rar.exe";
-    perm $exe_path_7zipa = $PATH_SCRIPT_LOCATION . "\xyplorer\app\7za.exe";
     perm $exe_path_7zip = "C:\Program Files\7-Zip\7z.exe";
-    perm $exe_path_subtitleedit = "C:\Program Files\Subtitle Edit 3\SubtitleEdit.exe";
-    perm $exe_path_mkvinfo = $PATH_SCRIPT_LOCATION . "\xyplorer\app\mkvtoolnix\mkvinfo.exe";
-    perm $exe_path_mkvextract = $PATH_SCRIPT_LOCATION . "\xyplorer\app\mkvtoolnix\mkvextract.exe";
+    perm $exe_path_subtitleedit =
+        "C:\Program Files\Subtitle Edit 3\SubtitleEdit.exe";
     perm $exe_path_putty = $PATH_SCRIPT_LOCATION . "\xyplorer\app\putty.exe";
 
     function app_extraction_unrar($source, $destination, $wait)
@@ -19,7 +15,7 @@
 
         status "Unraring: ". $source, 000000, progress;
 
-        run '"' . $exe_path_unrar . '" x "' . $source . '" "' .
+        run '"' . $EXE_LOCATION_UNRAR . '" x "' . $source . '" "' .
             $destination . '"', , $wait, 2;
     }
 
@@ -30,7 +26,8 @@
             !exists($arduino_debug_exe))
         {
             $search_dir = "C:\Program Files (x86)\";
-            $executables = quicksearch("arduino_debug.exe", $search_dir, "|", "s");
+            $executables = quicksearch(
+                "arduino_debug.exe", $search_dir, "|", "s");
             perm $arduino_debug_exe = list_get_last_item($executables);
 
             writepv($PATH_PERM_PV_DIR);
@@ -88,14 +85,14 @@
     /*	 Returns full path to created RAR	*/
     function app_compress_rar($filename, $source, $location, $switch)
     {
-        run '"' . $exe_path_rar . '" ' . $switch . ' "' . $location .
+        run '"' . $EXE_LOCATION_RAR . '" ' . $switch . ' "' . $location .
             $filename . '.rar" "' . $source . '"', , 1, 1;
         return $location . $filename . ".rar";
     }
 
     function app_compress_sevenzip($filename, $source, $location, $switch)
     {
-        run '"' . $exe_path_7zipa . '" ' . $switch . ' "' . $location .
+        run '"' . $EXE_LOCATION_7ZA . '" ' . $switch . ' "' . $location .
             $filename . '.7z" "' . $source . '"', , 1, 1;
         return $location . $filename . ".7z";
     }
@@ -123,17 +120,19 @@
         $output_file = "";
         foreach($track_number, $track_numbers)
         {
-            $output_file = $track_number . ':"' . $path . '\' . $base . '_' . $track_number . '.srt" ' . $output_file;
+            $output_file = $track_number . ':"' . $path . '\' . $base . '_' .
+                $track_number . '.srt" ' . $output_file;
         }
 
         status "Extracting SRT from ". $source, 000000, progress;
-        run '"' . $exe_path_mkvextract . '" tracks "' . $source . '" '. $output_file, , 1, 2;
+        run '"' . $EXE_LOCATION_MKVEXTRACT . '" tracks "' . $source . '" '.
+            $output_file, , 1, 2;
     }
 
     /* Open file in MKVinfo */
     function app_video_mkv_info($source)
     {
-        return runret($exe_path_mkvinfo . ' "' . $source . '"');
+        return runret($EXE_LOCATION_MKVINFO . ' "' . $source . '"');
     }
 
     /* Open file or folder in Atom */
