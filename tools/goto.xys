@@ -21,6 +21,12 @@
                 $ICON_APPLICATION,
                 0);
 
+    $menu_clipboard = string_generate_popup_menu_item(
+                "ToClipBoard",
+                "clipboard",
+                $ICON_CLIPBOARD,
+                0);
+
     $menu_locs = string_generate_popup_menu_item(
                 "Locations",
                 "goto_loc",
@@ -44,6 +50,18 @@
                 "open_app_putty_ssh_pi",
                 $ICON_TERMINAL,
                 1);
+
+    $menu_clipboard_sub_api = string_generate_popup_menu_item(
+                "API",
+                "api",
+                $ICON_CLIPBOARD,
+                1);
+
+    $menu_clipboard_sub_api_omdb = string_generate_popup_menu_item(
+                "OMDb",
+                "clipboard_api_omdb",
+                $ICON_CLIPBOARD,
+                2);
 
     $menu_atom = exists($mouse_pointer_item) == 2 ?
         string_generate_popup_menu_item(
@@ -90,7 +108,10 @@
     $menu_locs .
         $menu_locs_sub_code .
     $menu_tv .
-    $menu_script;
+    $menu_script .
+    $menu_clipboard .
+        $menu_clipboard_sub_api .
+            $menu_clipboard_sub_api_omdb;
 
     $choice = popupnested($menu);
 
@@ -151,6 +172,10 @@
 
         case "open_app_putty_ssh_pi":
             app_ssh_putty(readfile($PATH_UNC_GD_DNS_NAME), "pi", "1122");
+            break;
+
+        case "clipboard_api_omdb":
+            copytext readfile($PATH_OMDB_API_KEY);
             break;
 
         case "list_code_folders":

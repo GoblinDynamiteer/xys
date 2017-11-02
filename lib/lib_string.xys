@@ -81,7 +81,8 @@
         {
             $first_letter = "#";
         }
-        /* V and W is in same folder: 'WV' */
+
+        /* V and W is in same folder: 'VW' */
         elseif(($first_letter == "V") || ($first_letter == "W"))
         {
             $first_letter = "VW";
