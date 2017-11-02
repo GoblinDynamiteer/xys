@@ -37,14 +37,11 @@
         return replace($string, <crlf>);
     }
 
-    //Gets S01E09, returns S01E10
+    /* Example: Gets S01E09, returns S01E10 */
     function string_episode_next($episode)
     {
-        //gets ##|## from S##E##
         $season_episode = regexmatches($episode, $REGEX_DIGIT_2);
-        //gets first token from ##|##
         $season = gettoken($season_episode, 1, "|");
-        //gets last token from ##|##
         $number = gettoken($season_episode, -1, "|") + 1;
         return "S" . format($season, "00") . "E" . format($number, "00");
     }
@@ -58,7 +55,7 @@
 
     function string_movie_first_letter($string)
     {
-        //Skips The/An/A
+        /* Skip The. An. A. */
         if(regexmatches($string, $REGEX_MOVIE_PREFIX_THE) != "")
         {
             $first_letter = substr($string, 4, 1);
@@ -79,12 +76,12 @@
             $first_letter = substr($string, 0, 1);
         }
 
-        //If first letter is a digit
+        /* If first letter is a digit */
         if(regexmatches($first_letter, $REGEX_DIGIT_1) != "")
         {
             $first_letter = "#";
         }
-        // V and W should be in folder VW
+        /* V and W is in same folder: 'WV' */
         elseif(($first_letter == "V") || ($first_letter == "W"))
         {
             $first_letter = "VW";

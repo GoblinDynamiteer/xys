@@ -90,17 +90,15 @@
         db_tv_write_data($tv_show, "lastaireddate", $episode_last_date);
     }
 
-    function db_movie_update_data($movie)
+    function db_movie_update_data($movie_folder_name, $imdb)
     {
-        step;
-        echo "fix";
-        $genre = PYT_Genre($movie);
-        $year = PYT_Year($movie);
-        $title = PYT_Title($movie);
+        $genre = python_omdb($imdb, "genre");
+        $year = python_omdb($imdb, "year");
+        $title = python_omdb($imdb, "title");
 
-        db_movie_write_data($movie, "genre", $genre);
-        db_movie_write_data($movie, "year", $year);
-        db_movie_write_data($movie, "title", $title);
+        db_movie_write_data($movie_folder_name, "genre", $genre);
+        db_movie_write_data($movie_folder_name, "year", $year);
+        db_movie_write_data($movie_folder_name, "title", $title);
     }
 
     /*  Get IMDb from database, works for both TV-show and Movie */

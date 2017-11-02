@@ -63,13 +63,14 @@
 
                     }
 
+                    step;
                     if($search_data)
                     {
                         /* Ask user if movie found on OMDB is correct */
                         $imdb_id = input_ask_yes_no(
                             "Correct data for: " . $movie . "?" . $LINE_BREAK .
                             replace($search_data, "|", $LINE_BREAK)) ?
-                                list_get_last_item($search_data) :
+                                string_extract_imdb($search_data) :
                                 input_ask_for_imdb($movie);
                     }
 
@@ -85,8 +86,10 @@
 
                     status "Data set for: " . $movie;
 
-                    db_movie_update_data($movie);
-                    file_add_new_movie($movie);
+                    db_movie_update_data($movie, $imdb_id);
+
+                    /* Add movie to new.txt */
+                    file_add_new_movie($movie, $imdb_id);
                 }
             }
 
@@ -99,7 +102,7 @@
 
     if($flag_backup_db)
     {
-        FILE_BACKUP_Db();
+        file_backup_database();
     }
 
     status "Done!";
