@@ -100,36 +100,43 @@
 
     /* Generate menu */
     $menu =
-    $menu_filezilla .   // Conditional: folder under cursor position
-    $menu_git_bash .    // Conditional: folder under cursor position
-    $menu_gitkraken .   // Conditional: folder under cursor position
-    $menu_atom .        // Conditional: folder under cursor position
+    $menu_filezilla .        // Conditional: folder under cursor position
+    $menu_git_bash .         // Conditional: folder under cursor position
+    $menu_gitkraken .        // Conditional: folder under cursor position
+    $menu_atom .             // Conditional: folder under cursor position
     $menu_mkv_extract_subs . // Conditional: mkv-file under cursor position
+
+        /* Add a line if any of the above items are generated */
         ((  $menu_filezilla != $NULL ||
             $menu_atom != $NULL ||
             $menu_gitkraken != $NULL ||
             $menu_git_bash != $NULL) ||
             $menu_mkv_extract_subs != $NULL ?
                 "-|" : "") .
-    $menu_app .
-        $menu_app_sub_putty .
-        $menu_app_sub_ssh_pi .
-    $menu_locs .
-        $menu_locs_sub_code .
-    $menu_tv .
-    $menu_script .
-    $menu_clipboard .
-        $menu_clipboard_sub_api .
-            $menu_clipboard_sub_api_omdb;
+
+    /*  The following menu items are always present,
+        indented items are sub-items */
+    $menu_app .                  // App
+        $menu_app_sub_putty .    // App -> Putty
+        $menu_app_sub_ssh_pi .   // App -> Putty SSH to Pi
+    $menu_locs .                 // Locations
+        $menu_locs_sub_code .    // Locations -> Code
+    $menu_tv .                   // Select TV-show and go to last season folder
+    $menu_script .               // Script command help
+    $menu_clipboard .            // Clipboard
+        $menu_clipboard_sub_api .           // Clipboard -> API Keys
+            $menu_clipboard_sub_api_omdb;   // Clipboard -> API Keys -> OMDb
 
     $choice = popupnested($menu);
 
     /*  End if no choice is selected */
-    if(!$choice){
+    if(!$choice)
+    {
         end 1;
     }
 
-    switch($choice){
+    switch($choice)
+    {
         case "open_in_atom":
             app_text_open_in_atom($mouse_pointer_item);
             break;

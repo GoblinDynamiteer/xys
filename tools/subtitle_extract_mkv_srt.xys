@@ -1,7 +1,15 @@
+    /*  Extracts available srt-files from mkv-files
+        Determines language of extracted srt-files and
+        renames them accordingly.
 
-    /* XYPlorer script
-    Extract srt from selected mkv-file(s) and rename according to language.
-    Uses MKVToolnix
+        Languages used:
+        English -> filename.en.srt
+        Swedish -> filename.sv.srt
+
+        English subtitles with hearing impaired text are
+        tagged with "HEARING IMPAIRED".
+
+        Uses mvkinfo and mkvextract
     */
 
     include_once "..\const\include.xys";

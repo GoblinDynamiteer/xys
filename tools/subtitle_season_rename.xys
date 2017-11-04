@@ -1,7 +1,7 @@
-
-    /* XYPlorer script
-    Extract srt from selected mkv-file(s) and rename according to language.
-    Uses MKVToolnix
+    /*  Renames srt-files in folder to match episodes
+        Languages used:
+        English -> filename.en.srt
+        Swedish -> filename.sv.srt
     */
 
     include_once "..\const\include.xys";

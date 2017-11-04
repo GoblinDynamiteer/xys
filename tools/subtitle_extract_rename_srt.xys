@@ -1,8 +1,16 @@
-    include_once "..\const\include.xys";
+    /*  Extracts archived srt-files for zip- and rar-files
+        Determines language of extracted srt-files and
+        renames them accordingly.
 
-    /* XYPlorer script
-        Extract and rename SRT subtitles
+        Languages used:
+        English -> filename.en.srt
+        Swedish -> filename.sv.srt
+
+        English subtitles with hearing impaired text are
+        tagged with "HEARING IMPAIRED".
     */
+
+    include_once "..\const\include.xys";
 
     /* Get active pane path */
     $path = get("path", a);
@@ -41,7 +49,7 @@
     /* Determine new files */
     foreach($file, $srt_files_current)
     {
-        $srt_files = replace($srt_files, $file); // Removes $file string from $srt_files
+        $srt_files = replace($srt_files, $file);
     }
 
     /* Sort list of new srt-files, removes empty elements */
