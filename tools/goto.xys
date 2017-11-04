@@ -197,7 +197,7 @@
 
         case "clipboard_api_omdb":
             copytext readfile($PATH_OMDB_API_KEY);
-            status "Copied OMDb API-key to clipboard!"
+            status "Copied OMDb API-key to clipboard!";
             break;
 
         case "list_code_folders":
@@ -220,11 +220,8 @@
                     focus "P1";
                     goto "d:\kod";
                     break;
-
-                default:
-                    break;
             }
 
+        default:
             break;
-
     }
