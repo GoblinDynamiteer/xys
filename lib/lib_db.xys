@@ -64,8 +64,8 @@
     function db_movie_listing_update($letter){
         $data = listfolder(
             $PATH_DS_MOVIE . $letter,
-            $LISTFOLDER_PATTERN_ALL,
-            $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS
+            $SETTING_LISTFOLDER_PATTERN_ALL,
+            $SETTING_LISTFOLDER_NO_FILES + $SETTING_LISTFOLDER_NO_PATHS
         );
         setkey $data, "files", $letter, $PATH_DB_MOVIE_LIST;
     }
@@ -131,7 +131,7 @@
             $retval = "";
             foreach($episode, $episodes_local, "|")
             {
-                if(strpos($episodes_in_database, $episode) == $STRPOS_NOT_FOUND)
+                if(strpos($episodes_in_database, $episode) == $RETURN_VALUE_STRPOS_NOT_FOUND)
                 {
                     $retval = $retval . $episode . "|";
                 }

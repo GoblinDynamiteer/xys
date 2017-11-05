@@ -1,8 +1,8 @@
     include_once "..\const\include.xys";
 
     /* Get movie letters/subfolders */
-    $movie_letters = listfolder($PATH_DS_MOVIE, $LISTFOLDER_PATTERN_ALL,
-        $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS);
+    $movie_letters = listfolder($PATH_DS_MOVIE, $SETTING_LISTFOLDER_PATTERN_ALL,
+        $SETTING_LISTFOLDER_NO_FILES + $SETTING_LISTFOLDER_NO_PATHS);
 
     $flag_backup_db = 0; // Backup datase files flag
     $flag_generate_nfo = 1;
@@ -13,8 +13,8 @@
         /* List movie folders in letter/subfolder */
         $movies_in_folder = listfolder(
             $PATH_DS_MOVIE . $letter,
-            $LISTFOLDER_PATTERN_ALL,
-            $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS
+            $SETTING_LISTFOLDER_PATTERN_ALL,
+            $SETTING_LISTFOLDER_NO_FILES + $SETTING_LISTFOLDER_NO_PATHS
         );
 
         /* Current movies in database for letter/subfolder */
@@ -31,7 +31,7 @@
             /* Iterate through found movie folders */
             foreach($movie, $movies_in_folder)
             {
-                if(strpos($movies_in_database, $movie) == $STRPOS_NOT_FOUND)
+                if(strpos($movies_in_database, $movie) == $RETURN_VALUE_STRPOS_NOT_FOUND)
                 {
                     status "Found new movie: " . $movie;
 

@@ -96,15 +96,17 @@
 
     /* Standard function parameters	*/
     perm $WRITEFILE_ON_EXIST_APPEND = "a";
-    perm $LISTFOLDER_PATTERN_ALL = "*";
-    perm $LISTFOLDER_NO_FILES = 2;
-    perm $LISTFOLDER_NO_PATHS = 4;
-    perm $STRPOS_NOT_FOUND = -1;
-    perm $TAG_COMMENT = 2;
-    perm $CONFIRM_YES_NO_BUTTONS = 4;
+    perm $SETTING_LISTFOLDER_PATTERN_ALL = "*";
+    perm $SETTING_LISTFOLDER_NO_FILES = 2;
+    perm $SETTING_LISTFOLDER_NO_PATHS = 4;
+    perm $RETURN_VALUE_STRPOS_NOT_FOUND = -1;
+    perm $SETTING_TAG_COMMENT = 2;
+    perm $SETTING_CONFIRM_YES_NO_BUTTONS = 4;
+    perm $SETTING_GPC_PATH_WITHOUT_FILE_NAME = "path";
+    perm $SETTING_GPC_FILE_NAME_NO_EXTENSION = "base";
 
-    perm $APP_UNRAR_WAIT = 1;
-    perm $APP_UNRAR_NO_WAIT = 0;
+    perm $SETTING_RUNRET_WAIT = 1;
+    perm $SETTING_RUNRET_NO_WAIT = 0;
 
     /* Errors */
     perm $FUNCTION_RETURN_ERROR = 0;

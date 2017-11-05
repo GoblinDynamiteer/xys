@@ -11,8 +11,8 @@
         foreach($path, $search_paths, $NEW_LINE)
         {
             /* Get subfolders */
-            $sub_folders = listfolder($path, $LISTFOLDER_PATTERN_ALL,
-                $LISTFOLDER_NO_FILES);
+            $sub_folders = listfolder($path, $SETTING_LISTFOLDER_PATTERN_ALL,
+                $SETTING_LISTFOLDER_NO_FILES);
 
             /*  Todo: Fix search in %user% %appdata% etc, can't load from
                 text-file, says location is unavailable */

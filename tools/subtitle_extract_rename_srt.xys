@@ -27,7 +27,7 @@
     {
         foreach($file, $zip_files)
         {
-            app_extract_sevenzip($file, $path, $APP_UNRAR_WAIT);
+            app_extract_sevenzip($file, $path, $SETTING_RUNRET_WAIT);
             deletefile $file;
         }
     }
@@ -36,7 +36,7 @@
     {
         foreach($file, $rar_files)
         {
-            app_extraction_unrar($file, $path, $APP_UNRAR_WAIT);
+            app_extraction_unrar($file, $path, $SETTING_RUNRET_WAIT);
             deletefile $file;
         }
     }

@@ -38,8 +38,8 @@
 
     function file_tv_list_seasons_in_path($path)
     {
-        $data = listfolder($path, $LISTFOLDER_PATTERN_ALL,
-            $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS);
+        $data = listfolder($path, $SETTING_LISTFOLDER_PATTERN_ALL,
+            $SETTING_LISTFOLDER_NO_FILES + $SETTING_LISTFOLDER_NO_PATHS);
 
         return $data;
     }
@@ -161,8 +161,8 @@
     /*  List foldes in DS/TV */
     function file_list_all_tv_show_folders(void)
     {
-        $data = listfolder($PATH_DS_TV, $LISTFOLDER_PATTERN_ALL,
-            $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS);
+        $data = listfolder($PATH_DS_TV, $SETTING_LISTFOLDER_PATTERN_ALL,
+            $SETTING_LISTFOLDER_NO_FILES + $SETTING_LISTFOLDER_NO_PATHS);
 
         return $data;
     }
@@ -170,8 +170,8 @@
     /*  List folders and subfolders in DS/Movie */
     function file_list_all_movie_folders(void)
     {
-        $letters = listfolder($PATH_DS_MOVIE, $LISTFOLDER_PATTERN_ALL,
-            $LISTFOLDER_NO_FILES + $LISTFOLDER_NO_PATHS);
+        $letters = listfolder($PATH_DS_MOVIE, $SETTING_LISTFOLDER_PATTERN_ALL,
+            $SETTING_LISTFOLDER_NO_FILES + $SETTING_LISTFOLDER_NO_PATHS);
 
         $list = "";
 

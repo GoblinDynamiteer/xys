@@ -6,5 +6,5 @@
     foreach($folder, $selectedItems, $NEW_LINE)
     {
         app_extraction_unrar(quicksearch('*.rar', $folder),
-            $desitination, $APP_UNRAR_WAIT);
+            $desitination, $SETTING_RUNRET_WAIT);
     }

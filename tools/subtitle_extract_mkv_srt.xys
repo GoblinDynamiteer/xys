@@ -24,13 +24,15 @@
     foreach($mkv_file, $mkv_files)
     {
 
-        $mkv_file_path = gpc($mkv_file, "path"); //path without filename
-        $mkv_file_name = gpc($mkv_file, "base"); //only filename, without extension
+        $mkv_file_path = gpc($mkv_file, $SETTING_GPC_PATH_WITHOUT_FILE_NAME);
+        $mkv_file_name = gpc($mkv_file, $SETTING_GPC_FILE_NAME_NO_EXTENSION);
 
         $mkv_info = app_video_mkv_info($mkv_file);
 
-        $track_numbers = regexmatches($mkv_info, $REGEX_SUBTITLE_MKV_INFO_NUMBERS, "|");
-        $track_types = regexmatches($mkv_info, $REGEX_SUBTITLE_MKV_INFO_TYPES, "|");
+        $track_numbers = regexmatches($mkv_info,
+            $REGEX_SUBTITLE_MKV_INFO_NUMBERS, "|");
+        $track_types = regexmatches($mkv_info,
+            $REGEX_SUBTITLE_MKV_INFO_TYPES, "|");
 
         /*  List subtitle tracks for extraction */
         $track_extraction = "";
@@ -80,7 +82,7 @@
                 if(subtitle_calculate_points($srt_file, "hi") > $srt_word_hi_treshold)
                 {
                     /*  Todo: Remove HI */
-                    tag "HEARING IMPAIRED", $srt_file, $TAG_COMMENT;
+                    tag "HEARING IMPAIRED", $srt_file, $SETTING_TAG_COMMENT;
                 }
 
                 renameitem(

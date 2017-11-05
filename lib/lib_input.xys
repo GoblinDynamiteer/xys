@@ -14,5 +14,5 @@
 
     function input_ask_yes_no($message)
     {
-        return confirm($message, $LINE_BREAK, 2, $CONFIRM_YES_NO_BUTTONS);
+        return confirm($message, $LINE_BREAK, 2, $SETTING_CONFIRM_YES_NO_BUTTONS);
     }
