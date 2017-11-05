@@ -3,6 +3,36 @@
         "C:\Program Files\Subtitle Edit 3\SubtitleEdit.exe";
     perm $exe_path_putty = $PATH_SCRIPT_LOCATION . "\xyplorer\app\putty.exe";
 
+    /* Searches for executable, returns full path */
+    function app_find_executable($file_name)
+    {
+        $search_paths = readfile($PATH_EXEC_SEARCH_PATHS_TXT);
+
+        foreach($path, $search_paths, $NEW_LINE)
+        {
+            /* Get subfolders */
+            $sub_folders = listfolder($path, $LISTFOLDER_PATTERN_ALL,
+                $LISTFOLDER_NO_FILES);
+
+            /*  Todo: Fix search in %user% %appdata% etc, can't load from
+                text-file, says location is unavailable */
+
+            foreach($folder, $sub_folders)
+            {
+                status "Searching for " . $file_name  . " in " . $folder;
+                $search_hit = quicksearch($file_name, $folder);
+
+                if($search_hit)
+                {
+                    /* Todo: Return last/first hit if several */
+                    status "Found ". $file_name . "!";
+                    return $search_hit;
+                }
+            }
+        }
+    }
+
+    /* Extract file with unrar.exe */
     function app_extraction_unrar($source, $destination, $wait)
     {
         $wait = $wait ? 2 : 0;
@@ -19,17 +49,14 @@
             $destination . '"', , $wait, 2;
     }
 
+    /* Compile and upload with Arduino */
     function app_code_arduino_open_upload($file, $upload_only)
     {
         if( !isset($arduino_debug_exe) ||
             !check_is_path_to_exe($arduino_debug_exe) ||
             !exists($arduino_debug_exe))
         {
-            $search_dir = "C:\Program Files (x86)\";
-            $executables = quicksearch(
-                "arduino_debug.exe", $search_dir, "|", "s");
-            perm $arduino_debug_exe = list_get_last_item($executables);
-
+            perm $arduino_debug_exe = app_find_executable("arduino_debug.exe");
             writepv($PATH_PERM_PV_DIR);
         }
 
@@ -37,10 +64,7 @@
             !check_is_path_to_exe($arduino_ide_exe) ||
             !exists($arduino_ide_exe)) || 1
         {
-            $search_dir = "C:\Program Files (x86)\";
-            $executables = quicksearch("arduino.exe", $search_dir, "|", "s");
-            perm $arduino_ide_exe = list_get_last_item($executables);
-
+            perm $arduino_ide_exe = app_find_executable("arduino.exe");
             writepv($PATH_PERM_PV_DIR);
         }
 
@@ -60,10 +84,7 @@
             !check_is_path_to_exe($exe_path_filezilla) ||
             !exists($exe_path_filezilla))
         {
-            $search_dir = "C:\Program Files\";
-            $executables = quicksearch("filezilla.exe", $search_dir, "|", "s");
-            perm $exe_path_filezilla = list_get_last_item($executables);
-
+            perm $exe_path_filezilla = app_find_executable("filezilla.exe");
             writepv($PATH_PERM_PV_DIR);
         }
 
@@ -82,7 +103,7 @@
         }
     }
 
-    /*	 Returns full path to created RAR	*/
+    /* Compress to rar-file, return full path to created file */
     function app_compress_rar($filename, $source, $location, $switch)
     {
         run '"' . $EXE_LOCATION_RAR . '" ' . $switch . ' "' . $location .
@@ -90,6 +111,7 @@
         return $location . $filename . ".rar";
     }
 
+    /* Compress to 7z-file, return full path to created file */
     function app_compress_sevenzip($filename, $source, $location, $switch)
     {
         run '"' . $EXE_LOCATION_7ZA . '" ' . $switch . ' "' . $location .
@@ -97,6 +119,7 @@
         return $location . $filename . ".7z";
     }
 
+    /* Extract with 7z.exe */
     function app_extract_sevenzip($source, $destination, $wait)
     {
         $wait = $wait ? 2 : 0;

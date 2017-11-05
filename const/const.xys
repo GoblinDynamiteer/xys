@@ -59,6 +59,7 @@
     perm $PATH_SUB_HI_WORDLIST_TXT = $PATH_TXT_FILES . "hiSub.txt";
     perm $PATH_TV_SKIPLIST_TXT = $PATH_TXT_FILES . "skiplist.txt";
     perm $PATH_XYPLORER_HELP_SCRIPTING_TXT = $PATH_TXT_FILES . "scripthelp.txt";
+    perm $PATH_EXEC_SEARCH_PATHS_TXT = $PATH_TXT_FILES . "exec_search_paths.txt";
 
     /* Perm variables file */
     perm $PATH_PERM_PV_DIR = $PATH_SCRIPT_LOCATION . "perm_variables.dat";

@@ -71,12 +71,6 @@
         $today = now("yyyy-mm-dd");
         $maze_id = db_tv_read_data($tv_show, "tvmaze");
 
-        //American Dad has other season ordering on TVMaze, than releases
-        if($tv_show == "American Dad")
-        {
-            $episode = replace($episode, "S14E", "S13E");
-        }
-
         $season_number = string_regex_season_from_season_episode($episode);
         $episode_number = string_regex_episode_from_season_episode($episode);
 
@@ -90,6 +84,9 @@
 
         writefile($PATH_NEW_TXT, $string . $LINE_BREAK,
             $WRITEFILE_ON_EXIST_APPEND);
+
+        status "Added episode: " . $tv_show . " - S" . $season_number .
+            "E" . $episode_number . ": " . $title;
 
         log_new_tv($tv_show, $episode);
 
