@@ -52,13 +52,23 @@
                 "full_noep"
             );
 
-            if(!input_ask_yes_no(
-                "Found new Show: " . $tv_show . "!" . $NEW_LINE .
-                "Correct info?" . $NEW_LINE . $NEW_LINE .
-                $search_hit_data)
-                )
+            /* Python script returned error */
+            if(python_check_error($search_hit_data)
             {
                 $imdb_id = input_ask_for_imdb($tv_show);
+            }
+
+            else
+            {
+                /* Ask user if python script got correct show */
+                if(!input_ask_yes_no(
+                    "Found new Show: " . $tv_show . "!" . $NEW_LINE .
+                    "Correct info?" . $NEW_LINE . $NEW_LINE .
+                    $search_hit_data)
+                    )
+                {   // User selected NO
+                    $imdb_id = input_ask_for_imdb($tv_show);
+                }
             }
 
             /* Get TVmaze-id by searching API with IMDb-id */

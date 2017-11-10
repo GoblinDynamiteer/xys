@@ -38,3 +38,10 @@
         /* return data, remove crlf */
         return substr($data, 0, -2);
     }
+
+    /* Scripts return "Error searching for ..." */
+    function python_check_error($data)
+    {
+        /* Return 1 if string is not found */
+        return (substr($data, "Error searching for") == -1);
+    }
