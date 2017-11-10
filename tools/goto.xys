@@ -9,6 +9,13 @@
             $ICON_TV_ALT,
             0) : $NULL;
 
+    $menu_movie = exists($PATH_DS_MOVIE) ?
+        string_generate_popup_menu_item(
+            "Movie: Go to folder",
+            "goto_movie",
+            $ICON_TV_ALT,
+            0) : $NULL;
+
     $menu_script = string_generate_popup_menu_item(
                 "Help on scripting command",
                 "script_help",
@@ -122,6 +129,7 @@
     $menu_locs .                 // Locations
         $menu_locs_sub_code .    // Locations -> Code
     $menu_tv .                   // Select TV-show and go to last season folder
+    $menu_movie .                // List all movie folders, go to selected
     $menu_script .               // Script command help
     $menu_clipboard .            // Clipboard
         $menu_clipboard_sub_api .           // Clipboard -> API Keys
@@ -169,8 +177,21 @@
                             "1000"
                         );
             $season = file_tv_get_last_season_in_path($PATH_DS_TV . $tv_show);
-            goto $PATH_DS_TV . $tv_show . "\"  . $season;;
+            goto $PATH_DS_TV . $tv_show . "\"  . $season;
             break;
+
+        case "goto_movie":
+            $movie = inputselect(
+                "Movies",
+                file_list_all_movie_folders(),
+                $NOT_USED,
+                72,
+                $NOT_USED,
+                "500",
+                "1000"
+            );
+        goto $PATH_DS_MOVIE . $movie;
+        break;
 
         case "script_help":
             $script_list = readfile($PATH_XYPLORER_HELP_SCRIPTING_TXT);
@@ -203,10 +224,12 @@
         case "list_code_folders":
             $item_arduino_builds = "List Arduino builds";
             $item_code_folder = "Kod";
+            $item_arduino_libs = "Arduino Library Folder";
 
             $choice = list_generate_user_selection_list(
                 "Goto code folder",
                 $item_arduino_builds ."|" .
+                $item_arduino_libs . "|" .
                 $item_code_folder);
 
             switch ($choice)
@@ -219,6 +242,11 @@
                 case $item_code_folder:
                     focus "P1";
                     goto "d:\kod";
+                    break;
+
+                case $item_arduino_libs;
+                    focus "P1";
+                    goto "%user%\Documents\Arduino\";
                     break;
             }
 
