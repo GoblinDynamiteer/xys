@@ -3,7 +3,7 @@
     function input_ask_for_imdb($title)
     {
         $imdb = input("Enter IMDB-id / URL for: " . $title);
-        return STRING_TrimImdb($imdb);
+        return string_extract_imdb($imdb);
     }
 
     function input_ask_for_thetvdb($tvShow)

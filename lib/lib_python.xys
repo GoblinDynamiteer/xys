@@ -10,14 +10,13 @@
         $year = $year ? " -year " . $year : "";
         $type = $type ? " -type " . $type : "";
 
-        status "Running omdb-seacher.py: " . $query . $year . ' -o ' . $output;
-
         $data = runret('python "' . $omdb_script . '" "' . $query .
             '" -api ' . readfile($PATH_OMDB_API_KEY) .
             $year . $type .
             ' -o ' . $output);
 
-        status "Done!";
+        status "omdb-seacher.py query: " . $query . ' -o ' . $output .
+            " -- Got data: " . substr($data, 0, -2);
 
         /* return data, remove crlf */
         return substr($data, 0, -2);
@@ -30,12 +29,11 @@
         $season = $season ? " -season " . $season : "";
         $episode = $episode && $season ? " -episode " . $episode : "";
 
-        status "Running tvmaze-seacher.py: " . $query . ' -o ' . $output;
-
         $data = runret('python "' . $maze_script . '" "' . $query .
             '" -output ' . $output . $season . $episode);
 
-        status "Done!";
+        status "tvmaze-seacher.py query: " . $query . ' -o ' . $output .
+            " -- Got data: " . substr($data, 0, -2);
 
         /* return data, remove crlf */
         return substr($data, 0, -2);

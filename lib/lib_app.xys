@@ -1,7 +1,6 @@
     perm $exe_path_7zip = "C:\Program Files\7-Zip\7z.exe";
     perm $exe_path_subtitleedit =
         "C:\Program Files\Subtitle Edit 3\SubtitleEdit.exe";
-    perm $exe_path_putty = $PATH_SCRIPT_LOCATION . "\xyplorer\app\putty.exe";
 
     /* Searches for executable, returns full path */
     function app_find_executable($file_name)
@@ -193,7 +192,7 @@
     /* SHH Connection with putty */
     function app_ssh_putty($address, $user, $port)
     {
-        run '"'. $exe_path_putty .'"' .
+        run '"'. $EXE_LOCATION_PUTTY .'"' .
             " -ssh " . $user . "@" . $address . " " . $port;
     }
 
