@@ -51,6 +51,8 @@
     /* Compile and upload with Arduino */
     function app_code_arduino_open_upload($file, $upload_only)
     {
+        readpv($PATH_PERM_PV_DIR);
+
         if( !isset($arduino_debug_exe) ||
             !check_is_path_to_exe($arduino_debug_exe) ||
             !exists($arduino_debug_exe))
@@ -79,6 +81,8 @@
     /* Run filezilla and open local folder */
     function app_ftp_open_in_filezilla($folder)
     {
+        readpv($PATH_PERM_PV_DIR);
+
         if( !isset($exe_path_filezilla) ||
             !check_is_path_to_exe($exe_path_filezilla) ||
             !exists($exe_path_filezilla))
@@ -166,6 +170,8 @@
     /* Open repository path in GitKraken */
     function app_git_openrepo_kraken($repository_path)
     {
+        readpv($PATH_PERM_PV_DIR);
+
         if( !isset($exe_path_gitkraken) ||
             !check_is_path_to_exe($exe_path_gitkraken) ||
             !exists($exe_path_gitkraken))

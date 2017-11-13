@@ -1,4 +1,3 @@
-
     /* File and folder locations	*/
     perm $GOOGLE_DRIVE_LOCATION_DEFAULT = "D:\Google Drive\";
     perm $GOOGLE_DRIVE_LOCATION_ALT = "C:\gdrive\";
@@ -62,7 +61,7 @@
     perm $PATH_EXEC_SEARCH_PATHS_TXT = $PATH_TXT_FILES . "exec_search_paths.txt";
 
     /* Perm variables file */
-    perm $PATH_PERM_PV_DIR = $PATH_SCRIPT_LOCATION . "perm_variables.dat";
+    perm $PATH_PERM_PV_DIR = $PATH_XYS_SCRIPTS . "perm_variables.dat";
 
     /*  Icons */
     perm $ICON_LOCATION = $GOOGLE_DRIVE_LOCATION . "Misc\icons\";
@@ -157,9 +156,3 @@
     perm $REGEX_RELEASE_SPECIAL = "(remastered|directors.cut|extended|unrated|dircut|\.dc\.|uncut)";
     perm $REGEX_RELEASE_SCENE_SPECIAL = "(proper|repack|rerip|remux)";
     perm $REGEX_RELEASE_SOURCE = "(bluray|hddvd|web.dl|web.rip|blu.ray|hdtv|hdts|webrip|dvdscr)";
-
-    /* Load (and overwrite) perm variables*/
-    if(exists($PATH_PERM_PV_DIR))
-    {
-        readpv($PATH_PERM_PV_DIR);
-    }
