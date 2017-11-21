@@ -98,7 +98,7 @@
     perm $SETTING_LISTFOLDER_PATTERN_ALL = "*";
     perm $SETTING_LISTFOLDER_NO_FILES = 2;
     perm $SETTING_LISTFOLDER_NO_PATHS = 4;
-    perm $RETURN_VALUE_STRPOS_NOT_FOUND = -1;
+    perm $STRPOS_NOT_FOUND = -1;
     perm $SETTING_TAG_COMMENT = 2;
     perm $SETTING_CONFIRM_YES_NO_BUTTONS = 4;
     perm $SETTING_GPC_PATH_WITHOUT_FILE_NAME = "path";
@@ -109,7 +109,7 @@
 
     /* Errors */
     perm $FUNCTION_RETURN_ERROR = 0;
-    perm $ERROR_MESSAGE_PYTHON =  "Python script returned error!";
+    perm $ERROR_PYTHON_SEARCH = -1;
     perm $ERROR_SELECT_MORE_THAN_ONE = "More than one item selected!";
     perm $ERROR_PATH_NOT_DS_TV = "Path is not in DS/TV!";
     perm $ERROR_FILE_WRITE_TVSHOW_NFO = "Could not write tvshow.nfo!";

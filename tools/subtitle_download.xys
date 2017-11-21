@@ -1,3 +1,5 @@
     /* Placeholder file
         XYplorer script that uses python script subscene-dl to
         download subtitles for movies*/
+
+    include_once "..\const\include.xys";

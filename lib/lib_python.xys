@@ -40,8 +40,7 @@
     }
 
     /* Scripts return "Error searching for ..." */
-    function python_check_error($data)
+    function python_script_error($data)
     {
-        /* Return 1 if string is not found */
-        return (substr($data, "Error searching for") == -1);
+        return !(strpos($data, "Error") == -1);
     }

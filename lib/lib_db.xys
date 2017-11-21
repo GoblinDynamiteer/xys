@@ -110,7 +110,7 @@
     }
 
     /*  Checks if TV-show is new (not in database) */
-    function db_tv_is_show_in_db($tv_show)
+    function db_tv_is_new_show($tv_show)
     {
         $retval = getsectionlist($tv_show, $PATH_DB_TV) ? 0 : 1;
         return $retval;
@@ -131,7 +131,7 @@
             $retval = "";
             foreach($episode, $episodes_local, "|")
             {
-                if(strpos($episodes_in_database, $episode) == $RETURN_VALUE_STRPOS_NOT_FOUND)
+                if(strpos($episodes_in_database, $episode) == $STRPOS_NOT_FOUND)
                 {
                     $retval = $retval . $episode . "|";
                 }

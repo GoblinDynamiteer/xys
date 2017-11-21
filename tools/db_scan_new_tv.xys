@@ -35,15 +35,29 @@
         wait 2;
 
         /*  Check if TV-show is new (not in database) */
-        if(db_tv_is_show_in_db($tv_show))
+        if(db_tv_is_new_show($tv_show))
         {
             status "Found new Show: " . $tv_show;
 
             $imdb_id = python_omdb(
-                $tv_show,
-                "imdb",
-                "series"
+                $tv_show,   // Query
+                "imdb",     // Output from python script
+                $NULL,      // Year
+                "series"    // Type to search for: movie/series
                 );
+
+            /*  Try searching OMDb for show w/o "Marvels " prefix,
+                if error */
+            if( python_script_error($imdb_id) &&
+                strpos($tv_show, "marvel") != $STRPOS_NOT_FOUND)
+            {
+                $imdb_id = python_omdb(
+                    replace($tv_show, "marvels "),
+                    "imdb",
+                    $NULL,
+                    "series"
+                    );
+            }
 
             wait 100;
 
@@ -53,7 +67,7 @@
             );
 
             /* Python script returned error */
-            if(python_check_error($search_hit_data)
+            if(python_script_error($search_hit_data))
             {
                 $imdb_id = input_ask_for_imdb($tv_show);
             }

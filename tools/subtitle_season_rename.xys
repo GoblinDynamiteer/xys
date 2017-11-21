@@ -17,6 +17,7 @@
         $season_episode = string_regex_season_episode($vid_file);
         $name_without_ext = gpc($vid_file, "base");
 
+        /* Todo: Fix matching of 01x02 naming */
         $srt_files = quicksearch("*.srt AND " . $season_episode, $path, "|");
 
         foreach($srt_file, $srt_files)
