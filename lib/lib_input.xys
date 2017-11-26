@@ -6,6 +6,12 @@
         return string_extract_imdb($imdb);
     }
 
+    function input_ask_for_tvmaze($title)
+    {
+        $tvmaze_id = input("Enter tvmaze-id for: " . $title);
+        return $tvmaze_id;
+    }
+
     function input_ask_for_thetvdb($tvShow)
     {
         $tvdburl = input("Enter TheTVDb URL for: " . $tvShow);

@@ -91,7 +91,10 @@
                 "tvmaze_id",
             );
 
-            /* Todo: Build check for TVmaze-id retrieval */
+            if(python_script_error($tv_maze_id))
+            {
+                $tv_maze_id = input_ask_for_tvmaze($tv_show);
+            }
 
             db_tv_write_data($tv_show, "tvmaze", $tv_maze_id);
             db_tv_write_data($tv_show, "imdb", $imdb_id);

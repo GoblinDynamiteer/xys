@@ -79,6 +79,12 @@
         $airdate = python_tvmaze(
             $maze_id, "release_date", $season_number, $episode_number);
 
+        if(python_script_error($title) || python_script_error($airdate))
+        {
+            msg "Python script error! Stepping.";
+            step;
+        }
+
         $string = "[ " . $today . " ] [ TV ] [ " . $tv_show . " ] [ " .
             $episode . " : " . $title . " ] [ Airdate: " . $airdate . " ]";
 
