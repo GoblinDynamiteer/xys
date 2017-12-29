@@ -76,6 +76,7 @@
     perm $ICON_FILEZILLA = $ICON_LOCATION . "filezilla.ico";
     perm $ICON_FOLDER = $ICON_LOCATION . "folder_blue.ico";
     perm $ICON_CLIPBOARD = $ICON_LOCATION . "clipboard.ico";
+    perm $ICON_SCRIPT = $ICON_LOCATION . "script.ico";
     perm $ICON_NO_ICON = "";
 
     /*  File extensions */

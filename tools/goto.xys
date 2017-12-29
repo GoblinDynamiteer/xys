@@ -22,6 +22,12 @@
                 $ICON_HELP,
                 0);
 
+    $menu_script_run = string_generate_popup_menu_item(
+                "Run Script",
+                "run_script",
+                $ICON_SCRIPT,
+                0);
+
     $menu_app = string_generate_popup_menu_item(
                 "App",
                 "run_app",
@@ -69,6 +75,12 @@
                 "clipboard_api_omdb",
                 $ICON_CLIPBOARD,
                 2);
+
+    $menu_script_run_sub_tv_sort = string_generate_popup_menu_item(
+                "TV: Episode Sorter",
+                "script_run_ep_sort",
+                $ICON_SCRIPT,
+                1);
 
     $menu_atom = exists($mouse_pointer_item) == 2 ?
         string_generate_popup_menu_item(
@@ -133,7 +145,9 @@
     $menu_script .               // Script command help
     $menu_clipboard .            // Clipboard
         $menu_clipboard_sub_api .           // Clipboard -> API Keys
-            $menu_clipboard_sub_api_omdb;   // Clipboard -> API Keys -> OMDb
+            $menu_clipboard_sub_api_omdb .  // Clipboard -> API Keys -> OMDb
+    $menu_script_run .          // Run script
+        $menu_script_run_sub_tv_sort;       // Run script -> TV Ep sorter
 
     $choice = popupnested($menu);
 
@@ -221,6 +235,11 @@
             status "Copied OMDb API-key to clipboard!";
             break;
 
+        case "script_run_ep_sort":
+            status "Running episode sorter script!";
+            load $PATH_XYS_SCRIPTS . "tools\episode_sorter.xys";
+            break;
+
         case "list_code_folders":
             $item_arduino_builds = "List Arduino builds";
             $item_code_folder = "Kod";
@@ -249,6 +268,8 @@
                     goto "%user%\Documents\Arduino\";
                     break;
             }
+
+            break;
 
         default:
             break;
