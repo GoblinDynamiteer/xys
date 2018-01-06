@@ -82,6 +82,12 @@
                 $ICON_SCRIPT,
                 1);
 
+    $menu_script_run_sub_movie_db_remove = string_generate_popup_menu_item(
+                "Movie: Remove from database",
+                "script_run_mov_db_remove",
+                $ICON_SCRIPT,
+                1);
+
     $menu_atom = exists($mouse_pointer_item) == 2 ?
         string_generate_popup_menu_item(
             "#Atom [ ". $mouse_pointer_item ." ]",
@@ -147,7 +153,8 @@
         $menu_clipboard_sub_api .           // Clipboard -> API Keys
             $menu_clipboard_sub_api_omdb .  // Clipboard -> API Keys -> OMDb
     $menu_script_run .          // Run script
-        $menu_script_run_sub_tv_sort;       // Run script -> TV Ep sorter
+        $menu_script_run_sub_tv_sort .      // Run script -> TV Ep sorter
+        $menu_script_run_sub_movie_db_remove; // Run script -> Movie db remove
 
     $choice = popupnested($menu);
 
@@ -238,6 +245,11 @@
         case "script_run_ep_sort":
             status "Running episode sorter script!";
             load $PATH_XYS_SCRIPTS . "tools\episode_sorter.xys";
+            break;
+
+        case "script_run_mov_db_remove":
+            status "Running movie db remove script!";
+            load $PATH_XYS_SCRIPTS . "tools\db_remove_movie.xys";
             break;
 
         case "list_code_folders":

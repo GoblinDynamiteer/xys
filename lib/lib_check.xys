@@ -25,7 +25,9 @@
     /*  Check if folder path is in DS/Movie directory */
     function check_is_path_in_dsmovie($path)
     {
-        return (regexmatches($path, $REGEX_PATH_DS_MOVIE) != "");
+        $retval = regexmatches($path, $REGEX_PATH_DS_MOVIE) ||
+            regexmatches($path, $REGEX_PATH_DS_MOVIE_MOUNTED) ? 1 : 0;
+        return $retval;
     }
 
     /* Check if string contains an IMDb-id */

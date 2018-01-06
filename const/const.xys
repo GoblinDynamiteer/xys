@@ -113,6 +113,7 @@
     perm $ERROR_PYTHON_SEARCH = -1;
     perm $ERROR_SELECT_MORE_THAN_ONE = "More than one item selected!";
     perm $ERROR_PATH_NOT_DS_TV = "Path is not in DS/TV!";
+    perm $ERROR_PATH_NOT_DS_MOVIE = "Path is not in DS/Film!";
     perm $ERROR_FILE_WRITE_TVSHOW_NFO = "Could not write tvshow.nfo!";
     perm $ERROR_EXE_NOT_FOUND_FILEZILLA = "filezilla.exe not found!";
     perm $ERROR_EXE_NOT_FOUND_GITKRAKEN = "gitkraken.exe not found!";
@@ -152,6 +153,7 @@
     perm $REGEX_PATH_DS_TV = "^\\\\DS\\TV\\";
     perm $REGEX_PATH_DS_TV_MOUNTED = "T\:\\";
     perm $REGEX_PATH_DS_MOVIE = "^\\\\DS\\FILM\\";
+    perm $REGEX_PATH_DS_MOVIE_MOUNTED = "M\:\\";
 
     perm $REGEX_RELEASE_RESOLUTION = "(720p|1080p|2160p)";
     perm $REGEX_RELEASE_SPECIAL = "(remastered|directors.cut|extended|unrated|dircut|\.dc\.|uncut)";

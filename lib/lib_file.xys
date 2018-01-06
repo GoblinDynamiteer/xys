@@ -110,6 +110,16 @@
         $sc =       string_regex_movie_scene($movie_folder_name);
         $source =   string_regex_movie_source($movie_folder_name);
 
+        if(python_script_error($year))
+        {
+            $year = "N/A";
+        }
+
+        if(python_script_error($title))
+        {
+            $title = $movie_folder_name;
+        }
+
         $string = "[ " . $today . " ] [ MOVIE ] [ " . $title . " ] [ " .
         $year  . " ] [ " . $source . " " . $res . " ] ";
 

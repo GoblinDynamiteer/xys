@@ -1,0 +1,19 @@
+    /* Remove selected movie (folder) from database */
+
+    include_once "..\const\include.xys";
+
+    $selected_folder_with_path = get("SelectedItemsPathNames","|");
+    $selected_folder = get("SelectedItemsNames","|");
+
+    /* Check that folder in in correct place */
+    if(!check_is_path_in_dsmovie($selected_folder_with_path))
+    {
+        echo $ERROR_PATH_NOT_DS_MOVIE;
+        end 1;
+    }
+
+    /* Confirm deletion */
+    if(confirm("Remove " . $selected_folder . " from database?"))
+    {
+        db_movie_remove_from_db($selected_folder);
+    }
