@@ -1,6 +1,6 @@
     include_once "..\const\include.xys";
 
-    //Gets IMDB-id from string, returns ID in format tt######
+    /* Gets IMDB-id from string, returns ID in format tt###### */
     function string_extract_imdb($string)
     {
         $id = regexmatches($string, $REGEX_STRING_IMDB_ID);
@@ -8,6 +8,29 @@
         if($id == "")
         {
             msg "Could not extract IMDb-id from string!";
+            return 0;
+        }
+
+        else
+        {
+            return $id;
+        }
+    }
+
+    /* Gets TVMaze-id from string */
+    function string_extract_tvmaze($string)
+    {
+        $id = regexmatches($string, "\d{1,}");
+
+        if($id == "")
+        {
+            msg "Could not extract TVMaze-id from string!";
+            return 0;
+        }
+
+        if(gettoken($id, "count", "|") > 1)
+        {
+            msg "Got several numbers from TVMaze-string!";
             return 0;
         }
 

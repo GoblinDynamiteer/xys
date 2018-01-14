@@ -48,7 +48,7 @@
 
             /*  Try searching OMDb for show w/o "Marvels " prefix,
                 if error */
-            if( python_script_error($imdb_id) &&
+            if(python_script_error($imdb_id) &&
                 strpos($tv_show, "marvel") != $STRPOS_NOT_FOUND)
             {
                 $imdb_id = python_omdb(
@@ -95,6 +95,9 @@
             {
                 $tv_maze_id = input_ask_for_tvmaze($tv_show);
             }
+
+            /* Make sure ID is just numbers, not full URL */
+            $tv_maze_id = string_extract_tvmaze($tv_maze_id);
 
             db_tv_write_data($tv_show, "tvmaze", $tv_maze_id);
             db_tv_write_data($tv_show, "imdb", $imdb_id);
