@@ -31,6 +31,12 @@
         }
     }
 
+    function app_svtplay_dl($url)
+    {
+        $svtplay_dl = "D:\svtplay-dl\svtplay-dl.exe";
+        run $svtplay_dl . " -S --remux " . $url, , $wait, 2;
+    }
+
     /* Extract file with unrar.exe */
     function app_extraction_unrar($source, $destination, $wait)
     {

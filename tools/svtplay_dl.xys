@@ -1,0 +1,7 @@
+    include_once "..\const\include.xys";
+
+    focus "P1";
+    goto "D:\svtplay-dl\";
+
+    $url = input("Ange länk!");
+    app_svtplay_dl($url);
