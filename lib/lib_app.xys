@@ -1,6 +1,3 @@
-    perm $exe_path_7zip = "C:\Program Files\7-Zip\7z.exe";
-    perm $exe_path_subtitleedit =
-        "C:\Program Files\Subtitle Edit 3\SubtitleEdit.exe";
 
     /* Searches for executable, returns full path */
     function app_find_executable($file_name)
@@ -33,8 +30,7 @@
 
     function app_svtplay_dl($url)
     {
-        $svtplay_dl = "D:\svtplay-dl\svtplay-dl.exe";
-        run $svtplay_dl . " -S --remux " . $url, , $wait, 2;
+        run $EXE_LOCATION_SVTPLAYDL . " -S --remux " . $url, , $wait, 2;
     }
 
     /* Extract file with unrar.exe */
@@ -87,29 +83,9 @@
     /* Run filezilla and open local folder */
     function app_ftp_open_in_filezilla($folder)
     {
-        readpv($PATH_PERM_PV_DIR);
-
-        if( !isset($exe_path_filezilla) ||
-            !check_is_path_to_exe($exe_path_filezilla) ||
-            !exists($exe_path_filezilla))
-        {
-            perm $exe_path_filezilla = app_find_executable("filezilla.exe");
-            writepv($PATH_PERM_PV_DIR);
-        }
-
-        if(exists($exe_path_filezilla))
-        {
-            run '"' . $exe_path_filezilla . '" -c "' .
-                readfile($PATH_FILEZILLA_W_SITE) . '" --local="' .
-                    $folder . '"';
-        }
-
-        else
-        {
-            msg $ERROR_EXE_NOT_FOUND_FILEZILLA;
-
-            //Set manually?
-        }
+        run '"' . $EXE_LOCATION_FILEZILLA . '" -c "' .
+            readfile($PATH_FILEZILLA_W_SITE) . '" --local="' .
+            $folder . '"';
     }
 
     /* Compress to rar-file, return full path to created file */
@@ -211,30 +187,11 @@
     /* Open Git-Bash to and navigate to path */
     function app_git_openrepo_bash($path)
     {
-        if( !isset($exe_path_gitbash) ||
-            !check_is_path_to_exe($exe_path_gitbash) ||
-            !exists($exe_path_gitbash))
-        {
-            $search_dir = "C:\Program Files\";
-            $executables = quicksearch("git-bash.exe", $search_dir, "|", s);
-            perm $exe_path_gitbash = list_get_last_item($executables);
+        /* Convert 'C:\Path\Path Path' ==> 'C/Path/Path\ Path' */
+        $path = replacelist($path, ":|\| ", "|/|\ ", "|");
 
-            writepv($PATH_PERM_PV_DIR);
-        }
-
-        if(exists($exe_path_gitbash))
-        {
-            /* Convert 'C:\Path\Path Path' ==> 'C/Path/Path\ Path' */
-            $path = replacelist($path, ":|\| ", "|/|\ ", "|");
-
-            /* Workaround for opening path (could not find CLI command to
-                open path): edit .bashrc */
-            writefile(%USERPROFILE% . "\.bashrc", "cd /" . $path);
-            open $exe_path_gitbash;
-        }
-
-        else
-        {
-            msg $ERROR_EXE_NOT_FOUND_GITBASH;
-        }
+        /* Workaround for opening path (could not find CLI command to
+            open path): edit .bashrc */
+        writefile(%USERPROFILE% . "\.bashrc", "cd /" . $path);
+        run '"' . $EXE_LOCATION_GITBASH . '"';
     }
